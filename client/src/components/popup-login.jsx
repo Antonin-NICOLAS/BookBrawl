@@ -89,16 +89,17 @@ function LoginPopup(props) {
 
     //register
     const handleRegister = async (event) => {
+        res.setHeader('Access-Control-Allow-Credentials', true)
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+        res.setHeader(
+            'Access-Control-Allow-Headers',
+            'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version')
         event.preventDefault();
         const { prenom, nom, email, password } = data
         try {
             const { data } = await axios.post('https://book-brawl-backend.vercel.app/register', {
-                prenom, nom, email, password,
-                headers: [
-            { "Access-Control-Allow-Origin": '*' },
-            { "Access-Control-Allow-Headers": 'Origin, X-Requested-With, Content-Type, Accept '},
-            { "Access-Control-Allow-Methods": "POST, GET, PUT, OPTIONS, DELETE" }
-          ]
+                prenom, nom, email, password
             })
             if (data.error) {
                 toast.error(data.error)
@@ -114,16 +115,17 @@ function LoginPopup(props) {
 
     //login
     const handleLogin = async (event) => {
+        res.setHeader('Access-Control-Allow-Credentials', true)
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+        res.setHeader(
+            'Access-Control-Allow-Headers',
+            'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version')
         event.preventDefault();
         const { email, password } = loginData
         try {
             const { loginData } = await axios.post('https://book-brawl-backend.vercel.app/login', {
-                email, password,
-                headers: [
-            { "Access-Control-Allow-Origin": '*' },
-            { "Access-Control-Allow-Headers": 'Origin, X-Requested-With, Content-Type, Accept '},
-            { "Access-Control-Allow-Methods": "POST, GET, PUT, OPTIONS, DELETE" }
-          ]
+                email, password
             })
             if (loginData.error) {
                 toast.error(loginData.error)
