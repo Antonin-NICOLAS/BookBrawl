@@ -1,0 +1,46 @@
+#root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  box-sizing: border-box;
+  text-decoration: none;
+  overflow-x: hidden;
+  background-color: var(--bg);
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  --bg: #FCFCFC;
+  --navbar: #e283d1;
+  --login-box: #e283d180;
+  --color-text-body: #121111;
+  --title: rgb(220, 80, 80);
+  --1: #5770ff;
+  --2: #ff75b3;
+  --3: #ff7c6b;
+}
+
+html[data-theme='dark'] {
+  --bg: #030303;
+  --navbar: #8c008e;
+  --login-box: #8c008e80;
+  --color-text-body: #edeeee;
+  --title: rgba(220, 80, 80, 0.8);
+  --1: #313e88;
+  --2: #843d5d;
+  --3: #6d362f;
+}
