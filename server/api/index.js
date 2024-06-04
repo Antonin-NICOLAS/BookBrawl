@@ -8,7 +8,10 @@ const {mongoose} = require('mongoose');
 const app = express()
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(cors())
+app.use(cors({
+    origin: ["https://book-brawl.vercel.app"],
+    credentials: true
+}))
 app.use('/', require('../routes/authroutes'))
 
 //mongoDB connection
