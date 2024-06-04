@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors');
+const dotenv = require('dotenv').config();
 const { test, registerUser, loginUser } = require('../controllers/authcontroller')
 
 const router = express.Router()
@@ -7,7 +8,7 @@ const router = express.Router()
 router.use(
     cors({
         credentials: true,
-        origin: 'http://localhost:5173'
+        origin: `${process.env.FRONTEND_SERVER}`
     })
 )
 
