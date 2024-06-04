@@ -1,0 +1,249 @@
+/*login box*/
+/*login box*/
+/*login box*/
+.login-overlay{
+  position: fixed;
+  top: 8vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9996;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+.wrapper {
+  z-index: 9997;
+  width: 400px;
+  height: calc(240px + 19.4vh);
+  min-height: 300px;
+  max-height: 500px;
+  border-radius: 30px;
+  background-color: var(--login-box);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--navbar);
+  overflow: hidden;
+  transition: height .2s ease;
+}
+.active .wrapper{
+  height: calc(342px + 24.6vh);
+  max-height: 600px
+}
+
+.wrapper .form-box-login,
+.wrapper .form-box-register{
+  width: calc(100% - 30px);
+  padding: 15px;
+}
+.wrapper .form-box-login{
+  position: absolute;
+  transform: translateX(0px);
+  transition: ease-in-out 0.4s;
+}
+.wrapper .form-box-register{
+  transform: translateX(400px);
+  transition: ease-in-out 0.3s;
+}
+
+.active .form-box-login{
+  transform: translateX(-400px);
+  transition: ease-in-out 0.3s;
+}
+.active .form-box-register{
+  transform: translateX(0px);
+  transition: ease-in-out 0.4s;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: scale(0.9);
+  }
+  to {
+      opacity: 1;
+      transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+      opacity: 1;
+      transform: scale(1);
+  }
+  to {
+      opacity: 0;
+      transform: scale(0.9);
+  }
+}
+
+.animate-popup {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-popup-close {
+  animation: fadeOut 0.3s ease-out;
+}
+
+.wrapper .close-login {
+  background: #030303;
+  color: #edeeee;
+  width: calc(20px + 2vh);
+  height: calc(20px + 2vh);
+  position: absolute;
+  z-index: 9998;
+  top: 0;
+  right: 0;
+  font-size: calc(10px + 1.2vh);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 30px;
+  cursor: pointer;
+
+}
+
+.wrapper .form-box-login h2 {
+  font-size: calc(15px + 2vh);
+  text-decoration: underline;
+  color: #030303;
+  text-align: center;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+.wrapper .form-box-register h2 {
+  font-size: calc(15px + 2vh);
+  text-decoration: underline;
+  color: #030303;
+  text-align: center;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.input-box {
+  position: relative;
+  width: 100%;
+  height: calc(30px + 3vh);
+  border-bottom: #030303 solid 2px;
+  padding: 0 0 10px 0;
+  margin: calc(10px + 1vh) 0;
+}
+.form-box-register .input-box{
+  margin: 0;
+}
+
+.input-box label {
+  position: absolute;
+  top: calc(75% - (10px + 0.8vh)/2);
+  left: 5px;
+  font-size: calc(10px + 0.8vh);
+  pointer-events: none;
+  font-weight: 500;
+  transition: 0.5s;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label,
+.input-box input:user-invalid~label {
+  top: 20%;
+}
+
+.input-box input {
+  width: calc(100% - 30px);
+  height: 50%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-weight: 500;
+  color: #030303;
+  padding: 0 25px 0 5px;
+}
+
+.input-box .icon {
+  position: absolute;
+  right: 5px;
+}
+
+.input-box .icon i {
+  color: #030303;
+  font-size: calc(10px + 0.8vh);
+  line-height: 80px;
+}
+
+.remember-forgot {
+  font-size: calc(7px + 0.8vh);
+  margin: calc(10px + 1vh) 0;
+  display: flex;
+  justify-content: space-between;
+}
+.form-box-register .remember-forgot{
+  justify-content: center;
+}
+
+.remember-forgot label {
+  display: flex;
+}
+
+.remember-forgot label input {
+  display: flex;
+  accent-color: var(--color-text-body);
+  width: calc(7px + 0.8vh);
+  height: calc(7px + 0.8vh);
+  margin: 1px 3px;
+}
+
+.remember-forgot a {
+  text-decoration: none;
+  color: #030303;
+}
+
+.remember-forgot a:hover {
+  text-decoration: underline;
+}
+
+.wrapper .submit-login {
+  width: 100%;
+  height: calc(20px + 3vh);
+  background-color: #030303;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #edeeee;
+  font-size: calc(10px + 2vh);
+  font-weight: 500;
+  margin-top: calc(7px + 1.5vh);
+}
+
+.login-register {
+  font-size: calc(7px + 0.8vh);
+  display: flex;
+  justify-content: center;
+  margin: calc(10px + 1vh) 0 0 0;
+}
+.form-box-register .login-register{
+  margin: 0;
+}
+
+.login-register p a {
+  text-decoration: none;
+  color: #030303;
+  font-weight: 600;
+}
+
+.login-register p a:hover {
+  text-decoration: underline;
+}
+
+/*error*/
+.error-message{
+  border: red solid 2px;
+  padding: 2px;
+  margin: 5px 0;
+  font-size: calc(7px + 0.8vh);
+  color: red;
+}
