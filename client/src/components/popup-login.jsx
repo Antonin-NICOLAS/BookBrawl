@@ -92,7 +92,7 @@ function LoginPopup(props) {
         event.preventDefault();
         const { prenom, nom, email, password } = data
         try {
-            const { data } = await axios.post('/register', {
+            const { data } = await axios.post('https://book-brawl-backend.vercel.app/register', {
                 prenom, nom, email, password
             })
             if (data.error) {
@@ -112,7 +112,7 @@ function LoginPopup(props) {
         event.preventDefault();
         const { email, password } = loginData
         try {
-            const { loginData } = await axios.post('/login', {
+            const { loginData } = await axios.post('https://book-brawl-backend.vercel.app/login', {
                 email, password
             })
             if (loginData.error) {
