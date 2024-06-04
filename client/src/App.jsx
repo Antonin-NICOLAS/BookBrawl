@@ -9,8 +9,6 @@ import APropos from '../src/pages/a-propos';
 import LoginPopup from '../src/components/popup-login';
 
 axios.defaults.baseURL = `${process.env.BACKEND_SERVER}`
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
 axios.defaults.withCredentials = false
 
 export default function App() {
