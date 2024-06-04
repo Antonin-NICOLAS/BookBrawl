@@ -93,7 +93,12 @@ function LoginPopup(props) {
         const { prenom, nom, email, password } = data
         try {
             const { data } = await axios.post('https://book-brawl-backend.vercel.app/register', {
-                prenom, nom, email, password
+                prenom, nom, email, password,
+                headers: [
+            { "Access-Control-Allow-Origin": '*' },
+            { "Access-Control-Allow-Headers": 'Origin, X-Requested-With, Content-Type, Accept '},
+            { "Access-Control-Allow-Methods": "POST, GET, PUT, OPTIONS, DELETE" }
+          ]
             })
             if (data.error) {
                 toast.error(data.error)
@@ -113,7 +118,12 @@ function LoginPopup(props) {
         const { email, password } = loginData
         try {
             const { loginData } = await axios.post('https://book-brawl-backend.vercel.app/login', {
-                email, password
+                email, password,
+                headers: [
+            { "Access-Control-Allow-Origin": '*' },
+            { "Access-Control-Allow-Headers": 'Origin, X-Requested-With, Content-Type, Accept '},
+            { "Access-Control-Allow-Methods": "POST, GET, PUT, OPTIONS, DELETE" }
+          ]
             })
             if (loginData.error) {
                 toast.error(loginData.error)
