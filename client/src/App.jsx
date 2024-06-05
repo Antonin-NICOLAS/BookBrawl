@@ -36,19 +36,19 @@ export default function App() {
     return (
         <>
             <Navbar onLoginClick={handleLoginClick} />
-            <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
+            <Toaster position='bottom-right' toastOptions={{duration: 2000}}/>
             <Routes location={background || location}>
                 <Route exact path="/" element={<Home />} />
                 <Route path="/about" element={<APropos />} />
-                {ButtonPopup && (
-                    <>
-                        <Route path="/login" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
-                        <Route path="/register" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
-                        <Route path="/about/login" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
-                        <Route path="/about/register" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
-                    </>
-                )}
             </Routes>
+            {ButtonPopup && (
+                <Routes>
+                    <Route path="/login" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
+                    <Route path="/register" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
+                    <Route path="/about/login" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
+                    <Route path="/about/register" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
+                </Routes>
+            )}
         </>
     );
 }
