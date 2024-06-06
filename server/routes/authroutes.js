@@ -8,7 +8,7 @@ const router = express.Router()
 router.use(
     cors({
         credentials: true,
-        origin: `${process.env.FRONTEND_SERVER}`
+        origin: `https://book-brawl.vercel.app`
     })
 )
 
