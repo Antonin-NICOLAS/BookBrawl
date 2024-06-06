@@ -9,7 +9,7 @@ import APropos from '../src/pages/a-propos';
 import LoginPopup from '../src/components/popup-login';
 
 axios.defaults.baseURL = `https://book-brawl-backend.vercel.app`
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = false
 
 export default function App() {
     const [ButtonPopup, setButtonPopup] = useState(false);
