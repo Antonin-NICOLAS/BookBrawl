@@ -113,29 +113,26 @@ function LoginPopup(props) {
     //login
     const handleLogin = async (event) => {
         event.preventDefault();
-        const { email, password } = loginData;
+        const { email, password } = loginData
         try {
-            const response = await axios.post('/login', { email, password }, {
+            const { data } = await axios.post('/login', {
+                email, password,
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
                 }
-            });
-            const { data } = response;
-            if (data && data.error) {
-                toast.error(data.error);
-            } else if (data && data.prenom) {
+            })
+            if (data.error) {
+                toast.error(data.error)
+            } else {
                 setLoginData({});
                 localStorage.setItem('prenom', data.prenom); // Stocke le prénom dans localStorage
                 toast.success('Vous êtes connectés !');
                 handleClose();
-                window.location.reload(); // Recharge la page pour mettre à jour le prénom
-            } else {
-                toast.error('Une erreur inconnue est survenue.');
+                window.location.reload();
             }
         } catch (error) {
-            console.error(error);
-            toast.error('Une erreur est survenue lors de la connexion.');
+            console.log(error)
         }
     };
 
