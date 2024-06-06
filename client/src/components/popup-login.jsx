@@ -93,9 +93,8 @@ function LoginPopup(props) {
         try {
             const { data } = await axios.post('/register', {
                 prenom, nom, email, password,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                headers: {'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin':'*'
                 }
             })
             if (data.error) {
@@ -117,19 +116,16 @@ function LoginPopup(props) {
         try {
             const { data } = await axios.post('/login', {
                 email, password,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                headers: {'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin':'*'
                 }
             })
             if (data.error) {
                 toast.error(data.error)
             } else {
-                setLoginData({});
-                localStorage.setItem('prenom', data.prenom); // Stocke le prénom dans localStorage
-                toast.success('Vous êtes connectés !');
+                setLoginData({})
+                toast.success('Vous êtes connectés !')
                 handleClose();
-                window.location.reload();
             }
         } catch (error) {
             console.log(error)
