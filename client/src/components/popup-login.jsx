@@ -127,7 +127,9 @@ function LoginPopup(props) {
                 localStorage.setItem('prenom', data.prenom);
                 toast.success('Vous êtes connectés !')
                 handleClose();
-                window.location.reload();
+                setTimeout(() => {
+                    window.location.reload(); // Recharge la page pour mettre à jour le prénom
+                }, 500);
             }
         } catch (error) {
             console.log(error)
