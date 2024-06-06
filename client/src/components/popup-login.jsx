@@ -8,7 +8,6 @@ import './popup-login.css';
 
 function LoginPopup(props) {
     const [closing, setClosing] = useState(false);
-    const [error, setError] = useState(null); // State to manage error messages
     const navigate = useNavigate();
 
     const [data, setData] = useState({
@@ -94,8 +93,9 @@ function LoginPopup(props) {
         try {
             const { data } = await axios.post('/register', {
                 prenom, nom, email, password,
-                headers: {'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin':'*'
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 }
             })
             if (data.error) {
@@ -113,23 +113,29 @@ function LoginPopup(props) {
     //login
     const handleLogin = async (event) => {
         event.preventDefault();
-        const { email, password } = loginData
+        const { email, password } = loginData;
         try {
-            const { loginData } = await axios.post('/login', {
-                email, password,
-                headers: {'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin':'*'
+            const response = await axios.post('/login', { email, password }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 }
-            })
-            if (loginData.error) {
-                toast.error(loginData.error)
-            } else {
-                setLoginData({})
-                toast.success('Vous êtes connectés !')
+            });
+            const { data } = response;
+            if (data && data.error) {
+                toast.error(data.error);
+            } else if (data && data.prenom) {
+                setLoginData({});
+                localStorage.setItem('prenom', data.prenom); // Stocke le prénom dans localStorage
+                toast.success('Vous êtes connectés !');
                 handleClose();
+                window.location.reload(); // Recharge la page pour mettre à jour le prénom
+            } else {
+                toast.error('Une erreur inconnue est survenue.');
             }
         } catch (error) {
-            console.log(error)
+            console.error(error);
+            toast.error('Une erreur est survenue lors de la connexion.');
         }
     };
 
@@ -157,7 +163,6 @@ function LoginPopup(props) {
                                     <a href="#">J'ai oublié mon mot de passe</a>
                                 </div>
                                 <button type="submit" className="submit-login">Login</button>
-                                {error && <div className="error-message">{error}</div>}
                                 <div className="login-register">
                                     <p>Pas de compte ?&nbsp;&nbsp;&nbsp;<a onClick={registerLink} className="register">Créez en un</a></p>
                                 </div>
@@ -196,7 +201,6 @@ function LoginPopup(props) {
                                     <label>&nbsp;&nbsp;<input type="checkbox" required /><a target="_blank" href="/src/assets/conditions.pdf">Accepter les conditions d'utilisation</a></label>
                                 </div>
                                 <button type="submit" className="submit-login">Register</button>
-                                {error && <div className="error-message">{error}</div>}
                                 <div className="login-register">
                                     <p>Vous avez déjà un compte ?&nbsp;&nbsp;&nbsp;<a onClick={loginLink} className="login-link">Se connecter</a></p>
                                 </div>
