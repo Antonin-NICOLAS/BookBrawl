@@ -98,7 +98,7 @@ function LoginPopup(props) {
         event.preventDefault();
         const { prenom, nom, email, password } = data
         try {
-            const { data } = await axios.post('https://book-brawl-backend.vercel.app/register', {
+            const { data } = await axios.post('/register', {
                 prenom, nom, email, password
             })
             if (data.error) {
@@ -124,7 +124,7 @@ function LoginPopup(props) {
         event.preventDefault();
         const { email, password } = loginData
         try {
-            const { loginData } = await axios.post('https://book-brawl-backend.vercel.app/login', {
+            const { loginData } = await axios.post('/login', {
                 email, password
             })
             if (loginData.error) {
@@ -147,7 +147,7 @@ function LoginPopup(props) {
                     {props.formType === 'login' ? (
                         <div className="form-box-login">
                             <h2>Login</h2>
-                            <form onSubmit={handleLogin} method="POST">
+                            <form onSubmit={handleLogin}>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-signature"></i></span>
                                     <input type="email" id="email" name="email" value={loginData.email} onChange={handleLoginChange} required autoComplete="off"/>
@@ -172,7 +172,7 @@ function LoginPopup(props) {
                     ) : (
                         <div className="form-box-register">
                             <h2>Registration</h2>
-                            <form onSubmit={handleRegister} method="POST">
+                            <form onSubmit={handleRegister}>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-font"></i></span>
                                     <input type="text" id="prenom" name="prenom" value={data.prenom} onChange={handleRegisterChange} required autoComplete="off" />
