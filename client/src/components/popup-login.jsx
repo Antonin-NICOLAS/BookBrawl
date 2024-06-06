@@ -116,19 +116,22 @@ function LoginPopup(props) {
 
     //login
     const handleLogin = async (event) => {
+        event.preventDefault();
         res.setHeader('Access-Control-Allow-Credentials', true)
         res.setHeader('Access-Control-Allow-Origin', '*')
         res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
         res.setHeader(
             'Access-Control-Allow-Headers',
             'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version')
-        event.preventDefault();
-        const { email, password } = loginData
+
         try {
-            const { loginData } = await axios.post('/login', {
-                email, password,
-                headers: {'Content-Type': 'application/json'}
-            })
+            const {loginData} = await fetch(`/login`, {
+                headers: { "Content-Type": "application/json" },
+                method: "POST",
+                mode: "cors",
+                body: JSON.stringify(loginData)
+            });
+
             if (loginData.error) {
                 toast.error(loginData.error)
             } else {
