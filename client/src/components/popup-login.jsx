@@ -8,6 +8,7 @@ import './popup-login.css';
 
 function LoginPopup(props) {
     const [closing, setClosing] = useState(false);
+    const [error, setError] = useState(null); // State to manage error messages
     const navigate = useNavigate();
 
     const [data, setData] = useState({
@@ -114,14 +115,14 @@ function LoginPopup(props) {
         event.preventDefault();
         const { email, password } = loginData
         try {
-            const { data } = await axios.post('/login', {
+            const { loginData } = await axios.post('/login', {
                 email, password,
                 headers: {'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin':'*'
                 }
             })
-            if (data.error) {
-                toast.error(data.error)
+            if (loginData.error) {
+                toast.error(loginData.error)
             } else {
                 setLoginData({})
                 toast.success('Vous êtes connectés !')
@@ -156,6 +157,7 @@ function LoginPopup(props) {
                                     <a href="#">J'ai oublié mon mot de passe</a>
                                 </div>
                                 <button type="submit" className="submit-login">Login</button>
+                                {error && <div className="error-message">{error}</div>}
                                 <div className="login-register">
                                     <p>Pas de compte ?&nbsp;&nbsp;&nbsp;<a onClick={registerLink} className="register">Créez en un</a></p>
                                 </div>
@@ -194,6 +196,7 @@ function LoginPopup(props) {
                                     <label>&nbsp;&nbsp;<input type="checkbox" required /><a target="_blank" href="/src/assets/conditions.pdf">Accepter les conditions d'utilisation</a></label>
                                 </div>
                                 <button type="submit" className="submit-login">Register</button>
+                                {error && <div className="error-message">{error}</div>}
                                 <div className="login-register">
                                     <p>Vous avez déjà un compte ?&nbsp;&nbsp;&nbsp;<a onClick={loginLink} className="login-link">Se connecter</a></p>
                                 </div>
