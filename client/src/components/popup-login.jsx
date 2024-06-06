@@ -94,7 +94,9 @@ function LoginPopup(props) {
         try {
             const { data } = await axios.post('/register', {
                 prenom, nom, email, password,
-                headers: {'Content-Type': 'application/json'}
+                headers: {'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin':'*'
+                }
             })
             if (data.error) {
                 toast.error(data.error)
@@ -117,7 +119,7 @@ function LoginPopup(props) {
                 email, password,
                 headers: {'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin':'*'
-                },
+                }
             })
             if (loginData.error) {
                 toast.error(loginData.error)
@@ -139,15 +141,15 @@ function LoginPopup(props) {
                     {props.formType === 'login' ? (
                         <div className="form-box-login">
                             <h2>Login</h2>
-                            <form onSubmit={handleLogin}>
+                            <form onSubmit={handleLogin} method="POST">
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-signature"></i></span>
-                                    <input type="email" id="email" name="email" value={loginData.email} onChange={handleLoginChange} required autoComplete="off"/>
+                                    <input type="email" id="email" name="email" value={loginData.email} onChange={handleLoginChange} required autoComplete="off" />
                                     <label htmlFor="email">Email</label>
                                 </div>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="password" name="password" value={loginData.password} onChange={handleLoginChange} required autoComplete="off"/>
+                                    <input type="password" id="password" name="password" value={loginData.password} onChange={handleLoginChange} required autoComplete="off" />
                                     <label htmlFor="password">Mot de passe</label>
                                 </div>
                                 <div className="remember-forgot">
@@ -164,7 +166,7 @@ function LoginPopup(props) {
                     ) : (
                         <div className="form-box-register">
                             <h2>Registration</h2>
-                            <form onSubmit={handleRegister}>
+                            <form onSubmit={handleRegister} method="POST">
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-font"></i></span>
                                     <input type="text" id="prenom" name="prenom" value={data.prenom} onChange={handleRegisterChange} required autoComplete="off" />
