@@ -99,7 +99,8 @@ function LoginPopup(props) {
         const { prenom, nom, email, password } = data
         try {
             const { data } = await axios.post('/register', {
-                prenom, nom, email, password
+                prenom, nom, email, password,
+                headers: {'Content-Type': 'application/json'}
             })
             if (data.error) {
                 toast.error(data.error)
@@ -125,7 +126,8 @@ function LoginPopup(props) {
         const { email, password } = loginData
         try {
             const { loginData } = await axios.post('/login', {
-                email, password
+                email, password,
+                headers: {'Content-Type': 'application/json'}
             })
             if (loginData.error) {
                 toast.error(loginData.error)
