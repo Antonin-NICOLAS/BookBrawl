@@ -124,8 +124,10 @@ function LoginPopup(props) {
                 toast.error(data.error)
             } else {
                 setLoginData({})
+                localStorage.setItem('prenom', data.prenom);
                 toast.success('Vous êtes connectés !')
                 handleClose();
+                window.location.reload();
             }
         } catch (error) {
             console.log(error)
