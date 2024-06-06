@@ -1,8 +1,31 @@
-const express = require("express");
-const app = express();
+const express = require('express');
+const dotenv = require('dotenv').config();
+const cors = require('cors');
+const bodyParser = require('body-parser')
+const {mongoose} = require('mongoose');
 
-app.get("/", (req, res) => res.send("Express on Vercel"));
+//start server
+const app = express()
+app.use(express.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cors())
+app.use('/', require('../routes/authroutes'))
 
-app.listen(3000, () => console.log("Server ready on port 3000."));
+//mongoDB connection
+mongoose.connect(process.env.MONGO_URL)
+.then(() => {
+    console.log("mongoDB connected")
+})
+.catch((err) => {
+    console.log("failed to connect", err)
+})
+
+const port = process.env.PORT || 8000;
+const host = process.env.HOST || 'localhost'
+
+app.listen(port, function () {
+    console.log("Server Has Started!");
+    console.log(`Server is running at http://${host}:${port}`)
+});
 
 module.exports = app;
