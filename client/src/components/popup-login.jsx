@@ -115,7 +115,9 @@ function LoginPopup(props) {
         try {
             const { loginData } = await axios.post('/login', {
                 email, password,
-                headers: {'Content-Type': 'application/json'},
+                headers: {'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin':'*'
+                },
             })
             if (loginData.error) {
                 toast.error(loginData.error)
