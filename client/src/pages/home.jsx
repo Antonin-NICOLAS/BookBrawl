@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
+import './home.css'
 
 function Home() {
 
   return (
     <>
-      <div>
-        <h1>Home</h1>
-        <p>coucou</p>
-      </div>
+      <iframe
+        src="https://99ojpnx5xzv64x.embednotionpage.com/omonia/Book-Brawl-a8c34d21f72a4a9dbc73a4b1f7373c16?pvs=4"
+      ></iframe>
     </>
   );
 }
