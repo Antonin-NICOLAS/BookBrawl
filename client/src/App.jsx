@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
-import dotenv from 'dotenv'
 import { Toaster } from 'react-hot-toast'
 import Navbar from '../src/components/navbar';
 import Home from '../src/pages/home';
 import APropos from '../src/pages/a-propos';
+import ErrorPage from '../src/pages/error'
 import LoginPopup from '../src/components/popup-login';
 
-axios.defaults.baseURL = `https://book-brawl-backend.vercel.app`
+axios.defaults.baseURL = `http://localhost:8000`
+//https://book-brawl-backend.vercel.app
 axios.defaults.withCredentials = false
 
 export default function App() {
@@ -36,10 +37,11 @@ export default function App() {
     return (
         <>
             <Navbar onLoginClick={handleLoginClick} />
-            <Toaster position='bottom-right' toastOptions={{duration: 2000}}/>
+            <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
             <Routes location={background || location}>
                 <Route exact path="/" element={<Home />} />
                 <Route path="/about" element={<APropos />} />
+                <Route path="*" element={<ErrorPage />} />
             </Routes>
             {ButtonPopup && (
                 <Routes>
