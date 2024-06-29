@@ -1,0 +1,9 @@
+.errortextpage1{
+    color: rgb(211, 115, 174);
+}
+.errortextpage3{
+    list-style: none;
+    text-decoration: none;
+    font-size: calc(10px + 2vh);
+    color: rgb(208, 0, 255);
+}
