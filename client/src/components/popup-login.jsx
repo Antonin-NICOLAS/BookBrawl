@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
+import conditions from '../assets/conditions.pdf'
 
 //css
 import './popup-login.css';
@@ -195,7 +197,7 @@ function LoginPopup(props) {
                                     <label htmlFor="confirm_password">Confirmer mot de passe</label>
                                 </div>
                                 <div className="remember-forgot">
-                                    <label>&nbsp;&nbsp;<input type="checkbox" required /><a target="_blank" href="/src/assets/conditions.pdf">Accepter les conditions d'utilisation</a></label>
+                                    <label>&nbsp;&nbsp;<input type="checkbox" required /><a href={conditions}>Accepter les conditions d'utilisation</a></label>
                                 </div>
                                 <button type="submit" className="submit-login">Register</button>
                                 <div className="login-register">
