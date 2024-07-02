@@ -1,17 +1,13 @@
 const express = require('express');
-require('dotenv').config();
+const dotenv = require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser')
 const {mongoose} = require('mongoose');
-const cookieParser = require('cookie-parser');
 
 //start server
 const app = express()
 app.use(express.json())
-app.use(cookieParser())
-app.use(express.urlencoded({extended: false}))
-//app.use(bodyParser.urlencoded({ extended: true }))
-
+app.use(bodyParser.urlencoded({ extended: true }))
 //cors plugin
 app.use(cors())
 //routes
