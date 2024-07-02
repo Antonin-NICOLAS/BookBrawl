@@ -43,7 +43,7 @@ const loginUser = async (req, res) => {
         
         const isPasswordMatch = await bcrypt.compare(password, check.password)
         if (isPasswordMatch){
-            return res.status(201).json({ message: "Login Successful", prenom: check.prenom });
+            return res.status(201).json({ message: "Login Successful"});
         }
         else {
             return res.json({ error: "Mot de passe incorrect" });
