@@ -8,8 +8,7 @@ import APropos from '../src/pages/a-propos';
 import ErrorPage from '../src/pages/error'
 import LoginPopup from '../src/components/popup-login';
 
-axios.defaults.baseURL = `https://book-brawl-backend.vercel.app`
-//https://book-brawl-backend.vercel.app
+axios.defaults.baseURL = `http://localhost:8000` //https://book-brawl-backend.vercel.app
 axios.defaults.withCredentials = false
 
 export default function App() {
