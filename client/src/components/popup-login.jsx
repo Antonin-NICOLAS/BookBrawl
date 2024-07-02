@@ -126,12 +126,8 @@ function LoginPopup(props) {
                 toast.error(data.error)
             } else {
                 setLoginData({})
-                localStorage.setItem('prenom', data.prenom);
                 toast.success('Vous êtes connectés !')
                 handleClose();
-                setTimeout(() => {
-                    window.location.reload(); // Recharge la page pour mettre à jour le prénom
-                }, 500);
             }
         } catch (error) {
             console.log(error)
@@ -149,12 +145,12 @@ function LoginPopup(props) {
                             <form onSubmit={handleLogin} method="POST">
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-signature"></i></span>
-                                    <input type="email" id="email" name="email" value={loginData.email} onChange={handleLoginChange} required autoComplete="off" />
+                                    <input type="email" id="email" name="email" value={loginData.email || ''} onChange={handleLoginChange} required autoComplete="off" />
                                     <label htmlFor="email">Email</label>
                                 </div>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="password" name="password" value={loginData.password} onChange={handleLoginChange} required autoComplete="off" />
+                                    <input type="password" id="password" name="password" value={loginData.password || ''} onChange={handleLoginChange} required autoComplete="off" />
                                     <label htmlFor="password">Mot de passe</label>
                                 </div>
                                 <div className="remember-forgot">
@@ -173,27 +169,27 @@ function LoginPopup(props) {
                             <form onSubmit={handleRegister} method="POST">
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-font"></i></span>
-                                    <input type="text" id="prenom" name="prenom" value={data.prenom} onChange={handleRegisterChange} required autoComplete="off" />
+                                    <input type="text" id="prenom" name="prenom" value={data.prenom || ''} onChange={handleRegisterChange} required autoComplete="off" />
                                     <label htmlFor="prenom">Prénom</label>
                                 </div>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-signature"></i></span>
-                                    <input type="text" id="nom" name="nom" value={data.nom} onChange={handleRegisterChange} required autoComplete="off" />
+                                    <input type="text" id="nom" name="nom" value={data.nom || ''} onChange={handleRegisterChange} required autoComplete="off" />
                                     <label htmlFor="nom">Nom</label>
                                 </div>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-envelope"></i></span>
-                                    <input type="email" id="email" name="email" value={data.email} onChange={handleRegisterChange} required autoComplete="off" />
+                                    <input type="email" id="email" name="email" value={data.email || ''} onChange={handleRegisterChange} required autoComplete="off" />
                                     <label htmlFor="email">Email</label>
                                 </div>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="password" name="password" value={data.password} onChange={handlePasswordChange} required autoComplete="off" />
+                                    <input type="password" id="password" name="password" value={data.password || ''} onChange={handlePasswordChange} required autoComplete="off" />
                                     <label htmlFor="password">Mot de passe</label>
                                 </div>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="confirm_password" name="confirmPassword" value={data.confirmPassword} onChange={handlePasswordChange} required autoComplete="off" />
+                                    <input type="password" id="confirm_password" name="confirmPassword" value={data.confirmPassword || ''} onChange={handlePasswordChange} required autoComplete="off" />
                                     <label htmlFor="confirm_password">Confirmer mot de passe</label>
                                 </div>
                                 <div className="remember-forgot">

@@ -5,7 +5,6 @@ import logo from "/src/assets/logo.png";
 
 function Navbar({ onLoginClick }) {
   const [checked, setChecked] = useState(false);
-  const [prenom, setPrenom] = useState(null);
 
   useEffect(() => {
     // Check navigator preferences
@@ -25,12 +24,6 @@ function Navbar({ onLoginClick }) {
     } else if (storedTheme === 'light') {
       setChecked(false);
       document.documentElement.setAttribute('data-theme', 'light');
-    }
-
-    // Get the stored prenom
-    const storedPrenom = localStorage.getItem('prenom');
-    if (storedPrenom) {
-      setPrenom(storedPrenom);
     }
   }, []);
 
@@ -94,11 +87,7 @@ function Navbar({ onLoginClick }) {
             </ul>
             <input type="checkbox" id="switch" checked={checked} onChange={handleChange} name="theme" />
             <label htmlFor="switch">Toggle</label>
-            {prenom ? (
-              <a href="/logout" className="authuser"><button className="login"><i className="fa-solid fa-user"></i>{prenom}</button></a>
-            ) : (
-              <button className="login" onClick={onLoginClick}><i className="fa-solid fa-user"></i>Login</button>
-            )}
+            <button className="login" onClick={onLoginClick}><i className="fa-solid fa-user"></i>Login</button>
           </div>
           <button className="burger" onClick={handleShowLinks}>
             <span className="bar"></span>
