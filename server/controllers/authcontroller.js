@@ -1,8 +1,19 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+require('dotenv').config();
+const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 
 const test = (req, res) => {
-    res.json('test is working');
+    res.json('server is working');
+}
+
+//token
+const maxAge = 1000 * 60 * 60 * 24;
+const createToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: maxAge
+    })
 }
 
 //register
@@ -24,7 +35,13 @@ const registerUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({ prenom, nom, email, password: hashedPassword });
-        return res.status(201).json(user);
+        const token = createToken(user._id)
+        res.cookie("jwt", token, {
+            withCredentials: true,
+            httpOnly: false,
+            maxAge: maxAge
+        })
+        return res.status(201).json({user: user._id});
     } catch (error) {
         console.log(error);
         return res.json({ error: "Une erreur est survenue. Réessayer plus tard" });
@@ -34,16 +51,17 @@ const registerUser = async (req, res) => {
 //login
 const loginUser = async (req, res) => {
     try {
-        const {email, password } = req.body;
-        
-        const check = await User.findOne({email});
-        if (!check) {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
             return res.json({ error: "L'email n'est associé à aucun compte" });
-        } 
-        
-        const isPasswordMatch = await bcrypt.compare(password, check.password)
-        if (isPasswordMatch){
-            return res.status(201).json({ message: "Login Successful", prenom: check.prenom });
+        }
+
+        const isPasswordMatch = await bcrypt.compare(password, user.password)
+        if (isPasswordMatch) {
+            // Générez le jeton JWT
+            return res.status(201).json("Login successful")
         }
         else {
             return res.json({ error: "Mot de passe incorrect" });
@@ -53,5 +71,4 @@ const loginUser = async (req, res) => {
         return res.json({ error: "Une erreur est survenue. Réessayer plus tard" });
     }
 }
-
-module.exports = { test, registerUser, loginUser };
+module.exports = { test, registerUser, loginUser};
