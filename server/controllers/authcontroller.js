@@ -1,5 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 const test = (req, res) => {
     res.json('test is working');
@@ -36,14 +38,17 @@ const loginUser = async (req, res) => {
     try {
         const {email, password } = req.body;
         
-        const check = await User.findOne({email});
-        if (!check) {
+        const user = await User.findOne({email});
+        if (!user) {
             return res.json({ error: "L'email n'est associé à aucun compte" });
         } 
         
-        const isPasswordMatch = await bcrypt.compare(password, check.password)
+        const isPasswordMatch = await bcrypt.compare(password, user.password)
         if (isPasswordMatch){
-            return res.status(201).json({ message: "Login Successful"});
+            jwt.sign({id: user._id, nom: user.nom, prenom: user.prenom, email: user.email}, process.env.JWT_SECRET, {}, (err, token) => {
+                if(err) throw err;
+                res.cookie('token', token).json(user)
+            })
         }
         else {
             return res.json({ error: "Mot de passe incorrect" });
