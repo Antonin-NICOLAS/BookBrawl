@@ -1,21 +1,25 @@
 const express = require('express');
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const {mongoose} = require('mongoose');
 
 //start server
 const app = express()
+
+//middlewares
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: false }))
 //cors plugin
-app.use(cors())
+app.use(cors({credentials: true, origin: process.env.FRONTEND_SERVER}))
 //routes
 app.use('/', require('../routes/authroutes'))
 //cors origin
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    //res.header('Access-Control-Allow-Origin', 'https://book-brawl-backend.vercel.app');
+    res.header('Access-Control-Allow-Origin', process.env.FRONTEND_SERVER);
+    res.header('Access-Control-Allow-Credentials', true)
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
