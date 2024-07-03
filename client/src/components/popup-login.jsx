@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Link } from 'react-router-dom'
+import { preconnect } from 'react-dom';
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import conditions from '../assets/conditions.pdf'
@@ -90,13 +90,14 @@ function LoginPopup(props) {
 
     //register
     const handleRegister = async (event) => {
+        preconnect("http://localhost:8000"); //marche pas ?
         event.preventDefault();
         const { prenom, nom, email, password } = data
         try {
             const { data } = await axios.post('/register', {
                 prenom, nom, email, password,
                 headers: {'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin':'*'
+                'Access-Control-Allow-Origin': import.meta.env.VITE_FRONTEND_SERVER
                 }
             })
             if (data.error) {
@@ -118,8 +119,9 @@ function LoginPopup(props) {
         try {
             const { data } = await axios.post('/login', {
                 email, password,
+                withCredentials: true,
                 headers: {'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin':'*'
+                'Access-Control-Allow-Origin': import.meta.env.VITE_FRONTEND_SERVER
                 }
             })
             if (data.error) {
