@@ -50,6 +50,7 @@ const loginUser = async (req, res) => {
                 secure: process.env.NODE_ENV === "production" ? true : false,
                 httpOnly: false, //true ne marche pas
                 sameSite: process.env.NODE_ENV === "production" ? 'None' : '',
+                maxAge: process.env.JWT_EXPIRATION,
             }
             jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
                 if (err) throw err;
