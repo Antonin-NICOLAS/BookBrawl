@@ -47,8 +47,8 @@ const loginUser = async (req, res) => {
         if (isPasswordMatch) {
             const options = {
                 //expires: new Date(Date.now() + process.env.JWT_EXPIRATION), // marche pas.
-                secure: process.env.NODE_ENV === "production" ? true : false,
-                httpOnly: process.env.NODE_ENV === "production" ? true : false,
+                secure: true,
+                httpOnly: false,
             }
             jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
                 if (err) throw err;
