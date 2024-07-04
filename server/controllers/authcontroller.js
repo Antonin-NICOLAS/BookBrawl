@@ -45,14 +45,9 @@ const loginUser = async (req, res) => {
 
         const isPasswordMatch = await bcrypt.compare(password, user.password)
         if (isPasswordMatch) {
-            const options = {
-                expires: new Date(Date.now() + process.env.JWT_EXPIRATION),
-                secure: process.env.NODE_ENV === "production" ? true : false,
-                httpOnly: process.env.NODE_ENV === "production" ? true : false,
-            }
             jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
                 if (err) throw err;
-                res.cookie('token', token, options).json(user)
+                res.cookie('token', token).json(user)
             })
         }
         else {
