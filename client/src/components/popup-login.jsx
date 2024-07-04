@@ -97,7 +97,7 @@ function LoginPopup(props) {
             const { data } = await axios.post('/register', {
                 prenom, nom, email, password,
                 headers: {'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
+                'Access-Control-Allow-Origin': 'https://book-brawl.vercel.app'
                 }
             })
             if (data.error) {
@@ -121,7 +121,7 @@ function LoginPopup(props) {
                 email, password,
                 withCredentials: true,
                 headers: {'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
+                'Access-Control-Allow-Origin': 'https://book-brawl.vercel.app'
                 }
             })
             if (data.error) {
