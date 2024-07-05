@@ -1,214 +1,68 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { preconnect } from 'react-dom';
-import axios from 'axios'
-import { toast } from 'react-hot-toast'
-import conditions from '../assets/conditions.pdf'
+const User = require('../models/user');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
-//css
-import './popup-login.css';
-
-function LoginPopup(props) {
-    const [closing, setClosing] = useState(false);
-    const navigate = useNavigate();
-
-    const [data, setData] = useState({
-        prenom: '',
-        nom: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    });
-    const [loginData, setLoginData] = useState({
-        email: '',
-        password: ''
-    });
-
-    const handleClose = () => {
-        setClosing(true);
-        setTimeout(() => {
-            setClosing(false);
-            props.setTrigger(false);
-            props.setFormType('login');
-            props.setFormType(null);
-        }, 300);
-    };
-
-    const registerLink = () => {
-        props.setFormType('register');
-        const currentPath = props.location.pathname.replace(/\/login$/, '');
-        navigate(`${currentPath}/register`, { state: { background: props.location.state.background } }); // Conserver l'état d'arrière-plan
-    };
-
-    const loginLink = () => {
-        props.setFormType('login');
-        const currentPath = props.location.pathname.replace(/\/register$/, '');
-        navigate(`${currentPath}/login`, { state: { background: props.location.state.background } }); // Conserver l'état d'arrière-plan
-    };
-
-    const handleRegisterChange = (e) => {
-        setData({ ...data, [e.target.name]: e.target.value });
-    };
-
-    const handleLoginChange = (e) => {
-        setLoginData({ ...loginData, [e.target.name]: e.target.value });
-    };
-
-    const handlePasswordChange = (e) => {
-        handleRegisterChange(e);
-        validatePassword();
-    };
-
-    //overlay click
-    const overlayRef = useRef(null);
-    const wrapperRef = useRef(null);
-    const handleClickOutside = (event) => {
-        if (overlayRef.current && wrapperRef.current && overlayRef.current.contains(event.target) && !wrapperRef.current.contains(event.target)) {
-            handleClose();
-        }
-    };
-
-    useEffect(() => {
-        if (props.trigger) {
-            document.addEventListener("click", handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener("click", handleClickOutside);
-        };
-    }, [props.trigger]);
-
-    //check both password
-    const validatePassword = () => {
-        const password = document.getElementById("password");
-        const confirmPassword = document.getElementById("confirm_password");
-        if (password && confirmPassword && password.value !== confirmPassword.value) {
-            confirmPassword.setCustomValidity("Les mots de passe diffèrent");
-        } else {
-            confirmPassword.setCustomValidity('');
-        }
-    };
-
-    //register
-    const handleRegister = async (event) => {
-        preconnect("https://book-brawl-backend.vercel.app"); //marche pas ?
-        event.preventDefault();
-        const { prenom, nom, email, password } = data
-        try {
-            const { data } = await axios.post('/register', {
-                prenom, nom, email, password,
-                headers: {'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
-                }
-            })
-            if (data.error) {
-                toast.error(data.error)
-            } else {
-                setData({})
-                toast.success('Bienvenue !')
-                handleClose();
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    };
-
-    //login
-    const handleLogin = async (event) => {
-        event.preventDefault();
-        const { email, password } = loginData
-        try {
-            const { data } = await axios.post('/login', {
-                email, password,
-                withCredentials: true,
-                credentials: "include",
-                headers: {'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
-                }
-            })
-            if (data.error) {
-                toast.error(data.error)
-            } else {
-                setLoginData({})
-                toast.success('Vous êtes connectés !')
-                handleClose();
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    };
-
-    return (props.trigger) ? (
-        <>
-            <div ref={overlayRef} className={`login-overlay ${closing ? "animate-popup-close" : "animate-popup"} ${props.formType === 'register' ? "active" : ""}`}>
-                <div ref={wrapperRef} className="wrapper">
-                    <span className="close-login" onClick={handleClose}><i className="fa-solid fa-xmark"></i></span>
-                    {props.formType === 'login' ? (
-                        <div className="form-box-login">
-                            <h2>Login</h2>
-                            <form onSubmit={handleLogin} method="POST">
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-signature"></i></span>
-                                    <input type="email" id="email" name="email" value={loginData.email || ''} onChange={handleLoginChange} required autoComplete="off" />
-                                    <label htmlFor="email">Email</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="password" name="password" value={loginData.password || ''} onChange={handleLoginChange} required autoComplete="off" />
-                                    <label htmlFor="password">Mot de passe</label>
-                                </div>
-                                <div className="remember-forgot">
-                                    <label><input type="checkbox" />Me le rappeler</label>
-                                    <a href="#">J'ai oublié mon mot de passe</a>
-                                </div>
-                                <button type="submit" className="submit-login">Login</button>
-                                <div className="login-register">
-                                    <p>Pas de compte ?&nbsp;&nbsp;&nbsp;<a onClick={registerLink} className="register">Créez en un</a></p>
-                                </div>
-                            </form>
-                        </div>
-                    ) : (
-                        <div className="form-box-register">
-                            <h2>Registration</h2>
-                            <form onSubmit={handleRegister} method="POST">
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-font"></i></span>
-                                    <input type="text" id="prenom" name="prenom" value={data.prenom || ''} onChange={handleRegisterChange} required autoComplete="off" />
-                                    <label htmlFor="prenom">Prénom</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-signature"></i></span>
-                                    <input type="text" id="nom" name="nom" value={data.nom || ''} onChange={handleRegisterChange} required autoComplete="off" />
-                                    <label htmlFor="nom">Nom</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-envelope"></i></span>
-                                    <input type="email" id="email" name="email" value={data.email || ''} onChange={handleRegisterChange} required autoComplete="off" />
-                                    <label htmlFor="email">Email</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="password" name="password" value={data.password || ''} onChange={handlePasswordChange} required autoComplete="off" />
-                                    <label htmlFor="password">Mot de passe</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="confirm_password" name="confirmPassword" value={data.confirmPassword || ''} onChange={handlePasswordChange} required autoComplete="off" />
-                                    <label htmlFor="confirm_password">Confirmer mot de passe</label>
-                                </div>
-                                <div className="remember-forgot">
-                                    <label>&nbsp;&nbsp;<input type="checkbox" required /><a href={conditions}>Accepter les conditions d'utilisation</a></label>
-                                </div>
-                                <button type="submit" className="submit-login">Register</button>
-                                <div className="login-register">
-                                    <p>Vous avez déjà un compte ?&nbsp;&nbsp;&nbsp;<a onClick={loginLink} className="login-link">Se connecter</a></p>
-                                </div>
-                            </form>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </>
-    ) : "";
+const test = (req, res) => {
+    res.json('test is working');
 }
 
-export default LoginPopup;
+//register
+const registerUser = async (req, res) => {
+    try {
+        const { prenom, nom, email, password } = req.body;
+
+        if (!nom) {
+            return res.json({ error: "Le nom est requis" });
+        }
+        if (!password || password.length < 6) {
+            return res.json({ error: "Un mot de passe est requis, d'une longueur de 6 caractères" });
+        }
+
+        const exist = await User.findOne({ email });
+        if (exist) {
+            return res.json({ error: "L'email est déjà associé à un compte" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({ prenom, nom, email, password: hashedPassword });
+        return res.status(201).json(user);
+    } catch (error) {
+        console.log(error);
+        return res.json({ error: "Une erreur est survenue. Réessayer plus tard" });
+    }
+}
+
+//login
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.json({ error: "L'email n'est associé à aucun compte" });
+        }
+
+        const isPasswordMatch = await bcrypt.compare(password, user.password)
+        if (isPasswordMatch) {
+            const options = {
+                secure: process.env.NODE_ENV === "production" ? true : false,
+                httpOnly: process.env.NODE_ENV === "production" ? true : false,
+                sameSite: process.env.NODE_ENV === "production" ? 'None' : '',
+                maxAge: 2 * 24 * 60 * 60 * 1000,
+            }
+            jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
+                if (err) throw err;
+                res.cookie('token', token, options).json(user)
+            })
+        }
+        else {
+            return res.json({ error: "Mot de passe incorrect" });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.json({ error: "Une erreur est survenue. Réessayer plus tard" });
+    }
+}
+
+module.exports = { test, registerUser, loginUser };
