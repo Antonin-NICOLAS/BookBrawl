@@ -90,7 +90,7 @@ function LoginPopup(props) {
 
     //register
     const handleRegister = async (event) => {
-        preconnect("http://localhost:8000"); //marche pas ?
+        preconnect("https://book-brawl-backend.vercel.app"); //marche pas ?
         event.preventDefault();
         const { prenom, nom, email, password } = data
         try {
@@ -120,6 +120,7 @@ function LoginPopup(props) {
             const { data } = await axios.post('/login', {
                 email, password,
                 withCredentials: true,
+                credentials: "include",
                 headers: {'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
                 }
