@@ -120,7 +120,6 @@ function LoginPopup(props) {
             const { data } = await axios.post('/login', {
                 email, password,
                 withCredentials: true,
-                credentials: "include",
                 headers: {'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
                 }
