@@ -47,7 +47,7 @@ const loginUser = async (req, res) => {
         if (isPasswordMatch) {
             const options = {
                 secure: process.env.NODE_ENV === "production" ? true : false,
-                httpOnly: false, //true ne marche pas
+                httpOnly: process.env.NODE_ENV === "production" ? true : false,
                 sameSite: process.env.NODE_ENV === "production" ? 'None' : '',
                 maxAge: 2 * 24 * 60 * 60 * 1000,
             }
