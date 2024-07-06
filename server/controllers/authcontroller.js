@@ -1,7 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
-const Cookies = require('js-cookie');
 const jwt = require('jsonwebtoken');
 
 const test = (req, res) => {
@@ -51,12 +50,11 @@ const loginUser = async (req, res) => {
                 httpOnly: process.env.NODE_ENV === "production" ? true : false,
                 sameSite: process.env.NODE_ENV === "production" ? 'None' : '',
                 maxAge: 2 * 24 * 60 * 60 * 1000,
-                expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-                //domain: "vercel.app"
+                expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
             }
             jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
                 if (err) throw err;
-                Cookies.set('token', token, options).json(user)
+                res.cookie('token', token, options).json(user)
             })
         }
         else {
