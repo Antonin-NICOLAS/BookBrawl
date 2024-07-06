@@ -90,7 +90,6 @@ function LoginPopup(props) {
 
     //register
     const handleRegister = async (event) => {
-        preconnect("http://localhost:8000"); //marche pas ?
         event.preventDefault();
         const { prenom, nom, email, password } = data
         try {
