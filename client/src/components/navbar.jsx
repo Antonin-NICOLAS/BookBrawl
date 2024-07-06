@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import './navbar.css';
 import { Link } from 'react-router-dom'
 import logo from "/src/assets/logo.png";
+import { useContext } from "react";
+import { UserContext } from "../context/userContext"
+import { toast } from "react-hot-toast"
+import axios from "axios";
 
-function Navbar({ onLoginClick }) {
+function Navbar({ onLoginClick}) {
   const [checked, setChecked] = useState(false);
+  const { user, setUser } = useContext(UserContext)
 
   useEffect(() => {
     // Check navigator preferences
@@ -57,6 +62,31 @@ function Navbar({ onLoginClick }) {
     setShowLinks(!showLinks);
   };
 
+  //logout
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get('/logout', {
+        withCredentials: true,
+        headers: {'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
+          }
+      });
+      console.log(response);
+
+      if (response.error) {
+        toast.error('La déconnexion a échouée.');
+        console.log(error)
+      } else {
+        setUser(null);
+        toast.success('Vous êtes déconnecté !')
+      }
+    } catch (err) {
+      toast.error('Un problème est survenu pendant la déconnection.')
+      console.log(err.response)
+    }
+  };
+
+
   return (
     <>
       <header>
@@ -87,7 +117,11 @@ function Navbar({ onLoginClick }) {
             </ul>
             <input type="checkbox" id="switch" checked={checked} onChange={handleChange} name="theme" />
             <label htmlFor="switch">Toggle</label>
-            <button className="login" onClick={onLoginClick}><i className="fa-solid fa-user"></i>Login</button>
+            {user ? (
+              <button className="login" onClick={handleLogout}><i className="fa-solid fa-user"></i>{user.prenom}</button>
+            ) : (
+              <button className="login" onClick={onLoginClick}><i className="fa-solid fa-user"></i>Login</button>
+            )}
           </div>
           <button className="burger" onClick={handleShowLinks}>
             <span className="bar"></span>

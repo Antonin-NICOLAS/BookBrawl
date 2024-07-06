@@ -90,7 +90,7 @@ function LoginPopup(props) {
 
     //register
     const handleRegister = async (event) => {
-        preconnect("https://book-brawl-backend.vercel.app"); //marche pas ?
+        preconnect("http://localhost:8000"); //marche pas ?
         event.preventDefault();
         const { prenom, nom, email, password } = data
         try {
@@ -128,7 +128,7 @@ function LoginPopup(props) {
                 toast.error(data.error)
             } else {
                 setLoginData({})
-                toast.success('Vous êtes connectés !')
+                toast.success('Vous êtes connecté !')
                 handleClose();
             }
         } catch (error) {
