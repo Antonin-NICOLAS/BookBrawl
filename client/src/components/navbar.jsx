@@ -80,8 +80,8 @@ function Navbar({ onLoginClick}) {
         setUser(null);
         toast.success('Vous êtes déconnecté !')
         setTimeout(() => {
-          window.location.reload();  // Recharger la page après 300ms
-      }, 200)
+          window.location.reload();
+      }, 2000)
       }
     } catch (err) {
       toast.error('Un problème est survenu pendant la déconnection.')
