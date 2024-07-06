@@ -130,6 +130,9 @@ function LoginPopup(props) {
                 setLoginData({})
                 toast.success('Vous êtes connecté !')
                 handleClose();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 400)
             }
         } catch (error) {
             console.log(error)

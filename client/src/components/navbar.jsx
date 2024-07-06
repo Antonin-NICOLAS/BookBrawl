@@ -79,6 +79,9 @@ function Navbar({ onLoginClick}) {
       } else {
         setUser(null);
         toast.success('Vous êtes déconnecté !')
+        setTimeout(() => {
+          window.location.reload();  // Recharger la page après 300ms
+      }, 200)
       }
     } catch (err) {
       toast.error('Un problème est survenu pendant la déconnection.')
