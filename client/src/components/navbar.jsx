@@ -65,7 +65,7 @@ function Navbar({ onLoginClick}) {
   //logout
   const handleLogout = async () => {
     try {
-      const response = await axios.get('/logout', {
+      const response = await axios.post('/logout', {
         withCredentials: true,
         headers: {'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
