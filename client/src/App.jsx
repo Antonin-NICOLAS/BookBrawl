@@ -7,8 +7,9 @@ import Home from '../src/pages/home';
 import APropos from '../src/pages/a-propos';
 import ErrorPage from '../src/pages/error'
 import LoginPopup from '../src/components/popup-login';
+import { UserContextProvider } from './context/userContext'
 
-axios.defaults.baseURL = 'https://book-brawl-backend.vercel.app'
+axios.defaults.baseURL = process.env.BACKEND_SERVER //https://book-brawl-backend.vercel.app
 axios.defaults.withCredentials = true
 
 export default function App() {
@@ -34,7 +35,7 @@ export default function App() {
     };
 
     return (
-        <>
+        <UserContextProvider>
             <Navbar onLoginClick={handleLoginClick} />
             <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
             <Routes location={background || location}>
@@ -50,6 +51,6 @@ export default function App() {
                     <Route path="/about/register" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
                 </Routes>
             )}
-        </>
+        </UserContextProvider>
     );
 }
