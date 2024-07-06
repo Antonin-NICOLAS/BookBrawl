@@ -50,7 +50,8 @@ const loginUser = async (req, res) => {
                 httpOnly: process.env.NODE_ENV === "production" ? true : false,
                 sameSite: process.env.NODE_ENV === "production" ? 'None' : '',
                 maxAge: 2 * 24 * 60 * 60 * 1000,
-                expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
+                expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+                //domain: ".vercel.app"
             }
             jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
                 if (err) throw err;
@@ -66,4 +67,30 @@ const loginUser = async (req, res) => {
     }
 }
 
-module.exports = { test, registerUser, loginUser };
+//logout
+
+const logoutUser = async(req,res) => {
+    const options = {
+        secure: process.env.NODE_ENV === "production" ? true : false,
+        httpOnly: process.env.NODE_ENV === "production" ? true : false,
+        sameSite: process.env.NODE_ENV === "production" ? 'None' : '',
+        expires: new Date(0)
+    }
+    res.cookie('token', 'expiredtoken', options);
+    res.status(200).json({status: "sucess"})
+}
+
+//profile
+const getProfile = (req, res) => {
+    const {token} = req.cookies
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, user) => {
+            if(err) throw err;
+            res.json(user)
+        })
+    } else {
+        res.json(null)
+    }
+}
+
+module.exports = { test, registerUser, loginUser, logoutUser, getProfile };
