@@ -6,7 +6,7 @@ function Home() {
   return (
     <>
       <iframe
-        src="https://99ojpnx5xzv64x.embednotionpage.com/omonia/Book-Brawl-a8c34d21f72a4a9dbc73a4b1f7373c16?pvs=4"
+        src="https://0y9ekjyrxg00yo.embednotionpage.com/Book-Brawl-a8c34d21f72a4a9dbc73a4b1f7373c16"
       ></iframe>
     </>
   );
