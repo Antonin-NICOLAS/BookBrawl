@@ -9,7 +9,6 @@ import ErrorPage from '../src/pages/error'
 import LoginPopup from '../src/components/popup-login';
 import { UserContextProvider } from './context/userContext'
 
-axios.defaults.baseURL = 'https://book-brawl-backend.vercel.app'
 axios.defaults.withCredentials = true
 
 export default function App() {
