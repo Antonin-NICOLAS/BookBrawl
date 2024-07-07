@@ -93,7 +93,7 @@ function LoginPopup(props) {
         event.preventDefault();
         const { prenom, nom, email, password } = data
         try {
-            const { data } = await axios.post('/api/register', {
+            const { data } = await axios.post(process.env.NODE_ENV === "production" ? '/api/register' : '/register', {
                 prenom, nom, email, password,
                 headers: {'Content-Type': 'application/json'
                 }
@@ -115,7 +115,7 @@ function LoginPopup(props) {
         event.preventDefault();
         const { email, password } = loginData
         try {
-            const { data } = await axios.post('/api/login', {
+            const { data } = await axios.post(process.env.NODE_ENV === "production" ? '/api/login' : '/login', {
                 email, password,
                 withCredentials: true,
                 headers: {'Content-Type': 'application/json'
