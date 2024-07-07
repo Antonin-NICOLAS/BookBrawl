@@ -11,8 +11,7 @@ export function UserContextProvider({children}) {
         if(!user) {
             axios.get('/api/profile',{
                 withCredentials: true,
-                headers: {'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
+                headers: {'Content-Type': 'application/json'
                 }
             }).then(({data}) => {
                 setUser(data)
