@@ -9,7 +9,7 @@ export function UserContextProvider({children}) {
 
     useEffect(() => {
         if(!user) {
-            axios.get('/api/profile',{
+            axios.get(process.env.NODE_ENV === "production" ? '/api/profile' : '/profile',{ ///api/profile
                 withCredentials: true,
                 headers: {'Content-Type': 'application/json'
                 }
