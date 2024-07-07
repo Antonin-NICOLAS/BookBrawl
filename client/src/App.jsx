@@ -9,6 +9,7 @@ import ErrorPage from '../src/pages/error'
 import LoginPopup from '../src/components/popup-login';
 import { UserContextProvider } from './context/userContext'
 
+axios.defaults.baseURL = process.env.NODE_ENV === "production" ? '' : process.env.BACKEND_SERVER, 
 axios.defaults.withCredentials = true
 
 export default function App() {
