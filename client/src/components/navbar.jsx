@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import './navbar.css';
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom';
 import logo from "/src/assets/logo.png";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext"
 
-function Navbar({ onLoginClick}) {
+function Navbar({onLoginClick, onLoginClickWhenOnRegister}) {
   const [checked, setChecked] = useState(false);
   const { user } = useContext(UserContext)
+  const location = useLocation();
 
   useEffect(() => {
     // Check navigator preferences
@@ -59,6 +60,17 @@ function Navbar({ onLoginClick}) {
   const handleShowLinks = () => {
     setShowLinks(!showLinks);
   };
+  const handleLoginClick = () => {
+    if (!location.pathname.endsWith("/login")) {
+      onLoginClick();
+    }
+    if (location.pathname.endsWith("/register")) {
+      onLoginClickWhenOnRegister();
+    }
+    else{
+      
+    }
+  };
 
 
   return (
@@ -94,7 +106,7 @@ function Navbar({ onLoginClick}) {
             {user ? (
               <Link class="linkaccount" to="/accounts"><button className="login"><i className="fa-solid fa-user"></i>{user.prenom}</button></Link>
             ) : (
-              <button className="login" onClick={onLoginClick}><i className="fa-solid fa-user"></i>Login</button>
+              <button className="login" onClick={handleLoginClick}><i className="fa-solid fa-user"></i>Login</button>
             )}
           </div>
           <button className="burger" onClick={handleShowLinks}>
