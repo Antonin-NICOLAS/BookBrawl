@@ -105,13 +105,13 @@ function Navbar({ onLoginClick}) {
                 <Link to="/"><i className="fa-solid fa-house"></i>&nbsp;&nbsp;&nbsp;Accueil</Link>
               </li>
               <li className="navbar_link second">
-                <Link href="#"><i className="fa-solid fa-ranking-star"></i>&nbsp;&nbsp;&nbsp;Classement</Link>
+                <Link to="/ranking"><i className="fa-solid fa-ranking-star"></i>&nbsp;&nbsp;&nbsp;Classement</Link>
               </li>
               <li className="navbar_link third">
-                <Link href="#"><i className="fa-solid fa-book"></i>&nbsp;&nbsp;&nbsp;Mes livres</Link>
+                <Link to="/books"><i className="fa-solid fa-book"></i>&nbsp;&nbsp;&nbsp;Mes livres</Link>
               </li>
               <li className="navbar_link four">
-                <Link href="#"><i className="fa-solid fa-calculator"></i>&nbsp;&nbsp;&nbsp;Prédictions</Link>
+                <Link to="/predict"><i className="fa-solid fa-calculator"></i>&nbsp;&nbsp;&nbsp;Prédictions</Link>
               </li>
               <li className="navbar_link fifth">
                 <Link to="/about"><i className="fa-solid fa-question"></i>&nbsp;&nbsp;&nbsp;À propos</Link>
