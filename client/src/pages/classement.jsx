@@ -15,7 +15,6 @@ const Classement = () => {
                 setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching the users:', error);
-                toast.error("Une erreur est survenue. Réessayer plus tard");
             }
         };
 
