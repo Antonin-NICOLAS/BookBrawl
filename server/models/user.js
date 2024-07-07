@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const {Schema} = mongoose
+const { Schema } = mongoose
 
 const userSchema = new Schema({
     prenom: {
@@ -19,9 +19,14 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    wordsRead: {
+        type: Number,
+        required: true,
+        default: 0
+    },
 })
- 
-const UserModel = mongoose.model("User",userSchema)
+
+const UserModel = mongoose.model("User", userSchema)
 
 module.exports = UserModel
