@@ -12,11 +12,10 @@ const Classement = () => {
         const fetchUsers = async () => {
             try {
                 const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userranking' : '/userranking');
-                const sortedUsers = response.data.sort((a, b) => b.wordsRead - a.wordsRead); // Trier les utilisateurs par nombre de mots lus
-                setUsers(sortedUsers);
+                setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching the users:', error);
-                toast.error(error.message);
+                toast.error("Une erreur est survenue. Réessayer plus tard");
             }
         };
 

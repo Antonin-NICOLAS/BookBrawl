@@ -25,7 +25,7 @@ function Compte() {
         toast.success('Vous êtes déconnecté !')
         setTimeout(() => {
             window.location.href = '/';
-          }, 2000);
+          }, 200);
       }
     } catch (err) {
       toast.error('Un problème est survenu pendant la déconnection.')
