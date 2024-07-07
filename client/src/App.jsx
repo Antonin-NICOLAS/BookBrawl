@@ -31,6 +31,14 @@ export default function App() {
         setInitialPath(currentPath);
         navigate(`${currentPath}/login`, { state: { background: location } });
     };
+    const handleRegistrationClick = () => {
+        setButtonPopup(true);
+        setFormType('login');
+        const currentPath = location.pathname === '/' ? '' : location.pathname;
+        const newPath = currentPath.replace(/\/register$/, '');
+        setInitialPath(newPath);
+        navigate(`${newPath}/login`, { state: { background: location } });
+    };
 
     const handlePopupClose = () => {
         setButtonPopup(false);
@@ -40,7 +48,7 @@ export default function App() {
 
     return (
         <UserContextProvider>
-            <Navbar onLoginClick={handleLoginClick} />
+            <Navbar onLoginClick={handleLoginClick} onLoginClickWhenOnRegister={handleRegistrationClick}/>
             <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
             <Routes location={background || location}>
                 <Route exact path="/" element={<Home />} />
