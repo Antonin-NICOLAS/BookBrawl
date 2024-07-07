@@ -9,6 +9,7 @@ import Classement from '../src/pages/classement';
 import Books from '../src/pages/books';
 import Predictions from '../src/pages/predictions'
 import APropos from '../src/pages/a-propos';
+import Accounts from '../src/pages/accounts';
 import ErrorPage from '../src/pages/error'
 import LoginPopup from '../src/components/popup-login';
 
@@ -47,6 +48,7 @@ export default function App() {
                 <Route exact path="/books" element={<Books />} />
                 <Route exact path="/predict" element={<Predictions />} />
                 <Route path="/about" element={<APropos />} />
+                <Route path="/accounts" element={<Accounts />} />
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
             {ButtonPopup && (
