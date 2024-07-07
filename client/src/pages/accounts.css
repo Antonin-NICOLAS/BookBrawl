@@ -1,0 +1,15 @@
+.logout {
+    border: solid 2px var(--bg);
+    border-radius: 20px;
+    height: 7vh;
+    max-height: 45px;
+    min-height: 30px;
+    width: 150px;
+    color: var(--bg);
+    background: rgb(255, 0, 191);
+    padding: 5px 11px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  }
