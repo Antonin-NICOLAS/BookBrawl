@@ -93,7 +93,7 @@ function LoginPopup(props) {
         event.preventDefault();
         const { prenom, nom, email, password } = data
         try {
-            const { data } = await axios.post('/register', {
+            const { data } = await axios.post('/api/register', {
                 prenom, nom, email, password,
                 headers: {'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
@@ -116,7 +116,7 @@ function LoginPopup(props) {
         event.preventDefault();
         const { email, password } = loginData
         try {
-            const { data } = await axios.post('/login', {
+            const { data } = await axios.post('/api/login', {
                 email, password,
                 withCredentials: true,
                 headers: {'Content-Type': 'application/json',
