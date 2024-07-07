@@ -156,7 +156,7 @@ ul li a i {
 
 
 /*login*/
-.authuser{
+.linkaccount{
   text-decoration: none;
 }
 
@@ -176,9 +176,6 @@ ul li a i {
   justify-content: center;
   align-items: center;
   display: flex;
-  text-decoration: none;
-}
-.loginreactlink{
   text-decoration: none;
 }
 

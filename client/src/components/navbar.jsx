@@ -4,12 +4,10 @@ import { Link } from 'react-router-dom'
 import logo from "/src/assets/logo.png";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext"
-import { toast } from "react-hot-toast"
-import axios from "axios";
 
 function Navbar({ onLoginClick}) {
   const [checked, setChecked] = useState(false);
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   useEffect(() => {
     // Check navigator preferences
@@ -62,32 +60,6 @@ function Navbar({ onLoginClick}) {
     setShowLinks(!showLinks);
   };
 
-  //logout
-  const handleLogout = async () => {
-    try {
-      const response = await axios.post(process.env.NODE_ENV === "production" ? '/api/logout' : '/logout', {
-        withCredentials: true,
-        headers: {'Content-Type': 'application/json'
-          }
-      });
-      console.log(response);
-
-      if (response.error) {
-        toast.error('La déconnexion a échouée.');
-        console.log(error)
-      } else {
-        setUser(null);
-        toast.success('Vous êtes déconnecté !')
-        setTimeout(() => {
-          window.location.reload();
-      }, 2000)
-      }
-    } catch (err) {
-      toast.error('Un problème est survenu pendant la déconnection.')
-      console.log(err.response)
-    }
-  };
-
 
   return (
     <>
@@ -120,7 +92,7 @@ function Navbar({ onLoginClick}) {
             <input type="checkbox" id="switch" checked={checked} onChange={handleChange} name="theme" />
             <label htmlFor="switch">Toggle</label>
             {user ? (
-              <button className="login" onClick={handleLogout}><i className="fa-solid fa-user"></i>{user.prenom}</button>
+              <Link class="linkaccount" to="/accounts"><button className="login"><i className="fa-solid fa-user"></i>{user.prenom}</button></Link>
             ) : (
               <button className="login" onClick={onLoginClick}><i className="fa-solid fa-user"></i>Login</button>
             )}
