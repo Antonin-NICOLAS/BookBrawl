@@ -9,7 +9,7 @@ export function UserContextProvider({children}) {
 
     useEffect(() => {
         if(!user) {
-            axios.get('/profile',{
+            axios.get('/api/profile',{
                 withCredentials: true,
                 headers: {'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': process.env.FRONTEND_SERVER
