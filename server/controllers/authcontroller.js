@@ -51,7 +51,7 @@ const loginUser = async (req, res) => {
                 sameSite: process.env.NODE_ENV === "production" ? 'lax' : '',
                 maxAge: 2 * 24 * 60 * 60 * 1000,
                 expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-                domain: 'book-brawl-backend.vercel.app'
+                domain: 'book-brawl.vercel.app'
             }
             jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
                 if (err) throw err;
@@ -75,7 +75,7 @@ const logoutUser = async(req,res) => {
         httpOnly: process.env.NODE_ENV === "production" ? true : false,
         sameSite: process.env.NODE_ENV === "production" ? 'lax' : '',
         expires: new Date(0),
-        domain: 'book-brawl-backend.vercel.app'
+        domain: 'book-brawl.vercel.app'
     }
     res.cookie('token', 'expiredtoken', options);
     res.status(200).json({status: "sucess"})
