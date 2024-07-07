@@ -11,8 +11,14 @@ const Classement = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userranking' : '/userranking');
+                const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userranking' : '/userranking'
+                );
                 setUsers(response.data);
+
+                if (response.error) {
+                    toast.error(response.error)
+                }
+
             } catch (error) {
                 console.error('Error fetching the users:', error);
             }
