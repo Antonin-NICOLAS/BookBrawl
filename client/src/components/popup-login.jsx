@@ -195,7 +195,7 @@ function LoginPopup(props) {
                                     <label htmlFor="confirm_password">Confirmer mot de passe</label>
                                 </div>
                                 <div className="remember-forgot">
-                                    <label>&nbsp;&nbsp;<input type="checkbox" required /><a href={conditions}>Accepter les conditions d'utilisation</a></label>
+                                    <label>&nbsp;&nbsp;<input type="checkbox" required /><a href={conditions} target="_blank">Accepter les conditions d'utilisation</a></label>
                                 </div>
                                 <button type="submit" className="submit-login">Register</button>
                                 <div className="login-register">
