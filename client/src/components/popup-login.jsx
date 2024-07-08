@@ -110,6 +110,7 @@ function LoginPopup(props) {
             }
         } catch (error) {
             console.log(error)
+            toast.error('Un problème est survenu. réessayez plus tard.')
         }
     };
 
@@ -136,6 +137,7 @@ function LoginPopup(props) {
             }
         } catch (error) {
             console.log(error)
+            toast.error('Un problème est survenu. réessayez plus tard.')
         }
     };
 

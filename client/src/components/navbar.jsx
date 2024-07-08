@@ -4,6 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 import logo from "/src/assets/logo.png";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext"
+import { toast } from 'react-hot-toast'
+import axios from "axios";
 
 function Navbar({onLoginClick, onLoginClickWhenOnRegister}) {
   const [checked, setChecked] = useState(false);
@@ -42,7 +44,7 @@ function Navbar({onLoginClick, onLoginClickWhenOnRegister}) {
     }
   }, [checked]);
 
-  // Function to handle the transition effect
+  // effet de transition dark/light
   const trans = () => {
     document.documentElement.classList.add('transition');
     window.setTimeout(() => {
@@ -60,6 +62,8 @@ function Navbar({onLoginClick, onLoginClickWhenOnRegister}) {
   const handleShowLinks = () => {
     setShowLinks(!showLinks);
   };
+
+  //prévenir de double cliquer sur le bouton login --> /login/login
   const handleLoginClick = () => {
     if (!location.pathname.endsWith("/login")) {
       onLoginClick();
@@ -104,7 +108,7 @@ function Navbar({onLoginClick, onLoginClickWhenOnRegister}) {
             <input type="checkbox" id="switch" checked={checked} onChange={handleChange} name="theme" />
             <label htmlFor="switch">Toggle</label>
             {user ? (
-              <Link class="linkaccount" to="/accounts"><button className="login"><i className="fa-solid fa-user"></i>{user.prenom}</button></Link>
+              <Link className="linkaccount" to="/accounts" ><button className="login"><i className="fa-solid fa-user"></i>{user.prenom}</button></Link>
             ) : (
               <button className="login" onClick={handleLoginClick}><i className="fa-solid fa-user"></i>Login</button>
             )}
