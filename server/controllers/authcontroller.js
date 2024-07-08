@@ -4,7 +4,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const test = (req, res) => {
-    res.json('test is working');
+    res.json('server is working');
 }
 
 //register
@@ -25,8 +25,20 @@ const registerUser = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({ prenom, nom, email, password: hashedPassword });
-        return res.status(201).json(user);
+        const user = await User.create({
+            prenom, nom, email, password: hashedPassword, wordsRead
+        });
+        const options = {
+            secure: process.env.NODE_ENV === "production" ? true : false,
+            httpOnly: process.env.NODE_ENV === "production" ? true : false,
+            sameSite: process.env.NODE_ENV === "production" ? 'lax' : '',
+            maxAge: 2 * 24 * 60 * 60 * 1000,
+            expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+            domain: process.env.NODE_ENV === "production" ? 'book-brawl.vercel.app' : '',
+        }
+        const token = jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email, words: user.wordsRead }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
+
+        return res.status(201).cookie('jwtauth', token, options).json(user);
     } catch (error) {
         console.log(error);
         return res.json({ error: "Une erreur est survenue. Réessayer plus tard" });
@@ -51,11 +63,11 @@ const loginUser = async (req, res) => {
                 sameSite: process.env.NODE_ENV === "production" ? 'lax' : '',
                 maxAge: 2 * 24 * 60 * 60 * 1000,
                 expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-                domain: 'book-brawl.vercel.app'
+                domain: process.env.NODE_ENV === "production" ? 'book-brawl.vercel.app' : '',
             }
-            jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
+            jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email, words: user.wordsRead }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
                 if (err) throw err;
-                res.cookie('token', token, options).json(user)
+                res.cookie('jwtauth', token, options).json(user)
             })
         }
         else {
@@ -69,24 +81,24 @@ const loginUser = async (req, res) => {
 
 //logout
 
-const logoutUser = async(req,res) => {
+const logoutUser = async (req, res) => {
     const options = {
         secure: process.env.NODE_ENV === "production" ? true : false,
         httpOnly: process.env.NODE_ENV === "production" ? true : false,
         sameSite: process.env.NODE_ENV === "production" ? 'lax' : '',
         expires: new Date(0),
-        domain: 'book-brawl.vercel.app'
+        domain: process.env.NODE_ENV === "production" ? 'book-brawl.vercel.app' : '',
     }
-    res.cookie('token', 'expiredtoken', options);
-    res.status(200).json({status: "sucess"})
+    res.cookie('jwtauth', 'expiredtoken', options);
+    res.status(200).json({ status: "sucess" })
 }
 
 //profile
 const getProfile = (req, res) => {
-    const {token} = req.cookies
-    if(token) {
-        jwt.verify(token, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, user) => {
-            if(err) throw err;
+    const { jwtauth } = req.cookies
+    if (jwtauth) {
+        jwt.verify(jwtauth, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, user) => {
+            if (err) throw err;
             res.json(user)
         })
     } else {
