@@ -25,11 +25,11 @@ function Compte() {
         toast.success('Vous êtes déconnecté !')
         setTimeout(() => {
             window.location.href = '/';
-          }, 200);
+          }, 2000);
       }
-    } catch (err) {
+    } catch (error) {
+      console.log(error)
       toast.error('Un problème est survenu pendant la déconnection.')
-      console.log(err.response)
     }
   };
 
@@ -38,7 +38,7 @@ function Compte() {
             <p>{user.prenom}</p>
             <p>{user.nom}</p>
             <p>{user.email}</p>
-            <button className="logout" onClick={handleLogout}><i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Se déconnecter</button>
+            <button className="logout" onClick={handleLogout}><i className="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Se déconnecter</button>
         </>
     );
 }

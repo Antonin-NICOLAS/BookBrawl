@@ -16,11 +16,12 @@ const Classement = () => {
                 setUsers(response.data);
 
                 if (response.error) {
-                    toast.error(response.error)
+                    console.log(response.error)
                 }
 
             } catch (error) {
-                console.error('Error fetching the users:', error);
+                console.log('Error fetching the users:', error);
+                toast.error('Veuillez vous connectez pour voir le classement')
             }
         };
 
