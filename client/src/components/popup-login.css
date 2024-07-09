@@ -35,8 +35,8 @@
 
 .wrapper .form-box-login,
 .wrapper .form-box-register{
-  width: calc(100% - 30px);
-  padding: 15px;
+  width: calc(100% - 60px);
+  padding: 30px;
 }
 .wrapper .form-box-login{
   position: absolute;
