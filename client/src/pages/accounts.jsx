@@ -1,12 +1,13 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../context/userContext";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import defaultaccountimage from "../assets/account.jpeg";
 import './accounts.css';
 
-function Compte() {
+function Compte({onPasswordClick}) {
   const { user, setUser, isLoading: userLoading } = useContext(UserContext);
+  const [showForm, setShowForm] = useState(false);
   const [image, setImage] = useState(null);
   const [PasswordData, setPasswordData] = useState({
     oldPassword: '',
@@ -113,84 +114,62 @@ function Compte() {
 
       toast.success('Votre avatar a été ajouté');
       setImage(null);
+      setShowForm(false);
       setUser(response.data); // Met à jour le contexte utilisateur avec les nouvelles données
     } catch (error) {
       console.error('Error adding avatar:', error);
       toast.error('Un problème est survenu. Réessayez plus tard.');
     }
   };
-  useEffect(() => {
-    if (userLoading) {
-      return <p>Chargement...</p>
-    }
-  }, [userLoading]);
+
+  //ouvrir popu changement de mot de passe :
+  const handlePasswordClick = () => {
+      onPasswordClick();
+  };
+  
+  if (userLoading) {
+    return <p>Chargement...</p>
+  }
 
   return (
     <>
-      <img src={user.avatar || defaultaccountimage} alt="avatar" />
-      <form onSubmit={handleAvatarSubmit} className="avatar-form">
-        <div className="form-group">
-          <label htmlFor="image">Avatar :</label>
-          <input
-            type="file"
-            id="image"
-            accept="image/*"
-            onChange={handleAvatarUpload}
-            required
-          />
-        </div>
-        <button type="submit" className="submit-avatar">Ajouter cette image comme avatar</button>
-      </form>
-      <p>{user.prenom}</p>
-      <p>{user.nom}</p>
-      <p>{user.email}</p>
-      <button onClick={() => setShowPasswordForm(!showPasswordForm)}>
-        {showPasswordForm ? 'Annuler' : 'Changer le mot de passe'}
+      <div className="account1">
+        <div className="identity-card">
+          <div className="identity-left">
+            <img src={user.avatar || defaultaccountimage} alt={user.prenom} className="avatar" />
+            <button className="buttonaddavatar" onClick={() => setShowForm(!showForm)}>
+                {showForm ? 'Annuler' : "Changer d'avatar"}
+            </button>
+            {showForm && (<form onSubmit={handleAvatarSubmit} className="avatar-form">
+              <div className="form-group">
+                <label htmlFor="image">
+                  <span>Avatar :</span><br />
+                  <span className="button-image">Choisir une image</span>
+                <input
+                  type="file"
+                  id="image"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  required
+                />
+                </label>
+              </div>
+              <button type="submit" className="submitavatar">Ajouter cette image comme avatar</button>
+            </form>)}
+          </div>
+          <div className="identity-right">
+            <span>{user.prenom}</span>
+            <span>{user.nom}</span>
+            <span>{user.email}</span>
+            <button className="buttonchangepassword" onClick={handlePasswordClick}>
+        Changer le mot de passe
       </button>
-      {showPasswordForm && (
-        <div className="change-password-form">
-          <h1>Changer le mot de passe</h1>
-          <form onSubmit={changePassword}>
-            <div>
-              <label htmlFor="oldpassword">Ancien mot de passe</label>
-              <input
-                type="password"
-                id="old_password"
-                name="oldPassword"
-                value={PasswordData.oldPassword || ''}
-                onChange={handlePasswordChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="newpassword">Nouveau mot de passe</label>
-              <input
-                type="password"
-                id="new_password"
-                name="newPassword"
-                value={PasswordData.newPassword || ''}
-                onChange={handleNewPasswordChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="confirm_newpassword">Confirmer le nouveau mot de passe</label>
-              <input
-                type="password"
-                id="confirm_new_password"
-                name="confirmnewPassword"
-                value={PasswordData.confirmnewPassword || ''}
-                onChange={handleNewPasswordChange}
-                required
-              />
-            </div>
-            <button type="submit">Changer le mot de passe</button>
-          </form>
-        </div>
-      )}
       <button className="logout" onClick={handleLogout}>
         <i className="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Se déconnecter
       </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

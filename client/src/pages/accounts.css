@@ -1,15 +1,76 @@
 .logout {
-    border: solid 2px var(--bg);
-    border-radius: 20px;
-    height: 7vh;
-    max-height: 45px;
-    min-height: 30px;
-    width: 150px;
-    color: var(--bg);
-    background: rgb(255, 0, 191);
-    padding: 5px 11px;
-    cursor: pointer;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-  }
+  border: solid 2px var(--bg);
+  border-radius: 20px;
+  height: 7vh;
+  max-height: 45px;
+  min-height: 30px;
+  width: 150px;
+  color: var(--bg);
+  background: rgb(255, 0, 191);
+  padding: 5px 11px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.identity-card {
+  display: block;
+  height: calc(50px + 30vh);
+  width: calc(50px + 40vw);
+  margin: 40px;
+  background-color: var(--title);
+  border-radius: 20px;
+}
+
+.identity-left {
+  width: 50%;
+  float: left;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.identity-right {
+  width: 50%;
+  float: right;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.identity-right span, .identity-right button{
+  margin-bottom: 10px;
+}
+
+.avatar {
+  border-radius: 50%;
+  display: inline-block;
+  width: 20vh;
+  max-width: 300px; /*à définir*/
+  aspect-ratio: 1;
+  padding: 20px;
+}
+
+input[type=file] {
+  display: none;
+}
+
+.buttonchangepassword, .buttonaddavatar {
+  padding: 8px 12px;
+  background: var(--1);
+  color: #fff;
+  cursor: pointer;
+}
+.submitchangepasswordform, .submitavatar{
+  padding: 8px 12px;
+  background: var(--2);
+  color: #fff;
+  cursor: pointer;
+}
+
+label .imagebutton:hover {
+  background: #0d45a5;
+}
