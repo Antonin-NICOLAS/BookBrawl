@@ -41,7 +41,7 @@ const registerUser = async (req, res) => {
         return res.status(201).cookie('jwtauth', token, options).json(user);
     } catch (error) {
         console.log(error);
-        return res.json({ error: "Une erreur est survenue. Réessayer plus tard" });
+        return res.json({ error: "Un problème est survenu. Réessayer plus tard" });
     }
 }
 
@@ -75,7 +75,7 @@ const loginUser = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        return res.json({ error: "Une erreur est survenue. Réessayer plus tard" });
+        return res.json({ error: "Un problème est survenu. Réessayer plus tard" });
     }
 }
 
