@@ -1,31 +1,31 @@
-const express = require('express')
+const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { test, registerUser, loginUser, logoutUser, getProfile } = require('../controllers/authcontroller')
-const { secure } = require("../controllers/authsecure")
-const { getUserRank } = require('../controllers/rankingcontroller')
+const { test, registerUser, loginUser, logoutUser, getProfile } = require('../controllers/authcontroller');
+const { secure } = require("../controllers/authsecure");
+const { getUserRank } = require('../controllers/rankingcontroller');
+const { addUserBook, getUserBooks } = require('../controllers/bookcontroller');
+const upload = require('../config/multer');
 
-const router = express.Router()
+const router = express.Router();
 
 router.use(
     cors({
         credentials: true,
-        origin: process.env.FRONTEND_SERVER
+        origin: process.env.FRONTEND_SERVER,
     })
-)
+);
 
-router.get('/', test)
+router.get('/', test);
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.post('/logout', logoutUser);
+router.get('/profile', getProfile);
 
-router.post('/register', registerUser)
-
-router.post('/login', loginUser)
-
-router.post('/logout', logoutUser)
-
-router.get('/profile', getProfile)
-
-router.use(secure)
+router.use(secure);
 
 router.get('/userranking', getUserRank);
+router.get('/userbooks', getUserBooks);
+router.post('/addbook', upload.single('image'), addUserBook);
 
-module.exports = router
+module.exports = router;
