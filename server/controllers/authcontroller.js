@@ -115,23 +115,22 @@ const changePassword = async (req, res) => {
 
         const user = await User.findById(userId);
         if (!user) {
-            return res.status(404).json({ error: "Utilisateur introuvable" });
+            return res.json({ error: "Utilisateur introuvable" });
         }
 
         const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
         if (!isPasswordMatch) {
-            return res.status(400).json({ error: "L'ancien mot de passe est incorrect" });
+            return res.json({ error: "L'ancien mot de passe est incorrect" });
         }
 
         if (newPassword.length < 6) {
-            return res.status(400).json({ error: "Le nouveau mot de passe doit comporter au moins 6 caractères" });
+            return res.json({ error: "Le nouveau mot de passe doit comporter au moins 6 caractères" });
         }
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
         await user.save();
 
-        res.status(200).json({ message: "Mot de passe changé avec succès" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Une erreur est survenue. Réessayez plus tard" });
