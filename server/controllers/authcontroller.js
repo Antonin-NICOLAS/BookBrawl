@@ -106,4 +106,54 @@ const getProfile = (req, res) => {
     }
 }
 
-module.exports = { test, registerUser, loginUser, logoutUser, getProfile };
+//changer de mot de passe 
+const changePassword = async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+        const userId = req.user.id;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: "Utilisateur introuvable" });
+        }
+
+        const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isPasswordMatch) {
+            return res.status(400).json({ error: "L'ancien mot de passe est incorrect" });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ error: "Le nouveau mot de passe doit comporter au moins 6 caractères" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ message: "Mot de passe changé avec succès" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Une erreur est survenue. Réessayez plus tard" });
+    }
+};
+
+//Avatar
+const addUserAvatar = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId)
+
+        const image = req.file.path;
+
+        user.avatar = image
+
+        await user.save();
+
+        res.status(200).json(user);
+    } catch (error) {
+        console.error("Erreur lors de l'ajout de l'avatar :", error);
+        res.status(500).json({ error: "Erreur lors de l'ajout de l'avatar" });
+    }
+};
+
+module.exports = { test, registerUser, loginUser, logoutUser, getProfile, changePassword, addUserAvatar };

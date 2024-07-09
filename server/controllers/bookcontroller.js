@@ -7,7 +7,8 @@ const cloudinary = require('cloudinary')
 // Route pour ajouter un livre
 const addUserBook = async (req, res) => {
     try {
-        const { title, wordsRead, userId } = req.body;
+        const { title, wordsRead } = req.body;
+        const { userId } = req.user.id
         const image = req.file.path;
 
         const book = new Book({
