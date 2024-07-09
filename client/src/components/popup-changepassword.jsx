@@ -43,8 +43,8 @@ function CPPopup(props) {
     };
 
     const validatePassword = () => {
-        const password = document.getElementById("new_password");
-        const confirmPassword = document.getElementById("confirm_new_password");
+        const password = document.getElementById("newpassword");
+        const confirmPassword = document.getElementById("confirmnewpassword");
         if (password && confirmPassword && password.value !== confirmPassword.value) {
             confirmPassword.setCustomValidity("Les mots de passe diffèrent");
         } else {
@@ -70,9 +70,9 @@ function CPPopup(props) {
 
             if (response.data.error) {
                 toast.error(response.data.error);
-            } else {
+            } else if (response.data.success) {
                 setPasswordData({ oldPassword: '', newPassword: '', confirmnewPassword: '' });
-                toast.success('Mot de passe changé avec succès');
+                toast.success(response.data.success);
                 handleClose()
             }
         } catch (error) {
@@ -115,13 +115,13 @@ function CPPopup(props) {
                         <div className="input-password-box">
                             <input
                                 type="password"
-                                id="confirm_newpassword"
+                                id="confirmnewpassword"
                                 name="confirmnewPassword"
                                 value={PasswordData.confirmnewPassword || ''}
                                 onChange={handleNewPasswordChange}
                                 required
                             />
-                            <label htmlFor="confirm_newpassword">Confirmer le nouveau mot de passe</label>
+                            <label htmlFor="confirmnewpassword">Confirmer le nouveau mot de passe</label>
                         </div>
                         <button type="submit" className="submitchangepasswordform">Changer le mot de passe</button>
                     </form>
