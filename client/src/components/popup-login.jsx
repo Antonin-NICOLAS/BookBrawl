@@ -99,6 +99,7 @@ function LoginPopup(props) {
                 }
             })
             if (data.error) {
+                console.log(data.error)
                 toast.error(data.error)
             } else {
                 setData({})
@@ -109,7 +110,7 @@ function LoginPopup(props) {
                 }, 2000)
             }
         } catch (error) {
-            console.log(error)
+            console.log("erreur lors de l'inscription :", error)
             toast.error('Un problème est survenu. réessayez plus tard.')
         }
     };
@@ -126,6 +127,7 @@ function LoginPopup(props) {
                 }
             })
             if (data.error) {
+                console.log(data.error)
                 toast.error(data.error)
             } else {
                 setLoginData({})
@@ -136,7 +138,7 @@ function LoginPopup(props) {
                 }, 2000)
             }
         } catch (error) {
-            console.log(error)
+            console.log("erreur lors de la connection :", error)
             toast.error('Un problème est survenu. réessayez plus tard.')
         }
     };
