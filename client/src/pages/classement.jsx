@@ -17,11 +17,12 @@ const Classement = () => {
 
                 if (response.error) {
                     console.log(response.error)
+                    toast.error(response.error)
                 }
 
             } catch (error) {
-                console.log('Error fetching the users:', error);
-                toast.error('Veuillez vous connectez pour voir le classement')
+                console.log('Erreur de récupération des utilisateurs :', error);
+                toast.error('Un problème est survenu. réessayez plus tard.')
             }
         };
 
