@@ -33,6 +33,18 @@ const Classement = () => {
                     setIsLoading(false);
                 }
             };
+            if (userLoading) {
+                return <p>Chargement...</p>;
+            }
+        
+            if (!user) {
+                return (
+                    <div>
+                        <h1>Classement des utilisateurs par nombre de mots lus</h1>
+                        <p>Veuillez vous connecter pour voir le classement.</p>
+                    </div>
+                );
+            }
 
     return (
         <div>

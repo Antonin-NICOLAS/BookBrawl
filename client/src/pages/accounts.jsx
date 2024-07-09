@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/userContext";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import defaultaccountimage from "../assets/account.jpeg"
+import defaultaccountimage from "../assets/account.jpeg";
 import './accounts.css';
 
 function Compte() {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, isLoading: userLoading } = useContext(UserContext);
   const [image, setImage] = useState(null);
   const [PasswordData, setPasswordData] = useState({
     oldPassword: '',
@@ -24,7 +24,6 @@ function Compte() {
           'Content-Type': 'application/json'
         }
       });
-      console.log(response);
 
       if (response.data.error) {
         toast.error('La déconnexion a échouée.');
@@ -37,7 +36,7 @@ function Compte() {
       }
     } catch (error) {
       console.log(error);
-      toast.error('Un problème est survenu pendant la déconnection.');
+      toast.error('Un problème est survenu pendant la déconnexion.');
     }
   };
 
@@ -83,15 +82,17 @@ function Compte() {
       console.error('Error changing password:', error);
     }
   };
-  //upload avatar
+
+  // Upload avatar
   const handleAvatarUpload = (event) => {
     setImage(event.target.files[0]);
   };
+
   const handleAvatarSubmit = async (event) => {
     event.preventDefault();
 
     if (!user) {
-      toast.error('Veuillez vous connecter pour ajouter un livre');
+      toast.error('Veuillez vous connecter pour ajouter un avatar');
       return;
     }
 
@@ -112,28 +113,34 @@ function Compte() {
 
       toast.success('Votre avatar a été ajouté');
       setImage(null);
+      setUser(response.data); // Met à jour le contexte utilisateur avec les nouvelles données
     } catch (error) {
       console.error('Error adding avatar:', error);
       toast.error('Un problème est survenu. Réessayez plus tard.');
     }
   };
+  useEffect(() => {
+    if (userLoading) {
+      return <p>Chargement...</p>
+    }
+  }, [userLoading]);
 
   return (
     <>
-        <img src={defaultaccountimage} alt='avatar' />
-        <form onSubmit={handleAvatarSubmit} className="book-form">
-          <div className="form-group">
-            <label htmlFor="image">Avatar :</label>
-            <input
-              type="file"
-              id="image"
-              accept="image/*"
-              onChange={handleAvatarUpload}
-              required
-            />
-          </div>
-          <button type="submit" className="submit-avatar">Ajouter un avatar</button>
-        </form>
+      <img src={user.avatar || defaultaccountimage} alt="avatar" />
+      <form onSubmit={handleAvatarSubmit} className="avatar-form">
+        <div className="form-group">
+          <label htmlFor="image">Avatar :</label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleAvatarUpload}
+            required
+          />
+        </div>
+        <button type="submit" className="submit-avatar">Ajouter cette image comme avatar</button>
+      </form>
       <p>{user.prenom}</p>
       <p>{user.nom}</p>
       <p>{user.email}</p>
