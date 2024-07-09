@@ -5,37 +5,40 @@ import { toast } from 'react-hot-toast';
 import './books.css';
 
 const Books = () => {
-    const { user } = useContext(UserContext);
+    const { user, isLoading: userLoading } = useContext(UserContext);
     const [books, setBooks] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [title, setTitle] = useState('');
     const [image, setImage] = useState(null);
     const [wordsRead, setWordsRead] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchBooks = async () => {
-            if (!user) return;
-            if (user) {
-                try {
-                    const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userbooks' : '/userbooks', {
-                        params: { userId: user.id }
-                    });
-                    setBooks(response.data);
-
-                    if (response.error) {
-                        console.log(response.error)
-                        toast.error(response.error)
-                    }
-
-                } catch (error) {
-                    console.error('Error fetching books:', error);
-                    toast.error('Un problème est survenu. Réessayez plus tard.');
-                }
-            };
+        if (!userLoading && user) {
+            fetchBooks();
         }
+    }, [userLoading, user]);
 
-        fetchBooks();
-    }, [user]);
+    const fetchBooks = async () => {
+        try {
+            const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userbooks' : '/userbooks', {
+                params: { userId: user.id }
+            });
+
+            if (response.data.error) {
+                toast.error(response.data.error);
+                setIsLoading(false);
+                return;
+            }
+
+            setBooks(response.data);
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error fetching books:', error);
+            toast.error('Un problème est survenu. Réessayez plus tard.');
+            setIsLoading(false);
+        }
+    };
 
     const handleImageUpload = (event) => {
         setImage(event.target.files[0]);
@@ -45,7 +48,7 @@ const Books = () => {
         event.preventDefault();
 
         if (!user) {
-            toast.error('Veuillez vous connectez pour ajouter un livre');
+            toast.error('Veuillez vous connecter pour ajouter un livre');
             return;
         }
 
@@ -62,50 +65,62 @@ const Books = () => {
                 },
             });
 
+            if (response.data.error) {
+                toast.error(response.data.error);
+                console.log(response.data.error);
+                return;
+            }
+
             toast.success('Votre livre a été ajouté');
-            // Reset form
             setTitle('');
             setImage(null);
             setWordsRead('');
             setShowForm(false);
             setBooks([...books, response.data]);
-
-            if (response.error) {
-                console.log(response.error)
-                toast.error(response.error)
-            }
-
         } catch (error) {
             console.error('Error adding book:', error);
-            toast.error('Un problème est survenu. réessayez plus tard.');
+            toast.error('Un problème est survenu. Réessayez plus tard.');
         }
     };
 
+    if (userLoading) {
+        return <p>Chargement...</p>;
+    }
+
+    if (!user) {
+        return (
+            <div className="book-container">
+                <h1>Vos Livres</h1>
+                <p>Veuillez vous connecter pour voir vos livres.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="book-container">
-            <h1>Your Books</h1>
-            {!user ? (
-                <div>Vous n'êtes pas connecté</div>
+            <h1>Vos Livres</h1>
+            {isLoading ? (
+                <p>Chargement...</p>
             ) : (
-            <div className="books-list">
-                {books.map((book) => (
-                    <div key={book._id} className="book-item">
-                        <img src={book.image} alt={book.title} className="book-image" />
-                        <div className="book-details">
-                            <h2>{book.title}</h2>
-                            <p>Words Read: {book.wordsRead}</p>
+                <div className="books-list">
+                    {books.map((book) => (
+                        <div key={book._id} className="book-item">
+                            <img src={book.image} alt={book.title} className="book-image" />
+                            <div className="book-details">
+                                <h2>{book.title}</h2>
+                                <p>Mots lus : {book.wordsRead}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
-        )}
+                    ))}
+                </div>
+            )}
             <button className="add-book-button" onClick={() => setShowForm(!showForm)}>
-                {showForm ? 'Hide Form' : 'Add a Book'}
+                {showForm ? 'Masquer le formulaire' : 'Ajouter un livre'}
             </button>
             {showForm && (
                 <form onSubmit={handleSubmit} className="book-form">
                     <div className="form-group">
-                        <label htmlFor="title">Title:</label>
+                        <label htmlFor="title">Titre :</label>
                         <input
                             type="text"
                             id="title"
@@ -115,7 +130,7 @@ const Books = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="image">Image:</label>
+                        <label htmlFor="image">Image :</label>
                         <input
                             type="file"
                             id="image"
@@ -125,7 +140,7 @@ const Books = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="wordsRead">Words Read:</label>
+                        <label htmlFor="wordsRead">Mots lus :</label>
                         <input
                             type="number"
                             id="wordsRead"
@@ -134,7 +149,7 @@ const Books = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="submit-button">Add Book</button>
+                    <button type="submit" className="submit-button">Ajouter un livre</button>
                 </form>
             )}
         </div>

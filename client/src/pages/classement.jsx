@@ -5,31 +5,34 @@ import { toast } from 'react-hot-toast'
 import './classement.css';
 
 const Classement = () => {
-    const { user } = useContext(UserContext); // Utiliser le contexte utilisateur
+    const { user, isLoading: userLoading } = useContext(UserContext);
+    const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
+        if (!userLoading && user) {
+            fetchUsers();
+        }
+    }, [userLoading, user]);
+
         const fetchUsers = async () => {
-            if (!user) return;
-            if (user) {
                 try {
                     const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userranking' : '/userranking'
                     );
                     setUsers(response.data);
+                    setIsLoading(false);
 
                     if (response.error) {
                         console.log(response.error)
                         toast.error(response.error)
+                        setIsLoading(false);
                     }
 
                 } catch (error) {
                     console.log('Erreur de récupération des utilisateurs :', error);
+                    setIsLoading(false);
                 }
             };
-        }
-
-        fetchUsers();
-    }, [user]);
 
     return (
         <div>
@@ -42,6 +45,13 @@ const Classement = () => {
                         <th className="column3">Mots lus</th>
                     </tr>
                 </thead>
+                {isLoading ? (
+                    <tbody>
+                        <tr>
+                            <td colSpan="3">Chargement...</td>
+                        </tr>
+                    </tbody>
+                ) : (
                 <tbody>
                     {users && users.length > 0 ? (
                         users.map((userItem, index) => (
@@ -59,7 +69,7 @@ const Classement = () => {
                             <td colSpan="3">Aucun utilisateur trouvé</td>
                         </tr>
                     )}
-                </tbody>
+                </tbody>)}
             </table>
         </div>
     );
