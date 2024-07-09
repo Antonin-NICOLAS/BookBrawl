@@ -21,6 +21,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    avatar: {
+        type: String,
+        default: 'https://book-brawl.vercel.app/assets/account-D8hsV5Dv.jpeg'
+    },
     wordsRead: {
         type: Number,
         required: true,
