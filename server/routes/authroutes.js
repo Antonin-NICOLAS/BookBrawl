@@ -25,7 +25,7 @@ router.get('/profile', getProfile);
 
 router.use(secure);
 
-router.post('/addavatar', uploadbook.single('image'), addUserAvatar);
+router.post('/addavatar', uploadavatar.single('image'), addUserAvatar);
 router.post('/change-password', changePassword);
 router.get('/userranking', getUserRank);
 router.get('/userbooks', getUserBooks);
