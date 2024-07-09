@@ -26,7 +26,8 @@ const registerUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
-            prenom, nom, email, password: hashedPassword, wordsRead
+            prenom, nom, email, password: hashedPassword, wordsRead: 0,
+            avatar: 'https://book-brawl.vercel.app/assets/account-D8hsV5Dv.jpeg'
         });
         const options = {
             secure: process.env.NODE_ENV === "production" ? true : false,
@@ -36,7 +37,7 @@ const registerUser = async (req, res) => {
             expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
             domain: process.env.NODE_ENV === "production" ? 'book-brawl.vercel.app' : '',
         }
-        const token = jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email, words: user.wordsRead }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
+        const token = jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email, avatar: user.avatar, words: user.wordsRead }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
 
         return res.status(201).cookie('jwtauth', token, options).json(user);
     } catch (error) {
@@ -65,7 +66,7 @@ const loginUser = async (req, res) => {
                 expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
                 domain: process.env.NODE_ENV === "production" ? 'book-brawl.vercel.app' : '',
             }
-            jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email, words: user.wordsRead }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
+            jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email, avatar: user.avatar, words: user.wordsRead }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
                 if (err) throw err;
                 res.cookie('jwtauth', token, options).json(user)
             })
@@ -140,20 +141,19 @@ const changePassword = async (req, res) => {
 //Avatar
 const addUserAvatar = async (req, res) => {
     try {
-        const userId = req.user.id;
-        const user = await User.findById(userId)
-
-        const image = req.file.path;
-
-        user.avatar = image
-
-        await user.save();
-
-        res.status(200).json(user);
+      const userId = req.user.id;
+      const user = await User.findById(userId);
+  
+      const image = req.file.path;
+      user.avatar = image;
+  
+      await user.save();
+  
+      res.status(200).json(user);
     } catch (error) {
-        console.error("Erreur lors de l'ajout de l'avatar :", error);
-        res.status(500).json({ error: "Erreur lors de l'ajout de l'avatar" });
+      console.error("Erreur lors de l'ajout de l'avatar :", error);
+      res.status(500).json({ error: "Erreur lors de l'ajout de l'avatar" });
     }
-};
+  };
 
 module.exports = { test, registerUser, loginUser, logoutUser, getProfile, changePassword, addUserAvatar };
