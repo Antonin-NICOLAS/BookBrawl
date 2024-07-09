@@ -5,7 +5,7 @@ const cloudinary = require('./cloudinary');
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'books',
+    folder: 'avatars',
     public_id: (req, file) => `${Date.now()}-${file.originalname}`,
   },
 });
