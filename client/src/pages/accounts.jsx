@@ -41,49 +41,6 @@ function Compte({onPasswordClick}) {
     }
   };
 
-  // Change password
-  const handlePasswordChange = (e) => {
-    setPasswordData({ ...PasswordData, [e.target.name]: e.target.value });
-  };
-
-  const validatePassword = () => {
-    const password = document.getElementById("new_password");
-    const confirmPassword = document.getElementById("confirm_new_password");
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
-      confirmPassword.setCustomValidity("Les mots de passe diffèrent");
-    } else {
-      confirmPassword.setCustomValidity('');
-    }
-  };
-
-  const handleNewPasswordChange = (e) => {
-    handlePasswordChange(e);
-    validatePassword();
-  };
-
-  const changePassword = async (event) => {
-    event.preventDefault();
-    const { oldPassword, newPassword } = PasswordData;
-    try {
-      const response = await axios.post(
-        process.env.NODE_ENV === "production" ? '/api/change-password' : '/change-password',
-        { oldPassword, newPassword },
-        { withCredentials: true }
-      );
-
-      if (response.data.error) {
-        toast.error(response.data.error);
-      } else {
-        setPasswordData({ oldPassword: '', newPassword: '', confirmnewPassword: '' });
-        toast.success(response.data.message);
-        setShowPasswordForm(false);
-      }
-    } catch (error) {
-      toast.error('Une erreur est survenue. Réessayez plus tard.');
-      console.error('Error changing password:', error);
-    }
-  };
-
   // Upload avatar
   const handleAvatarUpload = (event) => {
     setImage(event.target.files[0]);
@@ -122,7 +79,7 @@ function Compte({onPasswordClick}) {
     }
   };
 
-  //ouvrir popu changement de mot de passe :
+  //ouvrir popup changement de mot de passe :
   const handlePasswordClick = () => {
       onPasswordClick();
   };
