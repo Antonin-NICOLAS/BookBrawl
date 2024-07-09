@@ -12,18 +12,24 @@ import APropos from '../src/pages/a-propos';
 import Accounts from '../src/pages/accounts';
 import ErrorPage from '../src/pages/error'
 import LoginPopup from '../src/components/popup-login';
+import PasswordPopup from '../src/components/popup-changepassword'
 
 axios.defaults.baseURL = process.env.NODE_ENV === "production" ? '' : process.env.BACKEND_SERVER, //ne rien mettre sur github
 axios.defaults.withCredentials = true
 
 export default function App() {
+    //popup login
     const [ButtonPopup, setButtonPopup] = useState(false);
     const [formType, setFormType] = useState('login');
+    //popup change password
+    const [ButtonPasswordPopup, setButtonPasswordPopup] = useState(false);
+    //default
     const [initialPath, setInitialPath] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
     const background = location.state && location.state.background;
 
+    //popup login
     const handleLoginClick = () => {
         setButtonPopup(true);
         setFormType('login');
@@ -46,6 +52,20 @@ export default function App() {
         setInitialPath(null);
     };
 
+    //popup change password
+    const handlePasswordClick = () => {
+        setButtonPasswordPopup(true);
+        const currentPath = location.pathname === '/' ? '' : location.pathname;
+        setInitialPath(currentPath);
+        navigate(`/accounts/changepassword`, { state: { background: location } });
+    };
+
+    const handlePopupPasswordClose = () => {
+        setButtonPasswordPopup(false);
+        navigate(initialPath);
+        setInitialPath(null);
+    };
+
     return (
         <UserContextProvider>
             <Navbar onLoginClick={handleLoginClick} onLoginClickWhenOnRegister={handleRegistrationClick}/>
@@ -56,7 +76,7 @@ export default function App() {
                 <Route exact path="/books" element={<Books />} />
                 <Route exact path="/predict" element={<Predictions />} />
                 <Route path="/about" element={<APropos />} />
-                <Route path="/accounts" element={<Accounts />} />
+                <Route path="/accounts" element={<Accounts onPasswordClick={handlePasswordClick}/>} />
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
             {ButtonPopup && (
@@ -71,6 +91,11 @@ export default function App() {
                     <Route path="/predict/register" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
                     <Route path="/about/login" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
                     <Route path="/about/register" element={<LoginPopup trigger={ButtonPopup} setTrigger={handlePopupClose} formType={formType} setFormType={setFormType} location={location} />} />
+                </Routes>
+            )}
+                        {ButtonPasswordPopup && (
+                <Routes>
+                    <Route path="/accounts/changepassword" element={<PasswordPopup trigger={ButtonPasswordPopup} setTrigger={handlePopupPasswordClose} location={location} />} />
                 </Routes>
             )}
         </UserContextProvider>
