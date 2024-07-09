@@ -14,23 +14,25 @@ const Books = () => {
 
     useEffect(() => {
         const fetchBooks = async () => {
-            if(!user) return;
-            
-            try {
-                const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userbooks' : '/userbooks', {
-                    params: { userId: user.id }
-                });
-                setBooks(response.data);
-                
-                if(response.error){
-                    console.log(response.error)
-                    toast.error(response.error)
+            if (!user) return;
+            if (user) {
+                try {
+                    const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userbooks' : '/userbooks', {
+                        params: { userId: user.id }
+                    });
+                    setBooks(response.data);
+
+                    if (response.error) {
+                        console.log(response.error)
+                        toast.error(response.error)
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching books:', error);
+                    toast.error('Un problème est survenu. Réessayez plus tard.');
                 }
-            } catch (error) {
-                console.error('Erreur de récupération des livres :', error);
-                toast.error('Un problème est survenu. réessayez plus tard.');
-            }
-        };
+            };
+        }
 
         fetchBooks();
     }, [user]);
@@ -59,6 +61,7 @@ const Books = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+
             toast.success('Votre livre a été ajouté');
             // Reset form
             setTitle('');
@@ -66,6 +69,12 @@ const Books = () => {
             setWordsRead('');
             setShowForm(false);
             setBooks([...books, response.data]);
+
+            if (response.error) {
+                console.log(response.error)
+                toast.error(response.error)
+            }
+
         } catch (error) {
             console.error('Error adding book:', error);
             toast.error('Un problème est survenu. réessayez plus tard.');
@@ -75,6 +84,9 @@ const Books = () => {
     return (
         <div className="book-container">
             <h1>Your Books</h1>
+            {!user ? (
+                <div>Vous n'êtes pas connecté</div>
+            ) : (
             <div className="books-list">
                 {books.map((book) => (
                     <div key={book._id} className="book-item">
@@ -86,6 +98,7 @@ const Books = () => {
                     </div>
                 ))}
             </div>
+        )}
             <button className="add-book-button" onClick={() => setShowForm(!showForm)}>
                 {showForm ? 'Hide Form' : 'Add a Book'}
             </button>

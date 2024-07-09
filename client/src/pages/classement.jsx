@@ -10,24 +10,26 @@ const Classement = () => {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            try {
-                const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userranking' : '/userranking'
-                );
-                setUsers(response.data);
+            if (!user) return;
+            if (user) {
+                try {
+                    const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userranking' : '/userranking'
+                    );
+                    setUsers(response.data);
 
-                if (response.error) {
-                    console.log(response.error)
-                    toast.error(response.error)
+                    if (response.error) {
+                        console.log(response.error)
+                        toast.error(response.error)
+                    }
+
+                } catch (error) {
+                    console.log('Erreur de récupération des utilisateurs :', error);
                 }
-
-            } catch (error) {
-                console.log('Erreur de récupération des utilisateurs :', error);
-                toast.error('Un problème est survenu. réessayez plus tard.')
-            }
-        };
+            };
+        }
 
         fetchUsers();
-    }, []);
+    }, [user]);
 
     return (
         <div>
