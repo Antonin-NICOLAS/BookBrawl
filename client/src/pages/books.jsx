@@ -89,7 +89,7 @@ const Books = () => {
 
     if (!user) {
         return (
-            <div className="book-container">
+            <div className="unauthorizeduser">
                 <h1>Vos Livres</h1>
                 <p>Veuillez vous connecter pour voir vos livres.</p>
             </div>

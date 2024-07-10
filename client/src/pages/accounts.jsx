@@ -9,12 +9,6 @@ function Compte({onPasswordClick}) {
   const { user, setUser, isLoading: userLoading } = useContext(UserContext);
   const [showForm, setShowForm] = useState(false);
   const [image, setImage] = useState(null);
-  const [PasswordData, setPasswordData] = useState({
-    oldPassword: '',
-    newPassword: '',
-    confirmnewPassword: ''
-  });
-  const [showPasswordForm, setShowPasswordForm] = useState(false);
 
   // Logout
   const handleLogout = async () => {

@@ -39,7 +39,7 @@ const Classement = () => {
         
             if (!user) {
                 return (
-                    <div>
+                    <div className='unauthorizeduser'>
                         <h1>Classement des utilisateurs par nombre de mots lus</h1>
                         <p>Veuillez vous connecter pour voir le classement.</p>
                     </div>
@@ -71,9 +71,9 @@ const Classement = () => {
                                 key={userItem._id}
                                 className={user && String(userItem._id) === String(user.id) ? 'table-highlight' : ''}
                             >
-                                <td>{index + 1}</td>
-                                <td>{userItem.prenom} {userItem.nom}</td>
-                                <td>{userItem.wordsRead}</td>
+                                <td className='column1'>{index + 1}</td>
+                                <td className="column2">{userItem.prenom} {userItem.nom}</td>
+                                <td className="column3">{userItem.wordsRead}</td>
                             </tr>
                         ))
                     ) : (
