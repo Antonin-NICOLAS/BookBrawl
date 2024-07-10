@@ -25,22 +25,33 @@ html {
   padding: 0;
   overflow-x: hidden;
   --bg: #FCFCFC;
-  --navbar: #e283d1;
-  --login-box: #e283d180;
+  --navbar: #F4ACB7;
+  --login-box: #f4acb790;
   --color-text-body: #121111;
-  --title: #d94141;
-  --1: #5770ff;
+  --title: #D8E2DC;
+  --1: #D8E2DC;
   --2: #ff75b3;
   --3: #ff7c6b;
 }
 
 html[data-theme='dark'] {
   --bg: #030303;
-  --navbar: #8c008e;
-  --login-box: #8c008e80;
+  --navbar: #F4ACB7;
+  --login-box: #F4ACB780;
   --color-text-body: #edeeee;
-  --title: #922929;
+  --title: #150c7e;
   --1: #313e88;
   --2: #843d5d;
   --3: #6d362f;
+}
+
+/*page ou l'utilisateur doit être connecté*/
+
+.unauthorizeduser{
+  color: var(--color-text-body);
+  width: 100%;
+  height: calc(100vh - 8vh - 50px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
