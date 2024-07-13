@@ -313,19 +313,19 @@ function Compte({ onPasswordClick }) {
             {user ? (
               <>
                 <div className="reward-category">
-                  <h4>Mots</h4>
+                  <h3>Mots</h3>
                   <div className="word-reward">
                     {rewards.filter(reward => reward.criteria === 'word').length > 0 ? (
                       rewards.filter(reward => reward.criteria === 'word').map(reward => (
                         <img key={reward._id} src={reward.icon} alt={reward.name} />
                       ))
                     ) : (
-                      <li>Aucune récompense pour les mots</li>
+                      <p>Aucune récompense pour les mots</p>
                     )}
                   </div>
                 </div>
                 <div className="reward-category">
-                  <h4>Livres</h4>
+                  <h3>Livres</h3>
                   <ul>
                     {rewards.filter(reward => reward.criteria === 'book').length > 0 ? (
                       rewards.filter(reward => reward.criteria === 'book').map(reward => (
@@ -336,12 +336,12 @@ function Compte({ onPasswordClick }) {
                         </li>
                       ))
                     ) : (
-                      <li>Aucune récompense pour les livres</li>
+                      <p>Aucune récompense pour les livres</p>
                     )}
                   </ul>
                 </div>
                 <div className="reward-category">
-                  <h4>Participation</h4>
+                  <h3>Participation</h3>
                   <ul>
                     {rewards.filter(reward => reward.criteria === 'participation').length > 0 ? (
                       rewards.filter(reward => reward.criteria === 'participation').map(reward => (
@@ -352,12 +352,12 @@ function Compte({ onPasswordClick }) {
                         </li>
                       ))
                     ) : (
-                      <li>Aucune récompense pour la participation</li>
+                      <p>Aucune récompense pour la participation</p>
                     )}
                   </ul>
                 </div>
                 <div className="reward-category">
-                  <h4>Création</h4>
+                  <h3>Création</h3>
                   <ul>
                     {rewards.filter(reward => reward.criteria === 'creation').length > 0 ? (
                       rewards.filter(reward => reward.criteria === 'creation').map(reward => (
@@ -368,7 +368,7 @@ function Compte({ onPasswordClick }) {
                         </li>
                       ))
                     ) : (
-                      <li>Aucune récompense pour la création</li>
+                      <p>Aucune récompense pour la création</p>
                     )}
                   </ul>
                 </div>
@@ -439,7 +439,7 @@ function Compte({ onPasswordClick }) {
             </div>
           </div>
         </div>
-        <div className={`account2 ${activeSection === 'words' && recentBooks.length > 2 ? 'large' : ''} ${activeSection === 'rewards' ? 'large' : ''}`}>
+        <div className={`account2 ${activeSection === 'words' && recentBooks.length > 2 ? 'large' : ''} ${activeSection === 'rewards' ? 'large' : ''} ${activeSection === 'status' && showStatusForm ? 'large' : ''}`} >
           <div className="renderSection">
             <div className="accountnav">
               <button onClick={() => setActiveSection('status')} className={activeSection === 'status' ? 'active' : ''}>
