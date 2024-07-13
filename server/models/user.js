@@ -30,6 +30,14 @@ const userSchema = new Schema({
         required: true,
         default: 0
     },
+    status: {
+        type: String,
+        default: "Salut, je participe au BookBrawl 2024"
+    },
+    rewards: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Reward'
+    }]
 })
 
 const UserModel = mongoose.model("User", userSchema)
