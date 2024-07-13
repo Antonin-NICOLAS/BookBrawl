@@ -17,7 +17,7 @@ const Classement = () => {
 
         const fetchUsers = async () => {
                 try {
-                    const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userranking' : '/userranking'
+                    const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/books/userranking' : '/books/userranking'
                     );
                     setUsers(response.data);
                     setIsLoading(false);
@@ -47,9 +47,9 @@ const Classement = () => {
             }
 
     return (
-        <div>
+        <div className='classement'>
             <h1>Classement des utilisateurs par nombre de mots lus</h1>
-            <table>
+            <table className='classement-table'>
                 <thead className="table-head">
                     <tr>
                         <th className="column1">Rang</th>

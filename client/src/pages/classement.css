@@ -1,8 +1,8 @@
-h1 {
+.classement h1 {
   color: var(--color-text-body);
 }
 
-table {
+table.classement-table {
   width: 80%;
   margin: 50px auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -12,52 +12,52 @@ table {
   text-align: center;
 }
 
-tr.table-highlight {
+.classement-table tr.table-highlight {
   background-color: var(--title);
   color: var(--color-text-body);
   font-weight: 900;
 }
 
-thead .column1 {
+.classement-table thead .column1 {
   border-top-left-radius: 20px;
   width: 5%;
 }
 
-thead .column2 {
+.classement-table thead .column2 {
   width: 80%;
 }
 
-thead .column3 {
+.classement-table thead .column3 {
   border-top-right-radius: 20px;
   width: 10%;
 }
 
-th,
-td {
+.classement-table th,
+.classement-table td {
   padding: 12px 15px;
   border: none;
 }
 
-tbody tr:last-child td.column1 {
+.classement-table tbody tr:last-child td.column1 {
   border-bottom-left-radius: 20px;
 }
 
-tbody tr:last-child td.column3 {
+.classement-table tbody tr:last-child td.column3 {
   border-bottom-right-radius: 20px;
 }
 
-th {
+.classement-table th {
   background-color: var(--navbar);
   font-weight: bold;
   color: var(--bg);
   text-align: center;
 }
 
-tbody tr:nth-child(even):not(.table-highlight) {
+.classement-table tbody tr:nth-child(even):not(.table-highlight) {
   background-color: var(--navbar);
   color: var(--bg);
 }
 
-tbody tr:hover:not(.table-highlight) {
+.classement-table tbody tr:hover:not(.table-highlight) {
   font-weight: 700;
 }

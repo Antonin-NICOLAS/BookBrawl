@@ -7,11 +7,25 @@ import './books.css';
 const Books = () => {
     const { user, isLoading: userLoading } = useContext(UserContext);
     const [books, setBooks] = useState([]);
-    const [showForm, setShowForm] = useState(false);
-    const [title, setTitle] = useState('');
     const [image, setImage] = useState(null);
-    const [wordsRead, setWordsRead] = useState('');
+    const [showForm, setShowForm] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+
+    const [BookData, setBookData] = useState({
+        title: '',
+        author: '',
+        language: '',
+        wordsRead: '',
+        startDate: new Date(),
+        Readingstatus: '',
+        themes: '',
+        description: '',
+        rating: 0
+    });
+
+    const handleBookChange = (e) => {
+        setBookData({ ...BookData, [e.target.name]: e.target.value });
+    };
 
     useEffect(() => {
         if (!userLoading && user) {
@@ -21,7 +35,7 @@ const Books = () => {
 
     const fetchBooks = async () => {
         try {
-            const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/userbooks' : '/userbooks', {
+            const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/books/userbooks' : '/books/userbooks', {
                 params: { userId: user.id }
             });
 
@@ -47,22 +61,23 @@ const Books = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (!user) {
-            toast.error('Veuillez vous connecter pour ajouter un livre');
-            return;
-        }
-
         const formData = new FormData();
-        formData.append('title', title);
+        formData.append('title', BookData.title);
+        formData.append('author', BookData.author);
+        formData.append('language', BookData.language);
+        formData.append('wordsRead', BookData.wordsRead);
+        formData.append('startDate', BookData.startDate);
+        formData.append('Readingstatus', BookData.Readingstatus);
+        formData.append('themes', BookData.themes);
+        formData.append('description', BookData.description);
+        formData.append('rating', BookData.rating);
         formData.append('image', image);
-        formData.append('wordsRead', wordsRead);
-        formData.append('userId', user.id);
 
         try {
-            const response = await axios.post(process.env.NODE_ENV === "production" ? '/api/addbook' : '/addbook', formData, {
+            const response = await axios.post(process.env.NODE_ENV === "production" ? '/api/books/addbook' : '/books/addbook', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                },
+                }, params: { userId: user.id }
             });
 
             if (response.data.error) {
@@ -72,10 +87,20 @@ const Books = () => {
             }
 
             toast.success('Votre livre a été ajouté');
-            setTitle('');
             setImage(null);
-            setWordsRead('');
             setShowForm(false);
+            setBookData({
+                title: '',
+                author: '',
+                language: '',
+                wordsRead: '',
+                startDate: new Date(),
+                Readingstatus: '',
+                themes: '',
+                description: '',
+                rating: 0
+            });
+            setImage(null);
             setBooks([...books, response.data]);
         } catch (error) {
             console.error('Error adding book:', error);
@@ -124,8 +149,31 @@ const Books = () => {
                         <input
                             type="text"
                             id="title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            name='title'
+                            value={BookData.title || ''}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="author">Auteur :</label>
+                        <input
+                            type="text"
+                            id="author"
+                            name='author'
+                            value={BookData.author || ''}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="language">Langue :</label>
+                        <input
+                            type="text"
+                            id="language"
+                            name='language'
+                            value={BookData.language || ''}
+                            onChange={handleBookChange}
                             required
                         />
                     </div>
@@ -144,8 +192,66 @@ const Books = () => {
                         <input
                             type="number"
                             id="wordsRead"
-                            value={wordsRead}
-                            onChange={(e) => setWordsRead(e.target.value)}
+                            name='wordsRead'
+                            value={BookData.wordsRead || ''}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="startDate">Date de commencement :</label>
+                        <input
+                            type="date"
+                            id="startDate"
+                            name='startDate'
+                            value={BookData.startDate || ''}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="Readingstatus">Statut du livre :</label>
+                        <input
+                            type="text"
+                            id="Readingstatus"
+                            name='Readingstatus'
+                            value={BookData.Readingstatus || ''}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="themes">Themes :</label>
+                        <input
+                            type="text"
+                            id="themes"
+                            name='themes'
+                            value={BookData.themes || ''}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="description">Description :</label>
+                        <textarea
+                            type="text"
+                            cols="50"
+                            rows="2"
+                            id="description"
+                            name='description'
+                            value={BookData.description || ''}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="rating">Appréciation :</label>
+                        <input
+                            type="number"
+                            id="rating"
+                            name='rating'
+                            value={BookData.rating || ''}
+                            onChange={handleBookChange}
                             required
                         />
                     </div>
