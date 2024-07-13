@@ -25,7 +25,8 @@
   display: flex;
   align-items: center;
   border: 2px solid var(--navbar);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
   transition: height .2s ease;
 }
 .active .wrapper{
@@ -35,7 +36,7 @@
 
 .wrapper .form-box-login,
 .wrapper .form-box-register{
-  width: calc(100% - 60px);
+  width: 100%;
   padding: 30px;
 }
 .wrapper .form-box-login{
@@ -110,7 +111,7 @@
   text-decoration: underline;
   color: #030303;
   text-align: center;
-  margin-block-start: calc(15px + 2vh);
+  margin-block-start: calc(10px + 1vh);
   margin-block-end: 0;
 }
 .wrapper .form-box-register h2 {
@@ -118,14 +119,14 @@
   text-decoration: underline;
   color: #030303;
   text-align: center;
-  margin-block-start: calc(15px + 2vh);
+  margin-block-start: calc(10px + 1vh);
   margin-block-end: 0;
 }
 
 .input-box {
   position: relative;
   width: 100%;
-  height: calc(30px + 3vh);
+  height: calc(30px + 3.5vh);
   border-bottom: #030303 solid 2px;
   padding: 0 0 10px 0;
   margin: calc(10px + 1vh) 0;
@@ -151,7 +152,7 @@
 }
 
 .input-box input {
-  width: calc(100% - 30px);
+  width: 100%;
   height: 50%;
   position: absolute;
   bottom: 0;
@@ -167,6 +168,11 @@
 .input-box .icon {
   position: absolute;
   right: 5px;
+}
+@media screen and (max-height: 520px) {
+  .input-box .icon {
+    top: -2vh;
+  }
 }
 
 .input-box .icon i {
@@ -224,9 +230,6 @@
   display: flex;
   justify-content: center;
   margin: calc(10px + 1vh) 0 0 0;
-}
-.form-box-register .login-register{
-  margin: 0;
 }
 
 .login-register p a {

@@ -159,7 +159,7 @@ function LoginPopup(props) {
                                 </div>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="password" name="password" value={loginData.password || ''} onChange={handleLoginChange} required autoComplete="off" />
+                                    <input type="password" id="password" name="password" value={loginData.password || ''} onChange={handleLoginChange} required autoComplete="current-password" />
                                     <label htmlFor="password">Mot de passe</label>
                                 </div>
                                 <div className="remember-forgot">
@@ -198,7 +198,7 @@ function LoginPopup(props) {
                                 </div>
                                 <div className="input-box">
                                     <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="confirm_password" name="confirmPassword" value={data.confirmPassword || ''} onChange={handlePasswordChange} required autoComplete="off" />
+                                    <input type="password" id="confirm_password" name="confirmPassword" value={data.confirmPassword || ''} onChange={handlePasswordChange} required autoComplete="new-password" />
                                     <label htmlFor="confirm_password">Confirmer mot de passe</label>
                                 </div>
                                 <div className="remember-forgot">

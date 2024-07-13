@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
-ul {
+.navbar-o-p ul {
   list-style: none;
 }
 
@@ -16,7 +16,7 @@ ul {
   right: 0;
   align-items: center;
   justify-content: space-between;
-  height: 8vh;
+  height: calc(8vh + 20px);
   padding: 10px;
   font-size: calc(6px + 0.8vw);
   background: var(--navbar);
