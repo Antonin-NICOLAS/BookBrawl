@@ -37,7 +37,15 @@ const registerUser = async (req, res) => {
             expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
             domain: process.env.NODE_ENV === "production" ? 'book-brawl.vercel.app' : '',
         }
-        const token = jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email, avatar: user.avatar, words: user.wordsRead }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
+        const token = jwt.sign({
+            id: user._id,
+            nom: user.nom,
+            prenom: user.prenom,
+            email: user.email,
+            words: user.wordsRead,
+        },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES })
 
         return res.status(201).cookie('jwtauth', token, options).json(user);
     } catch (error) {
@@ -66,10 +74,18 @@ const loginUser = async (req, res) => {
                 expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
                 domain: process.env.NODE_ENV === "production" ? 'book-brawl.vercel.app' : '',
             }
-            jwt.sign({ id: user._id, nom: user.nom, prenom: user.prenom, email: user.email, avatar: user.avatar, words: user.wordsRead }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
-                if (err) throw err;
-                res.cookie('jwtauth', token, options).json(user)
-            })
+            jwt.sign({
+                id: user._id,
+                nom: user.nom,
+                prenom: user.prenom,
+                email: user.email,
+                words: user.wordsRead,
+            },
+                process.env.JWT_SECRET,
+                { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
+                    if (err) throw err;
+                    res.cookie('jwtauth', token, options).json(user)
+                })
         }
         else {
             return res.json({ error: "Mot de passe incorrect" });
@@ -147,19 +163,61 @@ const changePassword = async (req, res) => {
 //Avatar
 const addUserAvatar = async (req, res) => {
     try {
-      const userId = req.user.id;
-      const user = await User.findById(userId);
-  
-      const image = req.file.path;
-      user.avatar = image;
-  
-      await user.save();
-  
-      res.status(200).json(user);
-    } catch (error) {
-      console.error("Erreur lors de l'ajout de l'avatar :", error);
-      res.status(500).json({ error: "Erreur lors de l'ajout de l'avatar" });
-    }
-  };
+        const userId = req.user.id;
+        const user = await User.findById(userId);
 
-module.exports = { test, registerUser, loginUser, logoutUser, getProfile, changePassword, addUserAvatar };
+        const image = req.file.path;
+        user.avatar = image;
+
+        await user.save();
+
+        res.status(200).json({ avatar: user.avatar });
+    } catch (error) {
+        console.error("Erreur lors de l'ajout de l'avatar :", error);
+        res.json({ error: "Erreur lors de l'ajout de l'avatar" });
+    }
+};
+
+const getUserAvatar = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId).select('avatar');
+        res.status(200).json({ avatar: user.avatar });
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération de l'avatar utilisateur :", error);
+        res.json({ error: "Erreur lors de la récupération de l'avatar utilisateur" });
+    }
+};
+
+//status
+const addUserStatus = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId);
+
+        const { status } = req.body;
+        user.status = status;
+
+        await user.save();
+
+        res.status(200).json({ status: user.status });
+    } catch (error) {
+        console.error("Erreur lors de l'ajout du statut :", error);
+        res.json({ error: "Erreur lors de la modification du statut" });
+    }
+};
+
+const getUserStatus = async (req, res) => {
+    try {
+        const userId = req.user.id; 
+        const user = await User.findById(userId).select('status');
+        res.status(200).json({ status: user.status });
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération du statut utilisateur :", error);
+        res.json({ error: "Erreur lors de la récupération du statut utilisateur" });
+    }
+};
+
+module.exports = { test, registerUser, loginUser, logoutUser, getProfile, changePassword, addUserAvatar, getUserAvatar, addUserStatus, getUserStatus };

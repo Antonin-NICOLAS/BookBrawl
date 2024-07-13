@@ -1,21 +1,26 @@
-const express = require('express');
-const router = express.Router();
 const Book = require('../models/book');
 const User = require('../models/user');
-const cloudinary = require('cloudinary')
+const  { checkAndAwardRewards } = require('./rewardscontroller')
 
 // Route pour ajouter un livre
 const addUserBook = async (req, res) => {
     try {
-        const { title, wordsRead } = req.body;
-        const { userId } = req.user.id
+        const { title, author, language, wordsRead, startDate, Readingstatus, themes, description, rating} = req.body;
+        const userId  = req.user.id
         const image = req.file.path;
 
         const book = new Book({
             title,
+            author,
+            user: userId,
+            language,
             image,
             wordsRead,
-            user: userId,
+            startDate,
+            Readingstatus,
+            themes,
+            description,
+            rating,
         });
 
         await book.save();
@@ -24,6 +29,8 @@ const addUserBook = async (req, res) => {
         const user = await User.findById(userId);
         user.wordsRead += parseInt(wordsRead, 10);
         await user.save();
+
+        await checkAndAwardRewards(userId)
 
         res.status(200).json(book);
     } catch (error) {
@@ -35,7 +42,7 @@ const addUserBook = async (req, res) => {
 // Route pour récupérer les livres d'un utilisateur
 const getUserBooks = async (req, res) => {
     try {
-        const { userId } = req.query;
+        const userId = req.user.id
         const books = await Book.find({ user: userId });
         res.status(200).json(books);
     } catch (error) {
@@ -44,4 +51,17 @@ const getUserBooks = async (req, res) => {
     }
 };
 
-module.exports = { addUserBook, getUserBooks };
+const getUserRecentBooks = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const books = await Book.find({ user: userId })
+                                .sort({ addedAt: -1 })
+                                .limit(4);
+        res.status(200).json(books);
+    } catch (error) {
+        console.error('Erreur de récupération des livres :', error);
+        res.status(500).json({ error: 'Erreur de récupération de vos livres' });
+    }
+};
+
+module.exports = { addUserBook, getUserBooks, getUserRecentBooks };
