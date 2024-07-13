@@ -16,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors({credentials: true, origin: process.env.FRONTEND_SERVER}))
 //routes
 app.use('/', require('../routes/authroutes'))
+app.use('/books', require('../routes/bookroutes'))
+app.use('/rewards', require('../routes/rewardroutes'));
 //cors origin
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', process.env.FRONTEND_SERVER);
