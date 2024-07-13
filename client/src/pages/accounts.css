@@ -404,11 +404,16 @@ td.column2 span{
 .reward-category{
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .word-reward{
+  height: calc(50px + 10vh);
+  width: 100%;
+  display:flex;
+  flex-direction: row-reverse;
+  white-space: nowrap;
   overflow-x: scroll;
   overflow-y: hidden;
-  height: calc(50px + 10vh);
 }
 .word-reward img{
   height: 100%;
