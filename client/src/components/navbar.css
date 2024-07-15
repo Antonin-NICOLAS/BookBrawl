@@ -49,12 +49,12 @@
 .Title {
   font-family: 'Courier New', Courier, monospace;
   color: var(--bg);
-  font-size: 6vh;
-  padding-left: 4vh;
+  font-size: calc(5px + 1.5vh + 1.5vw);
+  padding-left: calc(1.5vh + 1.5vw);
   margin: 0;
 }
 
-@media screen and (min-height: 850px) and (min-width: 1350px) {
+@media screen and (min-height: 750px) and (min-width: 1350px) {
   .Title {
     font-size: 51px;
   }
@@ -102,7 +102,7 @@ ul li a i {
 }
 
 .navbar_link {
-  padding: 10px 20px;
+  padding: calc(5px + 0.75vh) calc(10px + 0.8vw);
 }
 
 .navbar_links {
@@ -187,7 +187,7 @@ nav .login i {
   .login {
     height: 40px;
     width: 40px;
-    background: rgb(255, 0, 191);
+    background: #adae8d;
     padding: 0;
     font-size: 0;
   }
@@ -262,6 +262,100 @@ html.transition *:after {
     display: none;
   }
 }
+@media screen and (min-height:650px) and (max-width: 1120px){
+    /*burger and menu*/
+    .burger {
+      display: block;
+      position: relative;
+      padding: 0;
+      margin-right: 5%;
+      width: 45px;
+      height: 45px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+  
+    .bar {
+      display: block;
+      width: 30px;
+      height: 4px;
+      border-radius: 3px;
+      background: var(--bg);
+      transition: all .5s ease-in-out;
+    }
+  
+    .bar::before,
+    .bar::after {
+      content: "";
+      width: 45px;
+      height: 4px;
+      position: absolute;
+      left: 0;
+      background: var(--bg);
+      border-radius: 3px;
+      transition: all .5s ease-in-out;
+    }
+  
+    .bar::before {
+      transform: translateY(-12px)
+    }
+  
+    .bar::after {
+      transform: translateY(12px)
+    }
+    .show-nav .bar {
+      width: 0;
+      background: transparent;
+    }
+  
+    .show-nav .bar::before {
+      transform: rotate(45deg);
+    }
+  
+    .show-nav .bar::after {
+      transform: rotate(-45deg);
+    }
+    .navbar_links{
+      position: fixed;
+      top: calc(8vh + 20px);
+      right: 0;
+      left: 50%;
+      height: calc(100vh - 8vh - 20px);
+      width:50vw;
+      background-color: var(--navbar);
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+      transform: translateX(100%);
+      transition: all .5s ease-in-out;
+    }
+    .show-nav .navbar_links{
+      transform: translateX(0);
+    }
+    .navbar_link {
+      padding: 1.5rem;
+      font-size: calc(9px + 0.8vh);
+      transform: translateX(120%);
+      transition: all .5s ease-in-out;
+    }
+    .show-nav .navbar_link  {        
+      transform: translateX(0);
+    }   
+    .navbar_link > a::after {
+      display: block;
+      content: "";
+      width: 0;
+      height: 2px;
+      margin-top: 2px;
+      background: var(--bg);
+      transition: width 0.4s;
+    }
+    
+    .navbar_link:active > a::after {
+      width: 100%;
+    }
+}
 @media screen and (max-width: 1066px){
 
   /*burger and menu*/
@@ -319,10 +413,10 @@ html.transition *:after {
   }
   .navbar_links{
     position: fixed;
-    top: 8vh;
+    top: calc(8vh + 20px);
     right: 0;
     left: 50%;
-    height: calc(100vh - 8vh);
+    height: calc(100vh - 8vh - 20px);
     width:50vw;
     background-color: var(--navbar);
     flex-direction: column;
@@ -365,7 +459,7 @@ html.transition *:after {
     }
     .navbar_links{
       z-index: 9000;
-      top: 8vh;
+      top: calc(8vh + 20px);
       right: 0;
       left: 0;
       height: calc(50vh - 8vh);
@@ -381,7 +475,7 @@ html.transition *:after {
       transform: translateX(0);
     }
     .navbar_link {
-      padding: 1.5rem;
+      padding: 2.7vh;
       font-size: calc(9px + 0.8vh);
       transform: translateX(100%);
       transition: all .5s ease-in-out;
