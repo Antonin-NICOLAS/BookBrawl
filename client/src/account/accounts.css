@@ -1,0 +1,475 @@
+.account {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*account1*/
+.account1 {
+  display: flex;
+}
+
+.logout {
+  border: solid 2px var(--bg);
+  border-radius: 20px;
+  height: 7vh;
+  max-height: 45px;
+  min-height: 30px;
+  width: 150px;
+  color: var(--bg);
+  background: rgb(255, 0, 191);
+  padding: 5px 11px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.identity-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(51px + 30vh);
+  width: calc(30vh + 20vw); 
+  background-color: var(--title);
+  border-radius: 20px;
+  color: black;
+  transition: ease-in-out 0.5s;
+}
+
+.identity-const {
+  width: 100%;
+  height: calc(51px + 30vh);
+}
+
+.identity-left {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  float: left;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.identity-right {
+  width:60%;
+  height: 100%;
+  display: flex;
+  float: right;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: calc(6px + 1.5vh);
+}
+
+/* avatar form open*/
+
+.identity-card.large {
+  height: calc(51px + 50vh);
+}
+
+.wrapper-avatar-form {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-100px);
+  width: 0;
+  height: 0;
+  opacity: 0;
+  animation: avatarclose 0.5s ease-in-out;
+}
+
+.form-avatar-group {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wrapper-avatar-form label, .wrapper-avatar-form .submitavatar{
+  display: none;
+}
+
+.wrapper-avatar-form.active .submitavatar{
+  display: block;
+}
+
+.wrapper-avatar-form.active label {
+  display: block;
+  border: #000 solid 2px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.wrapper-avatar-form.active {
+  animation: avataropen 0.5s ease-in-out;
+  transform: translateY(0px);
+  width: 100%;
+  height: 20vh;
+  opacity: 1;
+}
+
+@keyframes avataropen {
+  from {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    transform: translateY(-100px);
+  }
+
+  40% {
+    opacity: 0;
+    width: 100%;
+    height: 0;
+  }
+
+  to {
+    transform: translateY(0px);
+    width: 100%;
+    height: 20vh;
+    opacity: 1;
+  }
+}
+
+@keyframes avatarclose {
+  from {
+    transform: translateY(0px);
+    width: 100%;
+    height: 20vh;
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 0;
+    width: 100%;
+    height: 0;
+  }
+
+  to {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    transform: translateY(-100px);
+  }
+}
+
+
+.identity-right span {
+  margin-bottom: calc(2px + 1.5vh);
+}
+
+.identity-right button {
+  margin-top: calc(3px + 2vh);
+}
+
+.avatar {
+  width: calc(50px + 10vh + 4vw);
+  aspect-ratio: 1;
+  clip-path: inset(0% 10% 0% 10% round 10px);
+  object-fit: cover;
+  margin-bottom: calc(3px + 1.5vh);
+}
+
+.account input[type=file] {
+  display: none;
+}
+
+.buttonchangepassword,
+.buttonaddavatar,
+.buttonaddstatus {
+  border: 2px solid var(--color-text-body);
+  border-radius: 10px;
+  background: var(--1);
+  color: var(--color-text-body);
+  padding: calc(2px + 1vh) calc(1px + 1vw);
+  font-size: calc(7px + 1vh);
+  cursor: pointer;
+}
+
+.submitavatar,
+.submitstatus {
+  padding: calc(2px + 1vh) calc(1px + 1vw);
+  background: var(--2);
+  color: #000;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+label .imagebutton:hover {
+  background: #0d45a5;
+}
+
+/*account 2*/
+
+.account2 {
+  display: flex;
+}
+
+.account2.large .renderSection {
+  height: calc(330px + 35vh);
+}
+.account2.medium .renderSection {
+  height: calc(200px + 32vh);
+}
+
+.renderSection {
+  background-color: var(--title);
+  border-radius: 20px;
+  height: calc(51px + 30vh);
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  transition: ease-in-out 0.5s;
+}
+
+/*navbar*/
+
+.accountnav {
+  height: calc((10px + 0.3vh) * 2 + 10vh);
+  width: 100%;
+  background-color: var(--navbar);
+  border-radius: 20px;
+  padding: calc(10px + 0.3vh);
+  display: flex;
+}
+
+.accountnav button {
+  background-color: transparent;
+  color: #000;
+  border: none;
+  height: 10vh;
+  width: calc(100% * 1/3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.accountnav button:hover {
+  background-color: var(--1-transparent);
+  border-radius: 10px;
+}
+
+.accountnav button.active {
+  background-color: var(--1);
+  border-radius: 10px;
+}
+
+.accountnav button .icon {
+  font-size: calc(20px + 1.5vh);
+  margin: 5px;
+}
+
+.accountnav button .text {
+  font-size: calc(10px + 0.75vh);
+  margin: 5px;
+}
+
+.section-content {
+  height: 100%;
+  width: 100%;
+  padding: calc(5px + 0.5vh);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: calc(6px + 1.5vh);
+}
+
+/* status*/
+
+.section-content h3 {
+  margin-bottom: calc(5px + 1vh)
+}
+
+.section-content p {
+  margin-bottom: calc(10px + 2vh)
+}
+
+.wrapper-status-form label, .wrapper-status-form .submitstatus{
+  display: none;
+}
+
+.status-form textarea {
+  margin: calc(5px + 1vh);
+  border-radius: 20px;
+  padding: 10px;
+  width: 80%;
+}
+
+/* status form open*/
+
+.wrapper-status-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-100px);
+  width: 0;
+  height: 0;
+  opacity: 0;
+  animation: avatarclose 0.5s ease-in-out;
+}
+
+.wrapper-status-form.active label {
+  margin-top: calc(5px + 1vh);
+  display: block;
+  width: 100%;
+}
+.wrapper-status-form.active .submitstatus{
+  display: block;
+}
+
+.wrapper-status-form.active {
+  animation: avataropen 0.5s ease-in-out;
+  transform: translateY(0px);
+  width: 100%;
+  height: 20vh;
+  opacity: 1;
+}
+
+/*books*/
+table.books-table {
+  width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  color: #000;
+  border-collapse: collapse;
+  text-align: center;
+}
+table.books-table *{
+  margin-bottom: 0;
+}
+
+/*largeur colonnes*/
+table.books-table .column1 {
+  width: 25%;
+}
+table.books-table .column2{
+  width: 40%;
+}
+/*images*/
+table.books-table .column1 img {
+  margin: calc(2px + 0.5vh) 2vh calc(2px + 0.5vh) 2vh;
+  height: 5vw;
+  border-radius: 5px;
+  clip-path: inset(0% 10% 0% 10% round 10px);
+  object-fit: cover;
+}
+
+table.books-table tbody tr:first-of-type img{
+  margin-top: calc(5px + 1vh);
+}
+table.books-table tbody tr:nth-last-of-type(3) img{
+  margin-bottom: calc(5px + 1vh);
+}
+
+table.books-table .column2.rating img{
+  height: 20px;
+  margin: 0 2px;
+}
+
+/*texte première case colonne 2 + première case colonne 3*/
+table.books-table tbody tr:first-of-type .column2 p, table.books-table tbody tr:first-of-type .column3 p{
+  margin-top: calc(2px + 1vh);
+}
+table.books-table tbody tr .rating .stars{
+  margin-bottom: calc(2px + 1vh);
+}
+
+td.column2 span{
+  font-style: italic;
+}
+
+table.books-table button {
+  background-color: #009879;
+  color: white;
+  border: none;
+  padding: calc(3px + 0.5vh) calc(5px + 1vw);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1em;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+table.books-table button:hover {
+  background-color: #007b5e;
+}
+
+/*rewards*/
+.reward-category{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.word-reward{
+  height: calc(50px + 10vh);
+  width: 100%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row-reverse;
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+.word-reward img{
+  height: 100%;
+}
+
+/*/*//* responsive *//*/*/
+
+@media screen and (max-width: 1400px) {
+  .account{
+    width: 95%;
+  }
+}
+@media screen and (max-height: 600px) {
+  .avatar{
+    width: calc(30px + 10vh + 4vw);
+  }
+}
+@media screen and (max-width: 1100px) and (max-height: 1050px){
+  .account{
+    flex-direction: column;
+  }
+  .account1, .account2{
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .identity-card{
+    margin: 0 0 30px 0;
+    width: 70vw;
+  }
+  .renderSection{
+    margin: 0 0 30px 0;
+    width: 70vw;
+  }
+}
+@media screen and (max-width: 650px){
+  .account2 button .text{
+    display: none;
+  }
+  .identity-card{
+    width: 90vw;
+  }
+  .renderSection{
+    margin: 0 0 30px 0;
+    width: 90vw;
+  }
+  table.books-table .column1 img{
+    margin-left: 0;
+    margin-right: 0;
+    height: 10vw;
+  }
+}
