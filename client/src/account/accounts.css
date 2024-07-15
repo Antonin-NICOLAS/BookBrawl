@@ -210,12 +210,12 @@ label .imagebutton:hover {
 .account2 {
   display: flex;
 }
+.account2.medium .renderSection {
+  height: calc(200px + 32vh);
+}
 
 .account2.large .renderSection {
   height: calc(330px + 35vh);
-}
-.account2.medium .renderSection {
-  height: calc(200px + 32vh);
 }
 
 .renderSection {
