@@ -110,19 +110,6 @@ const logoutUser = async (req, res) => {
     res.status(200).json({ status: "sucess" })
 }
 
-//profile
-const getProfile = (req, res) => {
-    const { jwtauth } = req.cookies
-    if (jwtauth) {
-        jwt.verify(jwtauth, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, user) => {
-            if (err) throw err;
-            res.json(user)
-        })
-    } else {
-        res.json(null)
-    }
-}
-
 //changer de mot de passe 
 const changePassword = async (req, res) => {
     try {
@@ -160,64 +147,4 @@ const changePassword = async (req, res) => {
     }
 };
 
-//Avatar
-const addUserAvatar = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const user = await User.findById(userId);
-
-        const image = req.file.path;
-        user.avatar = image;
-
-        await user.save();
-
-        res.status(200).json({ avatar: user.avatar });
-    } catch (error) {
-        console.error("Erreur lors de l'ajout de l'avatar :", error);
-        res.json({ error: "Erreur lors de l'ajout de l'avatar" });
-    }
-};
-
-const getUserAvatar = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const user = await User.findById(userId).select('avatar');
-        res.status(200).json({ avatar: user.avatar });
-
-    } catch (error) {
-        console.error("Erreur lors de la récupération de l'avatar utilisateur :", error);
-        res.json({ error: "Erreur lors de la récupération de l'avatar utilisateur" });
-    }
-};
-
-//status
-const addUserStatus = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const user = await User.findById(userId);
-
-        const { status } = req.body;
-        user.status = status;
-
-        await user.save();
-
-        res.status(200).json({ status: user.status });
-    } catch (error) {
-        console.error("Erreur lors de l'ajout du statut :", error);
-        res.json({ error: "Erreur lors de la modification du statut" });
-    }
-};
-
-const getUserStatus = async (req, res) => {
-    try {
-        const userId = req.user.id; 
-        const user = await User.findById(userId).select('status');
-        res.status(200).json({ status: user.status });
-
-    } catch (error) {
-        console.error("Erreur lors de la récupération du statut utilisateur :", error);
-        res.json({ error: "Erreur lors de la récupération du statut utilisateur" });
-    }
-};
-
-module.exports = { test, registerUser, loginUser, logoutUser, getProfile, changePassword, addUserAvatar, getUserAvatar, addUserStatus, getUserStatus };
+module.exports = { test, registerUser, loginUser, logoutUser, changePassword };

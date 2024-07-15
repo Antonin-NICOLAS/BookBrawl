@@ -7,17 +7,7 @@ const checkAndAwardRewards = async (userId) => {
         const user = await User.findById(userId).populate('rewards');
         const wordsRead = user.wordsRead;
 
-        const rewards = [
-            {
-                name: "100,000 Words Read",
-                description: "Awarded for reading 100,000 words",
-                criteria: "words",
-                threshold: 100000,
-                icon: "../assets/starrating.png",
-                rewardId: '100000_words'
-            },
-            // Ajoutez d'autres récompenses ici si nécessaire
-        ];
+        const rewards = await Reward.find();
 
         for (let reward of rewards) {
             // Vérifiez si l'utilisateur a déjà reçu cette récompense
