@@ -1,6 +1,9 @@
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
+//CSS
 import './predictions.css'
+//LOADER//
+import LoadingAnimation from '../components/loader';
 
 function Predictions() {
     const { user, setUser } = useContext(UserContext)
