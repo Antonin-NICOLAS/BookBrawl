@@ -10,7 +10,7 @@ export function UserContextProvider({ children }) {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/profile' : '/profile', {
+                const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/user/profile' : '/user/profile', {
                     withCredentials: true,
                     headers: {
                         'Content-Type': 'application/json'
