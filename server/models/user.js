@@ -34,10 +34,18 @@ const userSchema = new Schema({
         type: String,
         default: "Salut, je participe au BookBrawl 2024"
     },
+    booksRead: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Book'
+    }],
+    favoriteBooks: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Book'
+    }],
     rewards: [{
         type: Schema.Types.ObjectId,
         ref: 'Reward'
-    }]
+    }],
 })
 
 const UserModel = mongoose.model("User", userSchema)
