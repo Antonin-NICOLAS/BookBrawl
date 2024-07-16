@@ -1,0 +1,4 @@
+embed {
+    width: 90%;
+    height: calc(100% - 8vh - 40px - 30px);
+}
