@@ -14,20 +14,23 @@ import LoadingAnimation from '../components/loader';
 
 function Compte({ onPasswordClick }) {
   //Context
-  const { user, isLoading } = useContext(UserContext);
+  const { user, setUser, isLoading } = useContext(UserContext);
   const { setIsLoading, loadingStates } = useLoading();
   //others
+  const [avatar, setAvatar] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [words, setwords] = useState(null);
   const [StatusData, setStatusData] = useState({
     status: ''
   });
   const [recentBooks, setRecentBooks] = useState([]);
   const [rewards, setRewards] = useState([]);
+  //form
   const [showAvatarForm, setshowAvatarForm] = useState(false);
   const [showStatusForm, setshowStatusForm] = useState(false);
   const [image, setImage] = useState(null);
+  //sections
   const [activeSection, setActiveSection] = useState('status');
-  const [avatar, setAvatar] = useState(null);
-  const [status, setStatus] = useState(null);
 
   //attendre Usercontext
   useEffect(() => {
@@ -36,10 +39,11 @@ function Compte({ onPasswordClick }) {
       verifyRewards();
       fetchUserAvatar();
       fetchUserStatus();
+      fetchUserWords();
     }
   }, [isLoading, user]);
 
-  ////////////status et avatar et livres récents
+  ////////////status et avatar et livres récents et wordsread
   //status
 
   const fetchUserStatus = async () => {
@@ -99,6 +103,25 @@ function Compte({ onPasswordClick }) {
       toast.error('Un problème est survenu. Réessayez plus tard.');
     } finally {
       setIsLoading('recentBooks', false);
+    }
+  };
+
+  const fetchUserWords = async () => {
+    setIsLoading('words', true);
+    try {
+      const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/user/userwords' : '/user/userwords', {
+      });
+      if (response.data.error) {
+        toast.error(response.data.error);
+        console.log(response.data.error);
+      } else {
+        setwords(response.data.words);
+      }
+    } catch (error) {
+      console.error('Error fetching user words:', error);
+      toast.error('Un problème est survenu lors de la récupération des mots lus.');
+    } finally {
+      setIsLoading('words', false);
     }
   };
 
@@ -191,7 +214,7 @@ function Compte({ onPasswordClick }) {
 
     } catch (error) {
       console.error("Erreur lors de la récupération des récompenses :", error);
-      toast.error('Un problème est survenu. Réessayez plus tard.');
+      //toast.error('Un problème est survenu. Réessayez plus tard.'); => pas de toast car si 404 => normal => pas forcément de nouveu reward débloqué
     }
   };
 
@@ -297,59 +320,61 @@ function Compte({ onPasswordClick }) {
         );
       case 'words':
         return (
-          <div className={`words section-content ${recentBooks.length > 2 ? 'large' : ''}`}>
+          <div className="words section-content">
+            <h3>Mots lus</h3>
+            {isWordsLoading ? (
+              <LoadingAnimation />
+            ) : (
+              <p>{words}</p>
+            )}
+            <h3>Derniers livres lus</h3>
             {isRecentBooksLoading ? (
               <LoadingAnimation />
             ) : (
-              <>
-                <h3>Mots lus</h3>
-                <p>{user.words}</p>
-                <h3>Derniers livres lus</h3>
-                <table className="books-table">
-                  <tbody>
-                    {recentBooks.length > 0 ? (
-                      recentBooks.map((book) => (
-                        <React.Fragment key={book._id}>
-                          <tr>
-                            <td className='column1' rowSpan="3">
-                              <Link to={`/book/${book._id}`}>
-                                <img src={book.image} alt={book.title} className="book-image" />
-                              </Link>
-                            </td>
-                            <td className="column2">
-                              <p>
-                                <span>{book.title}</span>, {book.author}
-                              </p>
-                            </td>
-                            <td className="column3">
-                              <p>{formatDate(book.reviews[0].endDate)}</p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="column2">{book.wordsRead}</td>
-                            <td className="column3" rowSpan="2">
-                              <button>See more</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="column2 rating">
-                              <div className="stars">
-                                {[...Array(book.reviews[0].rating)].map((_, i) => (
-                                  <img key={i} src={Star} alt="star" className="star-image" />
-                                ))}
-                              </div>
-                            </td>
-                          </tr>
-                        </React.Fragment>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="3">Aucun livre récent</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </>
+              <table className="books-table">
+                <tbody>
+                  {recentBooks.length > 0 ? (
+                    recentBooks.map((book) => (
+                      <React.Fragment key={book._id}>
+                        <tr>
+                          <td className='column1' rowSpan="3">
+                            <Link to={`/book/${book._id}`}>
+                              <img src={book.image} alt={book.title} className="book-image" />
+                            </Link>
+                          </td>
+                          <td className="column2">
+                            <p>
+                              <span>{book.title}</span>, {book.author}
+                            </p>
+                          </td>
+                          <td className="column3">
+                            <p>{formatDate(book.reviews[0].endDate)}</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="column2">{book.wordsRead}</td>
+                          <td className="column3" rowSpan="2">
+                            <button>See more</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="column2 rating">
+                            <div className="stars">
+                              {[...Array(book.reviews[0].rating)].map((_, i) => (
+                                <img key={i} src={Star} alt="star" className="star-image" />
+                              ))}
+                            </div>
+                          </td>
+                        </tr>
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3">Aucun livre récent</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             )}
           </div>
         );
@@ -362,63 +387,59 @@ function Compte({ onPasswordClick }) {
               <>
                 <div className="reward-category">
                   <h3>Mots</h3>
-                  <div className="word-reward">
-                    {rewards.filter(reward => reward.criteria === 'word').length > 0 ? (
-                      rewards.filter(reward => reward.criteria === 'word').map(reward => (
+                  {rewards.filter(reward => reward.criteria === 'word').length > 0 ? (
+                    <div className="reward-section">
+                      {rewards.filter(reward => reward.criteria === 'word').map(reward => (
                         <img key={reward._id} src={reward.icon} alt={reward.name} />
-                      ))
-                    ) : (
+                      ))}
+                    </div>
+                  ) : (
+                    <ul>
                       <p>Aucune récompense pour les mots</p>
-                    )}
-                  </div>
+                    </ul>
+                  )}
                 </div>
                 <div className="reward-category">
                   <h3>Livres</h3>
-                  <ul>
-                    {rewards.filter(reward => reward.criteria === 'book').length > 0 ? (
-                      rewards.filter(reward => reward.criteria === 'book').map(reward => (
-                        <li key={reward._id}>
-                          <img src={reward.icon} alt={reward.name} />
-                          <span>{reward.name}</span>
-                          <p>{reward.description}</p>
-                        </li>
-                      ))
-                    ) : (
+                  {rewards.filter(reward => reward.criteria === 'book').length > 0 ? (
+                    <div className="reward-section">
+                      {rewards.filter(reward => reward.criteria === 'book').map(reward => (
+                        <img key={reward._id} src={reward.icon} alt={reward.name} />
+                      ))}
+                    </div>
+                  ) : (
+                    <ul>
                       <p>Aucune récompense pour les livres</p>
-                    )}
-                  </ul>
+                    </ul>
+                  )}
                 </div>
                 <div className="reward-category">
                   <h3>Participation</h3>
-                  <ul>
-                    {rewards.filter(reward => reward.criteria === 'participation').length > 0 ? (
-                      rewards.filter(reward => reward.criteria === 'participation').map(reward => (
-                        <li key={reward._id}>
-                          <img src={reward.icon} alt={reward.name} />
-                          <span>{reward.name}</span>
-                          <p>{reward.description}</p>
-                        </li>
-                      ))
-                    ) : (
+                  {rewards.filter(reward => reward.criteria === 'participation').length > 0 ? (
+                    <div className="reward-section">
+                      {rewards.filter(reward => reward.criteria === 'participation').map(reward => (
+                        <img key={reward._id} src={reward.icon} alt={reward.name} />
+                      ))}
+                    </div>
+                  ) : (
+                    <ul>
                       <p>Aucune récompense pour la participation</p>
-                    )}
-                  </ul>
+                    </ul>
+                  )}
                 </div>
                 <div className="reward-category">
                   <h3>Création</h3>
-                  <ul>
-                    {rewards.filter(reward => reward.criteria === 'creation').length > 0 ? (
-                      rewards.filter(reward => reward.criteria === 'creation').map(reward => (
-                        <li key={reward._id}>
-                          <img src={reward.icon} alt={reward.name} />
-                          <span>{reward.name}</span>
-                          <p>{reward.description}</p>
-                        </li>
-                      ))
-                    ) : (
+                  {rewards.filter(reward => reward.criteria === 'creation').length > 0 ? (
+                    <div className="reward-section">
+                      {rewards.filter(reward => reward.criteria === 'creation').map(reward => (
+                        <img key={reward._id} src={reward.icon} alt={reward.name} />
+                      ))}
+                    </div>
+                  ) : (
+                    <ul>
                       <p>Aucune récompense pour la création</p>
-                    )}
-                  </ul>
+                    </ul>
+                  )}
                 </div>
               </>
             )}
@@ -431,6 +452,7 @@ function Compte({ onPasswordClick }) {
 
   const isAvatarLoading = loadingStates.avatar;
   const isStatusLoading = loadingStates.status;
+  const isWordsLoading = loadingStates.words;
   const isAvatarChanging = loadingStates.avatarchange;
   const isStatusChanging = loadingStates.statuschange;
   const isRecentBooksLoading = loadingStates.recentBooks;
@@ -490,7 +512,7 @@ function Compte({ onPasswordClick }) {
             </div>
           </div>
         </div>
-        <div className={`account2 ${activeSection === 'words' && recentBooks.length > 2 ? 'large' : 'medium'} ${activeSection === 'rewards' ? 'large' : ''} ${activeSection === 'status' && showStatusForm ? 'large' : ''}`} >
+        <div className={`account2 ${activeSection === 'words' && recentBooks.length > 1 ? 'large' : ''} ${activeSection === 'words' && recentBooks.length === 1 ? 'medium' : ''} ${activeSection === 'rewards' && rewards.length >= 1 ? 'large' : ''} ${activeSection === 'rewards' && rewards.length === 0 ? 'medium' : ''} ${activeSection === 'status' && showStatusForm ? 'large' : ''}`} >
           <div className="renderSection">
             <div className="accountnav">
               <button onClick={() => setActiveSection('status')} className={activeSection === 'status' ? 'active' : ''}>
