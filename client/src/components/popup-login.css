@@ -3,7 +3,7 @@
 /*login box*/
 .login-overlay{
   position: fixed;
-  top: 8vh;
+  top: calc(8vh + 20px);
   left: 0;
   right: 0;
   bottom: 0;
