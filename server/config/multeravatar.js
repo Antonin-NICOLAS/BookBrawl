@@ -6,7 +6,10 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'avatars',
-    public_id: (req, file) => `${Date.now()}-${file.originalname}`,
+    public_id: (req, file) => {
+      const prenom = req.user.prenom;
+      return `${prenom}-${file.originalname}`;
+    },
   },
 });
 
