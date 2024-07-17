@@ -16,11 +16,22 @@ const getProfile = (req, res) => {
     }
 }
 
+const cloudinary = require('../config/cloudinary');
+
 //Avatar
 const addUserAvatar = async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await User.findById(userId);
+
+        //supprimer l'ancien avatar
+        if (user.avatar && user.avatar !== 'https://book-brawl.vercel.app/assets/account-D8hsV5Dv.jpeg') {
+            const urlParts = user.avatar.split('/');
+            const avatarsIndex = urlParts.indexOf('avatars');
+            const publicIdWithExtension = urlParts.slice(avatarsIndex).join('/');
+            const publicId = publicIdWithExtension.substring(0, publicIdWithExtension.lastIndexOf('.'));
+            await cloudinary.uploader.destroy(publicId);
+        }
 
         const image = req.file.path;
         user.avatar = image;
@@ -76,6 +87,20 @@ const getUserStatus = async (req, res) => {
     }
 };
 
+//words
+const getUserWords = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const user = await User.findById(userId).select('wordsRead');
+        res.status(200).json({ words: user.wordsRead });
+
+    } catch (error) {
+        console.error('Error fetching user details:', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+};
+
 const getUserById = async (req, res) => {
     const { userId } = req.params;
 
@@ -91,18 +116,11 @@ const getUserById = async (req, res) => {
                 path: 'rewards',
             });
 
-        if (!user) {
-            return res.status(404).json({ error: 'Utilisateur non trouvé' });
-        }
-
         res.status(200).json(user.toJSON());
     } catch (error) {
-        if (error.name === 'CastError') {
-            return res.status(400).json({ error: "ID d'utilisateur invalide" });
-        }
         console.error('Error fetching user details:', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 };
 
-module.exports = { getProfile, addUserAvatar, getUserAvatar, addUserStatus, getUserStatus, getUserById };
+module.exports = { getProfile, addUserAvatar, getUserAvatar, addUserStatus, getUserStatus, getUserById, getUserWords };
