@@ -59,17 +59,17 @@ const Classement = () => {
     return (
         <div className='classement'>
             <h1>Classement des utilisateurs par nombre de mots lus</h1>
-            <table className='classement-table'>
-                <thead className="table-head">
-                    <tr>
-                        <th className="column1">Rang</th>
-                        <th className="column2">Nom</th>
-                        <th className="column3">Mots lus</th>
-                    </tr>
-                </thead>
-                {isUsersLoading ? (
-                    <LoadingAnimation />
-                ) : (
+            {isUsersLoading ? (
+                <LoadingAnimation />
+            ) : (
+                <table className='classement-table'>
+                    <thead className="table-head">
+                        <tr>
+                            <th className="column1">Rang</th>
+                            <th className="column2">Nom</th>
+                            <th className="column3">Mots lus</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {users && users.length > 0 ? (
                             users.map((userItem, index) => (
@@ -87,8 +87,8 @@ const Classement = () => {
                                 <td colSpan="3">Aucun utilisateur trouvé</td>
                             </tr>
                         )}
-                    </tbody>)}
-            </table>
+                    </tbody>
+                </table>)}
         </div>
     );
 };
