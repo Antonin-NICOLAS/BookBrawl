@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 //Context
@@ -8,7 +8,7 @@ import './addbookform.css';
 //LOADER//
 import LoadingAnimation from '../components/loader';
 
-function BookForm({ onSuccess }) {
+function BookForm({ onSuccess, showForm, setShowForm }) {
     //context
     const { setIsLoading, loadingStates } = useLoading();
     //others
@@ -21,7 +21,7 @@ function BookForm({ onSuccess }) {
         wordsRead: '',
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
-        Readingstatus: '',
+        Readingstatus: 'lu',
         description: '',
         rating: 0
     });
@@ -87,7 +87,7 @@ function BookForm({ onSuccess }) {
                     wordsRead: response.data.wordsRead,
                     startDate: new Date().toISOString().split('T')[0],
                     endDate: new Date().toISOString().split('T')[0],
-                    Readingstatus: '',
+                    Readingstatus: 'lu',
                     description: '',
                     rating: 0
                 });
@@ -134,33 +134,47 @@ function BookForm({ onSuccess }) {
         }
 
         try {
-            const response = await axios.post(process.env.NODE_ENV === "production" ? '/api/books/addbook' : '/books/addbook', formData, {
+            const response = await axios.post(process.env.NODE_ENV === "production" ? '/api/books/add' : '/books/add', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                }
+                },
+                params: { BookTitle: BookData.title }
             });
 
             if (response.data.error) {
                 toast.error(response.data.error);
                 console.log(response.data.error);
-                return;
+                setBookData({
+                    title: '',
+                    author: '',
+                    language: '',
+                    wordsRead: '',
+                    startDate: new Date().toISOString().split('T')[0],
+                    endDate: new Date().toISOString().split('T')[0],
+                    Readingstatus: 'lu',
+                    themes: [],
+                    description: '',
+                    rating: 0
+                });
+                setExistingBookData(null)
+            } else {
+                toast.success('Votre livre a été ajouté');
+                setImage(null);
+                onSuccess();
+                setBookData({
+                    title: '',
+                    author: '',
+                    language: '',
+                    wordsRead: '',
+                    startDate: new Date().toISOString().split('T')[0],
+                    endDate: new Date().toISOString().split('T')[0],
+                    Readingstatus: 'lu',
+                    themes: [],
+                    description: '',
+                    rating: 0
+                });
+                setExistingBookData(null)
             }
-
-            toast.success('Votre livre a été ajouté');
-            setImage(null);
-            onSuccess();
-            setBookData({
-                title: '',
-                author: '',
-                language: '',
-                wordsRead: '',
-                startDate: new Date().toISOString().split('T')[0],
-                endDate: new Date().toISOString().split('T')[0],
-                Readingstatus: '',
-                themes: [],
-                description: '',
-                rating: 0
-            });
         } catch (error) {
             console.error('Error adding book:', error);
             toast.error('Un problème est survenu. Réessayez plus tard.');
@@ -168,16 +182,36 @@ function BookForm({ onSuccess }) {
             setIsLoading('addbook', false);
         }
     };
+    //overlay click
+    const overlayBookRef = useRef(null);
+    const wrapperBookRef = useRef(null);
+    const handleClickOutside = (event) => {
+        if (overlayBookRef.current && wrapperBookRef.current && overlayBookRef.current.contains(event.target) && !wrapperBookRef.current.contains(event.target)) {
+            handleBookClose();
+        }
+    };
+    useEffect(() => {
+        if (showForm) {
+            document.addEventListener("click", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [showForm]);
+    //function close
+    const handleBookClose = () => setShowForm(false)
 
     const isNewBookLoading = loadingStates.addbook;
 
     return (
-        <div className="book-overlay">
+        <div ref={overlayBookRef} className={`book-overlay ${showForm ? 'show' : 'hide'}`}>
             {isNewBookLoading ? (
                 <LoadingAnimation />
             ) : (
-                <div className="wrapper-book">
+                <div ref={wrapperBookRef} className="wrapper-book">
+                    <span className="close-book" onClick={handleBookClose}><i className="fa-solid fa-xmark"></i></span>
                     <form onSubmit={handleSubmit} className="book-form">
+                        <h2>Ajouter un livre</h2>
                         {ExistingBookData ? (
                             <>
                                 <div className="form-group">
@@ -249,21 +283,7 @@ function BookForm({ onSuccess }) {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="Readingstatus">Statut du livre :</label>
-                                    <select
-                                        id="Readingstatus"
-                                        name='Readingstatus'
-                                        value={ExistingBookData.Readingstatus || ''}
-                                        onChange={handleExistingBookChange}
-                                        required>
-                                        <option value="">Sélectionnez un statut</option>
-                                        <option value="lu">Lu</option>
-                                        <option value="en train de lire">En train de lire</option>
-                                        <option value="à lire">À lire</option>
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="description">Description :</label>
+                                    <label htmlFor="description">Avis :</label>
                                     <textarea
                                         type="text"
                                         cols="50"
@@ -405,21 +425,7 @@ function BookForm({ onSuccess }) {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="Readingstatus">Statut du livre :</label>
-                                    <select
-                                        id="Readingstatus"
-                                        name='Readingstatus'
-                                        value={BookData.Readingstatus || ''}
-                                        onChange={handleBookChange}
-                                        required>
-                                        <option value="">Sélectionnez un statut</option>
-                                        <option value="lu">Lu</option>
-                                        <option value="en train de lire">En train de lire</option>
-                                        <option value="à lire">À lire</option>
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="description">Description :</label>
+                                    <label htmlFor="description">Avis :</label>
                                     <textarea
                                         type="text"
                                         cols="50"
