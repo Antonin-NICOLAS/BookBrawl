@@ -39,6 +39,7 @@ html {
   --login-box: #f4acb790;
   --color-text-body: #121111;
   --title: #D8E2DC;
+  --title-transparent: #D8E2DC80;
   --1: #FFE1A8;
   --1-transparent: #FFE1A880;
   --2: #E7EFC5;
@@ -52,6 +53,7 @@ html[data-theme='dark'] {
   --login-box: #F4ACB780;
   --color-text-body: #edeeee;
   --title: #89545A;
+  --title-transparent: #89545A80;
   --1: #9C6770;
   --1-transparent: #9C677080;
   --2: #E7EFC5;
