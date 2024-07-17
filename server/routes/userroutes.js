@@ -2,9 +2,8 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const { getUserRank } = require('../controllers/rankingcontroller');
-const { getProfile, addUserAvatar, addUserStatus, getUserStatus, getUserAvatar, getUserById } = require('../controllers/usercontroller');
+const { getProfile, addUserAvatar, addUserStatus, getUserStatus, getUserAvatar, getUserById, getUserWords } = require('../controllers/usercontroller');
 const { secure } = require("../middlewares/authsecure");
-const uploadavatar = require('../config/multeravatar')
 
 const router = express.Router();
 
@@ -23,10 +22,12 @@ router.use(secure);
 //classement
 router.get('/userranking', getUserRank);
 //accounts
+const uploadavatar = require('../config/multeravatar')
 router.post('/addavatar', uploadavatar.single('image'), addUserAvatar);
 router.post('/addstatus', addUserStatus)
 router.get('/userstatus', getUserStatus);
 router.get('/useravatar', getUserAvatar);
+router.get('/userwords', getUserWords)
 //book details
 router.get('/:userId', getUserById)
 

@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const { secure } = require("../middlewares/authsecure");
-const { addUserBook, getUserBooks, getUserRecentBooks, getUserFavoriteBooks, checkExistingBook, BookSuggestion, getBookById } = require('../controllers/bookcontroller');
+const { addUserBook, getUserBooks, getUserRecentBooks, getUserFavoriteBooks, checkExistingBook, BookSuggestion, getBookById, deleteUserBook } = require('../controllers/bookcontroller');
 const uploadbook = require('../config/multerbooks');
 
 const router = express.Router();
@@ -21,7 +21,8 @@ router.get('/userrecentbooks', getUserRecentBooks)
 //books
 router.get('/userbooks', getUserBooks);
 router.get('/userfavoritebooks', getUserFavoriteBooks)
-router.post('/addbook', uploadbook.single('image'), addUserBook);
+router.post('/add', uploadbook.single('image'), addUserBook);
+router.get('/delete', deleteUserBook);
 router.get('/checkbook', checkExistingBook)
 router.get('/suggest', BookSuggestion);
 //book details
