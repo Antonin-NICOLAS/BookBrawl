@@ -42,6 +42,14 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Book'
     }],
+    CurrentReader: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Book'
+    }],
+    FutureReader: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Book'
+    }],
     rewards: [{
         type: Schema.Types.ObjectId,
         ref: 'Reward'
