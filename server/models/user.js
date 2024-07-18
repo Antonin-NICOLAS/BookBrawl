@@ -30,6 +30,10 @@ const userSchema = new Schema({
         required: true,
         default: 0
     },
+    futureWordsRead: {
+        type: Number,
+        default: 0
+    },
     status: {
         type: String,
         default: "Salut, je participe au BookBrawl 2024"
@@ -56,6 +60,11 @@ const userSchema = new Schema({
     }],
 })
 
-const UserModel = mongoose.model("User", userSchema)
+// Définition d'une propriété virtuelle pour calculer totalWords
+userSchema.virtual('totalWords').get(function() {
+    return this.wordsRead + this.futureWordsRead;
+});
 
-module.exports = UserModel
+const UserModel = mongoose.model("User", userSchema);
+
+module.exports = UserModel;
