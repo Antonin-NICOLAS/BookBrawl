@@ -9,3 +9,4 @@ Currently, two official plugins are available:
 
 remplacer target dans package.json avec "https://book-brawl-backend.vercel.app"
 index.html --> remplacer preconnect avec "https://book-brawl-backend.vercel.app"
+axios.defaults à remplacer également
