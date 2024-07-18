@@ -1,13 +1,19 @@
 const Book = require('../models/book');
 const User = require('../models/user');
 const cloudinary = require('../config/cloudinary');
+const slugify = require('slugify');
 const { checkAndAwardRewards, checkAndRevokeRewards } = require('./rewardscontroller');
 
 // Route pour ajouter un livre avec une critique
 const addUserBook = async (req, res) => {
     try {
-        const { title, author, language, wordsRead, startDate, endDate, Readingstatus, description, rating } = req.body;
+        const { title, author, language, wordsRead, startDate, endDate, Readingstatus, description, rating, imageUrl } = req.body;
         const userId = req.user.id;
+
+        //vérifier les dates
+        if (startDate > endDate) {
+            return res.json({ error: "La date de début doit être avant celle de fin" })
+        }
 
         // Vérifier si le livre existe déjà
         let book = await Book.findOne({ title: title, author: author, language: language });
@@ -23,7 +29,17 @@ const addUserBook = async (req, res) => {
         }
 
         if (!book) {
-            const image = req.file.path;
+            let image;
+            if (req.file) {
+                image = req.file.path;
+            } else if (imageUrl) {
+                // Téléchargez l'image depuis l'URL
+                const uploadedImage = await cloudinary.uploader.upload(imageUrl, {
+                    folder: 'books',
+                    public_id: slugify(title, { lower: true, strict: true })
+                });
+                image = uploadedImage.secure_url;
+            }
             const themes = JSON.parse(req.body.themes);
 
             book = new Book({
@@ -55,14 +71,14 @@ const addUserBook = async (req, res) => {
         }
 
         // Mettre à jour les lecteurs actuels ou passés
-        if (Readingstatus === 'en train de lire') {
+        if (Readingstatus === 'En train de lire') {
             book.currentReaders.push(userId);
             user.CurrentReader.push(book._id)
-        } else if (Readingstatus === 'lu') {
+        } else if (Readingstatus === 'Lu') {
             book.pastReaders.push(userId);
             user.booksRead.push(book._id)
         }
-        else if (Readingstatus === 'à lire') {
+        else if (Readingstatus === 'À lire') {
             book.futureReaders.push(userId);
             user.FutureReader.push(book._id)
         }
@@ -106,7 +122,7 @@ const getUserBooks = async (req, res) => {
         const futureReaderSet = new Set(user.FutureReader.map(book => book._id.toString()));
 
         // Filtrer les livres pour exclure ceux qui sont dans les favoris, currentReader ou futureReader
-        const filteredBooks = user.booksRead.filter(book => 
+        const filteredBooks = user.booksRead.filter(book =>
             !favoriteBooksSet.has(book._id.toString()) &&
             !currentReaderSet.has(book._id.toString()) &&
             !futureReaderSet.has(book._id.toString())
@@ -176,7 +192,7 @@ const checkExistingBook = async (req, res) => {
             return res.json({ error: "Les données de ce livre n'ont pas été trouvées" });
         }
     } catch (error) {
-        return res.status(500).json({error: 'Erreur lors de la récupération des données de ce livre.' });
+        return res.status(500).json({ error: 'Erreur lors de la récupération des données de ce livre.' });
     }
 };
 
@@ -272,11 +288,11 @@ const deleteUserBook = async (req, res) => {
         });
 
         if (otherUsers.length === 0) {
-                const urlParts = book.image.split('/');
-                const booksIndex = urlParts.indexOf('books');
-                const publicIdWithExtension = urlParts.slice(booksIndex).join('/');
-                const publicId = publicIdWithExtension.substring(0, publicIdWithExtension.lastIndexOf('.'));
-                await cloudinary.uploader.destroy(publicId);
+            const urlParts = book.image.split('/');
+            const booksIndex = urlParts.indexOf('books');
+            const publicIdWithExtension = urlParts.slice(booksIndex).join('/');
+            const publicId = publicIdWithExtension.substring(0, publicIdWithExtension.lastIndexOf('.'));
+            await cloudinary.uploader.destroy(publicId);
             await Book.findByIdAndDelete(bookId);
         }
 
