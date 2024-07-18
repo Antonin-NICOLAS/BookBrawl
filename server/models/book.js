@@ -20,7 +20,7 @@ const reviewSchema = new Schema({
     Readingstatus: {
         type: String,
         required: true,
-        enum: ['lu', 'en train de lire', 'à lire']
+        enum: ['Lu', 'En train de lire', 'À lire']
     },
     startDate: {
         type: Date,
