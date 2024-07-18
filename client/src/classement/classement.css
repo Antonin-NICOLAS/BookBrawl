@@ -1,5 +1,16 @@
+.classement{
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .classement h1 {
   color: var(--color-text-body);
+  font-size: calc(5px + 1vh + 1vw);
 }
 .classement a{
   text-decoration: none;
@@ -8,7 +19,7 @@
 
 table.classement-table {
   width: 80%;
-  margin: 50px auto;
+  margin: calc(5px + 2vh);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   color: var(--color-text-body);
@@ -64,4 +75,9 @@ table.classement-table {
 
 .classement-table tbody tr:hover:not(.table-highlight) {
   font-weight: 700;
+}
+
+/*graphique*/
+.chart{
+  margin-bottom: calc(5px + 1vh);
 }
