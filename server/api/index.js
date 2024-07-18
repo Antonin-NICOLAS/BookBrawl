@@ -19,6 +19,7 @@ app.use('/', require('../routes/authroutes'))
 app.use('/user', require('../routes/userroutes'))
 app.use('/books', require('../routes/bookroutes'))
 app.use('/rewards', require('../routes/rewardroutes'));
+app.use('/predict', require('../routes/predictroutes'));
 //cors origin
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', process.env.FRONTEND_SERVER);
