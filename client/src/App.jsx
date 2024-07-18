@@ -8,15 +8,15 @@ import { LoadingProvider, useLoading } from './context/LoadingContext';
 //Componenets
 import LoadingAnimation from './components/loader';
 import Navbar from './components/navbar';
-import LoginPopup from '../src/components/popup-login';
-import PasswordPopup from '../src/components/popup-changepassword'
+import LoginPopup from './components/popup-login';
+import PasswordPopup from './components/popup-changepassword'
 //pages
 import BookDetails from './relative/book-details';
 import UserDetails from './relative/user-details'
 import Home from '../src/pages/home';
 import Classement from './classement/classement';
 import Books from './book/books';
-import Predictions from '../src/pages/predictions'
+import Predictions from './predictions/predictions'
 import APropos from './a-propos/a-propos';
 import Accounts from './account/accounts';
 import ErrorPage from '../src/pages/error';
