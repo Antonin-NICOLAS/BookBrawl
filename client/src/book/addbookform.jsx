@@ -59,6 +59,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                         console.log(response.data.error)
                     }
                     else {
+                        setSuggestions([]);
                         setSuggestions(response.data);
                     }
                 } catch (error) {
@@ -142,6 +143,11 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
         setIsLoading('addbook', true);
         const formData = new FormData();
         if (ExistingBookData) {
+            //vérifier le rating
+            if (!ExistingBookData.rating) {
+                toast.error('Vous devez noter le livre');
+                return;
+            }
             //pour la vérification du livre
             formData.append('title', ExistingBookData.title);
             formData.append('author', ExistingBookData.author);
@@ -154,8 +160,14 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
             formData.append('description', ExistingBookData.description);
             formData.append('rating', ExistingBookData.rating);
         } else {
+            //vérifier les images
             if (!image && !BookData.imageUrl) {
                 toast.error('Vous devez fournir soit une image, soit une URL d\'image.');
+                return;
+            }
+            //vérifier le rating
+            if (!BookData.rating) {
+                toast.error('Vous devez noter le livre');
                 return;
             }
             formData.append('title', BookData.title);

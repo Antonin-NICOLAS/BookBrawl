@@ -45,7 +45,7 @@
   padding: calc(3px + 1vh);
 }
 
-.books-list .nofavoritebook {
+.favorite-book-container .books-list .nofavoritebook {
   margin-top: auto;
   margin-bottom: auto;
 }

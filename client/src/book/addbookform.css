@@ -32,7 +32,7 @@
     border-bottom-right-radius: 20px;
 }
 
-.close-book {
+.wrapper-book .close-book {
     background: #030303;
     color: #edeeee;
     width: calc(20px + 2vh);
@@ -167,6 +167,7 @@
     background-color: var(--1);
     cursor: pointer;
 }
+
 .wrapper-book .sub-form-group button:hover {
     background-color: var(--1-transparent);
 }
@@ -196,6 +197,7 @@
     text-align: center;
     border-radius: 5px;
 }
+
 .wrapper-book .form-group input::placeholder,
 .wrapper-book .sub-form-group input::placeholder {
     color: var(--color-text-body);
@@ -208,6 +210,7 @@
     border-radius: 5px;
     width: 100%;
 }
+
 .wrapper-book .form-group textarea::placeholder {
     color: var(--color-text-body);
 }
@@ -244,9 +247,10 @@ input[type="date"]::-webkit-datetime-edit-month-field,
 input[type="date"]::-webkit-datetime-edit-day-field,
 input[type="date"]::-webkit-datetime-edit-year-field,
 input[type="date"]::-webkit-datetime-edit {
-  color: var(--color-text-body);
+    color: var(--color-text-body);
 }
-input[type="date"]::-webkit-calendar-picker-indicator{
+
+input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 
