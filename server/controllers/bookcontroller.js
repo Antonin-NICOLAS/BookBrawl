@@ -10,19 +10,19 @@ const addUserBook = async (req, res) => {
         const { title, author, language, wordsRead, startDate, endDate, Readingstatus, description, rating, imageUrl } = req.body;
         const userId = req.user.id;
 
-        //vérifier les dates
-        if (startDate > endDate) {
+        // Vérifier les dates si le statut de lecture est "Lu"
+        if (Readingstatus === 'Lu' && startDate > endDate) {
             return res.json({ error: "La date de début doit être avant celle de fin" })
         }
 
         // Vérifier si le livre existe déjà
-        let book = await Book.findOne({ title: title, author: author, language: language });
+        let book = await Book.findOne({ title, author, language });
 
         // Vérifier si le livre existe déjà parmi les livres de l'utilisateur
         const user = await User.findById(userId).populate('booksRead favoriteBooks CurrentReader FutureReader');
         const userBookExists = user.booksRead.some(bookId => bookId.equals(book?._id)) ||
             user.CurrentReader.some(reader => reader.equals(book?._id)) ||
-            user.FutureReader.some(reader => reader.equals(book?._id))
+            user.FutureReader.some(reader => reader.equals(book?._id));
 
         if (userBookExists) {
             return res.json({ error: "Le livre existe déjà parmi vos livres." });
@@ -33,14 +33,14 @@ const addUserBook = async (req, res) => {
             if (req.file) {
                 image = req.file.path;
             } else if (imageUrl) {
-                // Téléchargez l'image depuis l'URL
                 const uploadedImage = await cloudinary.uploader.upload(imageUrl, {
                     folder: 'books',
                     public_id: slugify(title, { lower: true, strict: true })
                 });
                 image = uploadedImage.secure_url;
             }
-            const themes = JSON.parse(req.body.themes);
+
+            const themes = req.body.themes ? JSON.parse(req.body.themes) : [];
 
             book = new Book({
                 title,
@@ -48,18 +48,17 @@ const addUserBook = async (req, res) => {
                 language,
                 wordsRead,
                 image,
-                themes,
-                reviews: [{
+                themes: Readingstatus === 'Lu' ? themes : [],
+                reviews: Readingstatus === 'Lu' ? [{
                     user: userId,
                     description,
                     rating,
                     Readingstatus,
                     startDate,
                     endDate,
-                }]
+                }] : []
             });
-        } else {
-            // Si le livre existe, ajouter une nouvelle critique
+        } else if (Readingstatus === 'Lu') {
             book.reviews.push({
                 user: userId,
                 description,
@@ -68,34 +67,40 @@ const addUserBook = async (req, res) => {
                 startDate,
                 endDate,
             });
+        } else if (Readingstatus === 'À lire' || 'En train de lire') {
+            book.push({
+                title,
+                author,
+                language,
+                wordsRead,
+                image
+            })
         }
 
-        // Mettre à jour les lecteurs actuels ou passés
-        if (Readingstatus === 'En train de lire') {
-            book.currentReaders.push(userId);
-            user.CurrentReader.push(book._id)
-        } else if (Readingstatus === 'Lu') {
+        // Mettre à jour les lecteurs selon le statut de lecture
+        if (Readingstatus === 'Lu') {
             book.pastReaders.push(userId);
-            user.booksRead.push(book._id)
-        }
-        else if (Readingstatus === 'À lire') {
+            user.booksRead.push(book._id);
+            user.wordsRead += parseInt(wordsRead, 10);
+            if (rating === '5') {
+                user.favoriteBooks.push(book._id);
+            }
+        } else if (Readingstatus === 'En train de lire') {
+            book.currentReaders.push(userId);
+            user.CurrentReader.push(book._id);
+            user.futureWordsRead += parseInt(wordsRead, 10);
+        } else if (Readingstatus === 'À lire') {
             book.futureReaders.push(userId);
-            user.FutureReader.push(book._id)
+            user.FutureReader.push(book._id);
+            user.futureWordsRead += parseInt(wordsRead, 10);
         }
 
         await book.save();
-
-        // Mettre à jour le nombre total de mots lus par l'utilisateur
-        user.wordsRead += parseInt(wordsRead, 10);
-
-        //gérer les livres favoris
-        if (rating === '5') {
-            user.favoriteBooks.push(book._id);
-        }
-
         await user.save();
 
-        await checkAndAwardRewards(userId);
+        if (Readingstatus === 'Lu') {
+            await checkAndAwardRewards(userId);
+        }
 
         res.status(200).json(book);
     } catch (error) {
@@ -170,6 +175,7 @@ const getUserRecentBooks = async (req, res) => {
     }
 };
 
+//Favorite user books
 const getUserFavoriteBooks = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -258,8 +264,6 @@ const deleteUserBook = async (req, res) => {
 
         user.booksRead.pull(bookId);
         user.favoriteBooks.pull(bookId);
-        user.CurrentReader.pull(bookId);
-        user.FutureReader.pull(bookId);
 
         user.wordsRead -= book.wordsRead;
 
@@ -281,7 +285,6 @@ const deleteUserBook = async (req, res) => {
         const otherUsers = await User.find({
             $or: [
                 { booksRead: bookId },
-                { favoriteBooks: bookId },
                 { CurrentReader: bookId },
                 { FutureReader: bookId }
             ]
