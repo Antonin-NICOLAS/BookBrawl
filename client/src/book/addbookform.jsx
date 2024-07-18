@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import Select from 'react-select';
+//rating
+import StarRating from '../components/star-rating';
 //Context
 import { useLoading } from '../context/LoadingContext';
 //CSS
@@ -13,6 +16,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
     const { setIsLoading, loadingStates } = useLoading();
     //others
     const [suggestions, setSuggestions] = useState([]);
+    const [rating, setRating] = useState(0);
     const [BookData, setBookData] = useState({
         title: '',
         author: '',
@@ -21,24 +25,29 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
         wordsRead: '',
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
-        Readingstatus: 'lu',
+        Readingstatus: 'Lu',
         description: '',
-        rating: 0
+        rating: 0,
+        imageUrl: ''
     });
     const [ExistingBookData, setExistingBookData] = useState(null);
     const [image, setImage] = useState(null);
 
     //gérer les valeurs du form
+    //rating
+    const handleRatingChange = (newRating) => {
+        setRating(newRating);
+        setBookData({ ...BookData, rating: newRating });
+    };
+    //gérer les dates
+    const today = new Date().toISOString().split('T')[0];
+    const minDate = '2024-07-01';
+
+    //reste
     const handleBookChange = async (e) => {
         const { name, value } = e.target;
 
-        if (name === 'themes') {
-            // Pour les sélections multiples, récupérez les options sélectionnées
-            const values = Array.from(e.target.selectedOptions).map(option => option.value);
-            setBookData({ ...BookData, [name]: values });
-        } else {
-            setBookData({ ...BookData, [name]: value });
-        }
+        setBookData({ ...BookData, [name]: value });
 
         if (e.target.name === 'title') {
             if (e.target.value.length > 2) { // Commencez à chercher après 3 caractères
@@ -60,10 +69,34 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
             }
         }
     };
+    //gérer les selects
+    const themeOptions = [
+        { value: 'Action', label: '💪 Action', color: "#337EA9", backgroundcolor: "#E7F3F890", backgroundcolorhover: "#E7F3F8", selectedcolor: "#529CCA" },
+        { value: 'Dystopie', label: '🧟 Dystopie', color: "#CB912F", backgroundcolor: "#FBF3DB90", backgroundcolorhover: "#FBF3DB", selectedcolor: "#FFDC49" },
+        { value: 'Fantaisie', label: '✨ Fantaisie', color: "#9F6B53", backgroundcolor: "#F4EEEE90", backgroundcolorhover: "#F4EEEE", selectedcolor: "#937264" },
+        { value: 'Fiction', label: '🔮 Fiction', color: "#448361", backgroundcolor: "#EDF3EC90", backgroundcolorhover: "#EDF3EC", selectedcolor: "#4DAB9A" },
+        { value: 'Magie', label: '🪄 Magie', color: "#D9730D", backgroundcolor: "#FAEBDD90", backgroundcolorhover: "#FAEBDD", selectedcolor: "#FFA344" },
+        { value: 'Méditation', label: '💭 Méditation', color: "#9065B0", backgroundcolor: "#F6F3F990", backgroundcolorhover: "#F6F3F9", selectedcolor: "#9A6DD7" },
+        { value: 'Young Adult', label: '👶 Young Adult', color: "#787774", backgroundcolor: "#F1F1EF90", backgroundcolorhover: "#F1F1EF", selectedcolor: "#979A9B" },
+        { value: 'Paranormal', label: '🧿 Paranormal', color: "#D44C47", backgroundcolor: "#FDEBEC90", backgroundcolorhover: "#FDEBEC", selectedcolor: "#FF7369" },
+        { value: 'Romance', label: '❤️‍🔥 Romance', color: "#C14C8A", backgroundcolor: "#FAF1F590", backgroundcolorhover: "#FAF1F5", selectedcolor: "#E255A1" },
+        { value: 'Philosophie', label: '🧐 Philosophie', color: "#337EA9", backgroundcolor: "#E7F3F890", backgroundcolorhover: "#E7F3F8", selectedcolor: "#529CCA" },
+        { value: 'Science-fiction', label: '👽 Science-fiction', color: "#CB912F", backgroundcolor: "#FBF3DB90", backgroundcolorhover: "#FBF3DB", selectedcolor: "#FFDC49" }
+    ];
+    const languageOptions = [
+        { value: 'Français', label: 'Français', color: "#337EA9", backgroundcolor: "#E7F3F890", backgroundcolorhover: "#E7F3F8", selectedcolor: "#529CCA" },
+        { value: 'Anglais', label: 'Anglais', color: "#C14C8A", backgroundcolor: "#FAF1F590", backgroundcolorhover: "#FAF1F5", selectedcolor: "#E255A1" },
+        { value: 'Espagnol', label: 'Espagnol', color: "#D44C47", backgroundcolor: "#FDEBEC90", backgroundcolorhover: "#FDEBEC", selectedcolor: "#FF7369" }
+    ];
 
     //gérer les valeurs du form si livre existe déjà
     const handleExistingBookChange = (e) => {
         setExistingBookData({ ...ExistingBookData, [e.target.name]: e.target.value });
+    };
+
+    const handleNewRatingChange = (newRating) => {
+        setRating(newRating);
+        setExistingBookData({ ...ExistingBookData, rating: newRating });
     };
 
     //suggestions de titre
@@ -87,7 +120,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                     wordsRead: response.data.wordsRead,
                     startDate: new Date().toISOString().split('T')[0],
                     endDate: new Date().toISOString().split('T')[0],
-                    Readingstatus: 'lu',
+                    Readingstatus: 'Lu',
                     description: '',
                     rating: 0
                 });
@@ -105,6 +138,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         setIsLoading('addbook', true);
         const formData = new FormData();
         if (ExistingBookData) {
@@ -120,6 +154,10 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
             formData.append('description', ExistingBookData.description);
             formData.append('rating', ExistingBookData.rating);
         } else {
+            if (!image && !BookData.imageUrl) {
+                toast.error('Vous devez fournir soit une image, soit une URL d\'image.');
+                return;
+            }
             formData.append('title', BookData.title);
             formData.append('author', BookData.author);
             formData.append('language', BookData.language);
@@ -130,7 +168,11 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
             formData.append('Readingstatus', BookData.Readingstatus);
             formData.append('description', BookData.description);
             formData.append('rating', BookData.rating);
-            formData.append('image', image); // Utiliser le fichier image téléchargé
+            if (image) {
+                formData.append('image', image); // Utiliser le fichier image téléchargé
+            } else if (BookData.imageUrl) {
+                formData.append('imageUrl', BookData.imageUrl); // Utiliser l'URL de l'image
+            }
         }
 
         try {
@@ -151,10 +193,11 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                     wordsRead: '',
                     startDate: new Date().toISOString().split('T')[0],
                     endDate: new Date().toISOString().split('T')[0],
-                    Readingstatus: 'lu',
+                    Readingstatus: 'Lu',
                     themes: [],
                     description: '',
-                    rating: 0
+                    rating: 0,
+                    imageUrl: ''
                 });
                 setExistingBookData(null)
             } else {
@@ -168,10 +211,11 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                     wordsRead: '',
                     startDate: new Date().toISOString().split('T')[0],
                     endDate: new Date().toISOString().split('T')[0],
-                    Readingstatus: 'lu',
+                    Readingstatus: 'Lu',
                     themes: [],
                     description: '',
-                    rating: 0
+                    rating: 0,
+                    imageUrl: ''
                 });
                 setExistingBookData(null)
             }
@@ -182,6 +226,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
             setIsLoading('addbook', false);
         }
     };
+
     //overlay click
     const overlayBookRef = useRef(null);
     const wrapperBookRef = useRef(null);
@@ -198,6 +243,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
             document.removeEventListener("click", handleClickOutside);
         };
     }, [showForm]);
+
     //function close
     const handleBookClose = () => setShowForm(false)
 
@@ -226,11 +272,11 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="title">Auteur :</label>
+                                    <label htmlFor="author">Auteur :</label>
                                     <input
                                         type="text"
-                                        id="title"
-                                        name='title'
+                                        id="author"
+                                        name='author'
                                         value={ExistingBookData.author}
                                         autoComplete="off"
                                         readOnly
@@ -296,163 +342,279 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="rating">Appréciation :</label>
-                                    <input
-                                        type="number"
-                                        id="rating"
-                                        name='rating'
-                                        value={ExistingBookData.rating || ''}
-                                        onChange={handleExistingBookChange}
-                                        min="0"
-                                        max="5"
-                                        required
-                                    />
+                                    <label>Note :</label>
+                                    <StarRating rating={rating} setRating={handleNewRatingChange} />
                                 </div>
                             </>
                         ) : (
                             <>
-                                <div className="form-group">
-                                    <label htmlFor="title">Titre :</label>
-                                    <input
-                                        type="text"
-                                        id="title"
-                                        name='title'
-                                        value={BookData.title}
-                                        onChange={handleBookChange}
-                                        required
-                                        autoComplete="off"
-                                    />
-                                    {suggestions.length > 0 && (
-                                        <ul className="suggestions">
-                                            {suggestions.map((suggestion) => (
-                                                <li key={suggestion._id} onClick={() => handleSuggestionClick(suggestion)}>
-                                                    {suggestion.title}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
+                                <div className="big-form-group">
+                                    <div className="sub-form-group">
+                                        <input
+                                            type="text"
+                                            id="title"
+                                            name='title'
+                                            placeholder='Titre'
+                                            value={BookData.title}
+                                            onChange={handleBookChange}
+                                            required
+                                            autoComplete="off"
+                                        />
+                                        {suggestions.length > 0 && (
+                                            <ul className="suggestions">
+                                                {suggestions.map((suggestion) => (
+                                                    <li key={suggestion._id} onClick={() => handleSuggestionClick(suggestion)}>
+                                                        {suggestion.title}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                    <div className="sub-form-group">
+                                        <input
+                                            type="text"
+                                            id="author"
+                                            name='author'
+                                            placeholder='Auteur'
+                                            value={BookData.author || ''}
+                                            onChange={handleBookChange}
+                                            required
+                                        />
+                                    </div>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="author">Auteur :</label>
-                                    <input
-                                        type="text"
-                                        id="author"
-                                        name='author'
-                                        value={BookData.author || ''}
-                                        onChange={handleBookChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="image">Image :</label>
+                                    <label htmlFor="image">Choisir une image parmis vos fichiers</label>
                                     <input
                                         type="file"
                                         id="image"
                                         accept="image/*"
                                         onChange={handleImageUpload}
-                                        required
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="language">Langue :</label>
-                                    <select
-                                        id="language"
-                                        name='language'
-                                        value={BookData.language || ''}
-                                        onChange={handleBookChange}
-                                        required
-                                    >
-                                        <option value="">Sélectionnez une langue</option>
-                                        <option value="Français">Français</option>
-                                        <option value="Anglais">Anglais</option>
-                                        <option value="Espagnol">Espagnol</option>
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="themes">Themes :</label>
-                                    <select
-                                        id="themes"
-                                        name='themes'
-                                        value={BookData.themes || []}
-                                        onChange={handleBookChange}
-                                        multiple={true}
-                                        size="6"
-                                    >
-                                        <option value="Action">Action</option>
-                                        <option value="Dystopie">Dystopie</option>
-                                        <option value="Fantaisie">Fantaisie</option>
-                                        <option value="Fiction">Fiction</option>
-                                        <option value="Magie">Magie</option>
-                                        <option value="Méditation">Méditation</option>
-                                        <option value="Young Adult">Young Adult</option>
-                                        <option value="Paranormal">Paranormal</option>
-                                        <option value="Philosophie">Philosophie</option>
-                                        <option value="Romance">Romance</option>
-                                        <option value="Science-fiction">Science-fiction</option>
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="wordsRead">Mots lus :</label>
                                     <input
-                                        type="number"
-                                        id="wordsRead"
-                                        name='wordsRead'
-                                        value={BookData.wordsRead || ''}
+                                        type="url"
+                                        id="imageUrl"
+                                        name="imageUrl"
+                                        placeholder='ou inclure un URL de la couverture'
+                                        value={BookData.imageUrl}
                                         onChange={handleBookChange}
-                                        required
                                     />
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="startDate">Date de commencement :</label>
-                                    <input
-                                        type="date"
-                                        id="startDate"
-                                        name='startDate'
-                                        value={BookData.startDate || ''}
-                                        onChange={handleBookChange}
-                                        required
-                                    />
+                                <div className="big-form-group">
+                                    <div className="sub-form-group">
+                                        <Select
+                                            id="themes"
+                                            name="themes"
+                                            placeholder="Sélectionnez un ou plusieurs thèmes"
+                                            value={themeOptions.filter(option => BookData.themes.includes(option.value))}
+                                            onChange={(selectedOptions) => {
+                                                setBookData({
+                                                    ...BookData,
+                                                    themes: selectedOptions ? selectedOptions.map(option => option.value) : []
+                                                });
+                                            }}
+                                            options={themeOptions}
+                                            styles={{
+                                                placeholder: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    color: "black"
+                                                }),
+                                                control: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    backgroundColor: "transparent",
+                                                    borderRadius: "5px",
+                                                    borderColor: "gray",
+                                                    '&:hover': { borderColor: 'black' }
+                                                }),
+                                                dropdownIndicator: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    color: "black"
+                                                }),
+                                                option: (baseStyles, { data }) => ({
+                                                    ...baseStyles,
+                                                    color: data.color,
+                                                    backgroundColor: data.backgroundcolor,
+                                                    '&:hover': { backgroundColor: data.backgroundcolorhover },
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    borderRadius: "5px",
+                                                    marginBottom: "10px",
+                                                    marginLeft: "10px",
+                                                    marginRight: "10px",
+                                                    width: "fit-content",
+                                                }),
+                                                multiValue: (baseStyles, { data }) => ({
+                                                    ...baseStyles,
+                                                    color: "#000",
+                                                    '&:hover': { backgroundColor: data.selectedcolor },
+                                                    backgroundColor: data.selectedcolor,
+                                                }),
+                                                multiValueRemove: (baseStyles, { data }) => ({
+                                                    ...baseStyles,
+                                                    color: "#000",
+                                                    '&:hover': { backgroundColor: data.color, color: "#000" },
+                                                }),
+                                                menuList: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    display: "flex",
+                                                    flexDirection: "row",
+                                                    flexWrap: "wrap",
+                                                    alignItems: "center",
+                                                    justifyContent: "space-around",
+                                                    paddingLeft: "10px",
+                                                    paddingRight: "10px",
+                                                    paddingTop: "10px",
+                                                    width: "fit-content",
+                                                }),
+                                                menu: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    width: "100%",
+                                                    backgroundColor: "#FFFFFF"
+                                                }),
+                                            }}
+                                            isMulti
+                                            required
+                                        />
+                                    </div>
+                                    <div className='sub-form-group'>
+                                        <Select
+                                            id="language"
+                                            name="language"
+                                            placeholder="-- Langue --"
+                                            value={languageOptions.find(option => option.value === BookData.language)}
+                                            onChange={(selectedOption) => {
+                                                setBookData({ ...BookData, language: selectedOption ? selectedOption.value : '' });
+                                            }}
+                                            options={languageOptions}
+                                            styles={{
+                                                placeholder: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    color: "black"
+                                                }),
+                                                control: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    backgroundColor: "transparent",
+                                                    borderRadius: "5px",
+                                                    borderColor: "gray",
+                                                    '&:hover': { borderColor: 'black' }
+                                                }),
+                                                dropdownIndicator: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    color: "black"
+                                                }),
+                                                option: (baseStyles, { data }) => ({
+                                                    ...baseStyles,
+                                                    color: data.color,
+                                                    backgroundColor: data.backgroundcolor,
+                                                    '&:hover': { backgroundColor: data.backgroundcolorhover },
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    borderRadius: "5px",
+                                                    marginBottom: "10px",
+                                                    marginLeft: "10px",
+                                                    marginRight: "10px",
+                                                    width: "fit-content",
+                                                }),
+                                                singleValue: (baseStyles, { data }) => ({
+                                                    ...baseStyles,
+                                                    color: data.selectedcolor,
+                                                    '&:hover': { backgroundColor: data.color },
+                                                }),
+                                                menuList: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    paddingLeft: "10px",
+                                                    paddingRight: "10px",
+                                                    paddingTop: "10px",
+                                                    width: "fit-content",
+                                                }),
+                                                menu: (baseStyles) => ({
+                                                    ...baseStyles,
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    width: "100%",
+                                                    backgroundColor: "#FFFFFF"
+                                                }),
+                                            }}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div className="big-form-group">
+                                    <div className="sub-form-group">
+                                        <input
+                                            type="number"
+                                            id="wordsRead"
+                                            name='wordsRead'
+                                            placeholder='Nombre de mots lus'
+                                            value={BookData.wordsRead || ''}
+                                            onChange={handleBookChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="sub-form-group">
+                                        <button type="button">Calculer le nombre de mots</button>
+                                    </div>
+                                </div>
+                                <div className="big-form-group">
+                                    <div className="sub-form-group">
+                                        <label htmlFor="startDate">Date de commencement :</label>
+                                        <input
+                                            type="date"
+                                            id="startDate"
+                                            name='startDate'
+                                            min={minDate}
+                                            max={BookData.endDate || today}
+                                            value={BookData.startDate || ''}
+                                            onChange={handleBookChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="sub-form-group">
+                                        <label htmlFor="endDate">Date de fin :</label>
+                                        <input
+                                            type="date"
+                                            id="endDate"
+                                            name='endDate'
+                                            min={BookData.startDate || minDate}
+                                            max={today}
+                                            value={BookData.endDate || ''}
+                                            onChange={handleBookChange}
+                                            required
+                                        />
+                                    </div>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="endDate">Date de fin :</label>
-                                    <input
-                                        type="date"
-                                        id="endDate"
-                                        name='endDate'
-                                        value={BookData.endDate || ''}
-                                        onChange={handleBookChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="description">Avis :</label>
                                     <textarea
                                         type="text"
                                         cols="50"
                                         rows="2"
                                         id="description"
                                         name='description'
+                                        placeholder='Votre ressenti concernant ce livre'
                                         value={BookData.description || ''}
                                         onChange={handleBookChange}
                                         required
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="rating">Appréciation :</label>
-                                    <input
-                                        type="number"
-                                        id="rating"
-                                        name='rating'
-                                        value={BookData.rating || ''}
-                                        onChange={handleBookChange}
-                                        min="0"
-                                        max="5"
-                                        required
-                                    />
+                                    <label>Note :</label>
+                                    <StarRating rating={rating} setRating={handleRatingChange} />
                                 </div>
                             </>
                         )}
-                        <button type="submit" className="submit-button">Ajouter le livre</button>
+                        <button type="submit" className="submitbookform">Ajouter le livre</button>
                     </form>
                 </div>)}
         </div>

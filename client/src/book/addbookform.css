@@ -21,7 +21,7 @@
 
 /*wrapper*/
 .wrapper-book {
-    height: calc(100vh - 8vh - 20px - 60px);
+    height: calc(100% - 8vh - 4vh);
     width: 40vw;
     background-color: var(--title-transparent);
     backdrop-filter: blur(15px);
@@ -49,26 +49,117 @@
     cursor: pointer;
 }
 
+@media screen and (min-width: 1800px) {
+    .wrapper-book {
+        width: 30vw;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .wrapper-book {
+        width: 60vw;
+    }
+}
+
+@media screen and (max-width: 710px) {
+    .wrapper-book {
+        width: 80%;
+        border-radius: 20px;
+        border: 2px #000 solid;
+    }
+
+    .book-overlay {
+        justify-content: center;
+    }
+
+    .book-overlay.hide {
+        animation: fadeOut 0.3s ease-out;
+        transform: translateX(0);
+    }
+
+    .book-overlay.show {
+        animation: fadeIn 0.3s ease-out;
+        transform: translateX(0);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        to {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+    }
+}
+
 /*form*/
-.book-form{
+.book-form {
     height: 100%;
     width: 100%;
     padding: calc(6px + 1vh);
-    overflow-x: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
+/*titre*/
 .wrapper-book .book-form h2 {
     font-size: calc(10px + 2vh);
     text-decoration: underline;
-    color: #030303;
+    color: var(--color-text-body);
     text-align: center;
     margin-block-start: calc(5px + 1vh);
     margin-block-end: calc(5px + 1vh);
-  }
+}
 
-.wrapper-book .form-group{
+/*big group*/
+.wrapper-book .big-form-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: calc(3px + 2vh);
+}
+
+.wrapper-book .big-form-group .sub-form-group {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/*button calculer*/
+.wrapper-book .sub-form-group button {
+    padding: calc(3px + 1.2vh) calc(4px + 1vw);
+    color: var(--color-text-body);
+    border: none;
+    background-color: var(--1);
+    cursor: pointer;
+}
+.wrapper-book .sub-form-group button:hover {
+    background-color: var(--1-transparent);
+}
+
+/*form group*/
+.wrapper-book .form-group {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -76,52 +167,85 @@
     align-items: center;
     margin-bottom: calc(3px + 1vh);
 }
-@media screen and (min-width: 1800px) {
-    .wrapper-book{
-        width: 30vw;
-    }
-  }
 
-@media screen and (max-width: 1100px) {
-    .wrapper-book{
-        width: 60vw;
-    }
-  }
-@media screen and (max-width: 710px) {
-    .wrapper-book{
-        width: 80%;
-        border-radius: 20px;
-        border: 2px #000 solid;
-    }
-    .book-overlay{
-        justify-content: center;
-    }
-    .book-overlay.hide {
-        animation: fadeOut 0.3s ease-out;
-    }
-    
-    .book-overlay.show {
-        animation: fadeIn 0.3s ease-out;
-    }
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-      }
-      
-      @keyframes fadeOut {
-        from {
-            opacity: 1;
-            transform: scale(1);
-        }
-        to {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-      }
+.wrapper-book .form-group label,
+.wrapper-book .sub-form-group label {
+    margin-bottom: calc(2px + 0.5vh);
+    color: var(--color-text-body);
+}
+
+/*inputs*/
+.wrapper-book .form-group input,
+.wrapper-book .sub-form-group input {
+    background-color: transparent;
+    border: 1px var(--color-text-body) solid;
+    padding: calc(1px + 0.5vh) calc(1px + 0.5vw);
+    text-align: center;
+    border-radius: 5px;
+}
+.wrapper-book .form-group input::placeholder,
+.wrapper-book .sub-form-group input::placeholder {
+    color: var(--color-text-body);
+}
+
+.wrapper-book .form-group textarea {
+    background-color: transparent;
+    border: 1px var(--color-text-body) solid;
+    padding: calc(1px + 0.5vh) calc(1px + 0.5vw);
+    border-radius: 5px;
+    width: 100%;
+}
+.wrapper-book .form-group textarea::placeholder {
+    color: var(--color-text-body);
+}
+
+/*file input*/
+.wrapper-book .form-group input[type=file] {
+    color: var(--color-text-body);
+    min-width: 300px;
+    border: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wrapper-book .form-group input[type=file]::file-selector-button {
+    margin-right: 8px;
+    border: none;
+    background: var(--1);
+    padding: calc(3px + 1.2vh) calc(4px + 1vw);
+    color: var(--color-text-body);
+    cursor: pointer;
+}
+
+.wrapper-book .form-group input[type=file]::file-selector-button:hover {
+    background: var(--1-transparent);
+}
+
+.wrapper-book .form-group input[type=url] {
+    width: 100%;
+}
+
+/* placeholder text style */
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="date"]::-webkit-datetime-edit {
+  color: var(--color-text-body);
+}
+input[type="date"]::-webkit-calendar-picker-indicator{
+    display: none;
+}
+
+/*submit*/
+.wrapper-book .submitbookform {
+    background-color: #030303;
+    padding: calc(3px + 1.2vh) calc(4px + 1vw);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #edeeee;
+    font-size: calc(5px + 2vh);
+    font-weight: 500;
+    margin-top: calc(7px + 1.5vh) 0;
 }
