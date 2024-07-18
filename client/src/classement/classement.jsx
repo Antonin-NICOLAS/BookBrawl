@@ -45,6 +45,23 @@ const Classement = () => {
         }
     };
 
+    const calculateRanks = (users) => {
+    
+        // Initialiser le rang et une variable pour suivre le nombre de mots du précédent utilisateur
+        let rank = 1;
+    
+        // Parcourir les utilisateurs triés pour assigner les rangs
+        return users.map((user, index) => {
+            let prevWordsRead = users[0].wordsRead;
+            // Si le nombre de mots du courant est inférieur au précédent, mettre à jour le rang
+            if (index > 0 && user.wordsRead < prevWordsRead) {
+                rank = index + 1;
+            }
+            prevWordsRead = user.wordsRead;
+            return { ...user, rank };
+        });
+    };
+
     if (!user) {
         return (
             <div className='unauthorizeduser'>
@@ -55,6 +72,7 @@ const Classement = () => {
     }
 
     const isUsersLoading = loadingStates.users;
+    const rankedUsers = calculateRanks(users);
 
     return (
         <div className='classement'>
@@ -72,13 +90,13 @@ const Classement = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {users && users.length > 0 ? (
-                                users.map((userItem, index) => (
+                            {rankedUsers && rankedUsers.length > 0 ? (
+                                rankedUsers.map((userItem, index) => (
                                     <tr
                                         key={userItem._id}
                                         className={user && String(userItem._id) === String(user.id) ? 'table-highlight' : ''}
                                     >
-                                        <td className='column1'>{index + 1}</td>
+                                        <td className='column1'>{userItem.rank}</td>
                                         <td className="column2"><Link to={`/user/${userItem._id}`}>{userItem.prenom} {userItem.nom}</Link></td>
                                         <td className="column3">{userItem.wordsRead}</td>
                                     </tr>
