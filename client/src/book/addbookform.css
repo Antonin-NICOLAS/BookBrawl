@@ -55,9 +55,21 @@
     }
 }
 
+@media screen and (max-width: 1300px) {
+    .wrapper-book {
+        width: 50vw;
+    }
+}
+
 @media screen and (max-width: 1100px) {
     .wrapper-book {
         width: 60vw;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .wrapper-book {
+        width: 75vw;
     }
 }
 
@@ -75,6 +87,7 @@
     .book-overlay.hide {
         animation: fadeOut 0.3s ease-out;
         transform: translateX(0);
+        z-index: -4;
     }
 
     .book-overlay.show {
