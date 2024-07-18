@@ -2,7 +2,9 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import defaultaccountimage from "../assets/account.jpeg";
-import Star from '../assets/starrating.png'
+//images
+import FullStar from '../assets/starrating.png';
+import HalfStar from '../assets/halfstarrating.png';
 //Context
 import { UserContext } from "../context/userContext";
 import { useLoading } from '../context/LoadingContext';
@@ -329,52 +331,59 @@ function Compte({ onPasswordClick }) {
             )}
             <h3>Derniers livres lus</h3>
             {isRecentBooksLoading ? (
-              <LoadingAnimation />
+                <LoadingAnimation />
             ) : (
-              <table className="books-table">
-                <tbody>
-                  {recentBooks.length > 0 ? (
-                    recentBooks.map((book) => (
-                      <React.Fragment key={book._id}>
-                        <tr>
-                          <td className='column1' rowSpan="3">
-                            <Link to={`/book/${book._id}`}>
-                              <img src={book.image} alt={book.title} className="book-image" />
-                            </Link>
-                          </td>
-                          <td className="column2">
-                            <p>
-                              <span>{book.title}</span>, {book.author}
-                            </p>
-                          </td>
-                          <td className="column3">
-                            <p>{formatDate(book.reviews[0].endDate)}</p>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="column2">{book.wordsRead}</td>
-                          <td className="column3" rowSpan="2">
-                            <button>See more</button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="column2 rating">
-                            <div className="stars">
-                              {[...Array(book.reviews[0].rating)].map((_, i) => (
-                                <img key={i} src={Star} alt="star" className="star-image" />
-                              ))}
-                            </div>
-                          </td>
-                        </tr>
-                      </React.Fragment>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="3">Aucun livre récent</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                <table className="books-table">
+                    <tbody>
+                        {recentBooks.length > 0 ? (
+                            recentBooks.map((book) => {
+                                const rating = book.reviews[0].rating;
+                                const fullStars = Math.floor(rating);
+                                const hasHalfStar = rating % 1 !== 0;
+
+                                return (
+                                    <React.Fragment key={book._id}>
+                                        <tr>
+                                            <td className='column1' rowSpan="3">
+                                                <Link to={`/book/${book._id}`}>
+                                                    <img src={book.image} alt={book.title} className="book-image" />
+                                                </Link>
+                                            </td>
+                                            <td className="column2">
+                                                <p>
+                                                    <span>{book.title}</span>, {book.author}
+                                                </p>
+                                            </td>
+                                            <td className="column3">
+                                                <p>{formatDate(book.reviews[0].endDate)}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="column2">{book.wordsRead}</td>
+                                            <td className="column3" rowSpan="2">
+                                                <button>See more</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="column2 rating">
+                                                <div className="stars">
+                                                    {[...Array(fullStars)].map((_, i) => (
+                                                        <img key={i} src={FullStar} alt="full star" className="star-image" />
+                                                    ))}
+                                                    {hasHalfStar && <img src={HalfStar} alt="half star" className="star-image" />}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </React.Fragment>
+                                );
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan="3">Aucun livre récent disponible.</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             )}
           </div>
         );
@@ -382,7 +391,7 @@ function Compte({ onPasswordClick }) {
         return (
           <div className="rewards section-content">
             {isRewardsLoading ? (
-              <LoadingAnimation />
+              <LoadingAnimation recentBooks={recentBooks} isLoading={isRecentBooksLoading}/>
             ) : (
               <>
                 <div className="reward-category">
