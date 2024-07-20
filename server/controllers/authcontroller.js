@@ -45,7 +45,7 @@ const registerUser = async (req, res) => {
             words: user.wordsRead,
         },
             process.env.JWT_SECRET,
-            { expiresIn: process.env.JWT_EXPIRES })
+            { expiresIn: '2d' })
 
         return res.status(201).cookie('jwtauth', token, options).json(user);
     } catch (error) {
@@ -57,7 +57,7 @@ const registerUser = async (req, res) => {
 //login
 const loginUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, stayLoggedIn } = req.body;
 
         const user = await User.findOne({ email });
         if (!user) {
@@ -66,12 +66,14 @@ const loginUser = async (req, res) => {
 
         const isPasswordMatch = await bcrypt.compare(password, user.password)
         if (isPasswordMatch) {
+            const cookieDuration = stayLoggedIn ? 7 * 24 * 60 * 60 * 1000 : 2 * 24 * 60 * 60 * 1000;
+            const expiration = stayLoggedIn ? '7d' : '2d'
             const options = {
                 secure: process.env.NODE_ENV === "production" ? true : false,
                 httpOnly: process.env.NODE_ENV === "production" ? true : false,
                 sameSite: process.env.NODE_ENV === "production" ? 'lax' : '',
-                maxAge: 2 * 24 * 60 * 60 * 1000,
-                expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+                maxAge: cookieDuration,
+                expires: new Date(Date.now() + cookieDuration),
                 domain: process.env.NODE_ENV === "production" ? 'book-brawl.vercel.app' : '',
             }
             jwt.sign({
@@ -82,7 +84,7 @@ const loginUser = async (req, res) => {
                 words: user.wordsRead,
             },
                 process.env.JWT_SECRET,
-                { expiresIn: process.env.JWT_EXPIRES }, (err, token) => {
+                { expiresIn: expiration }, (err, token) => {
                     if (err) throw err;
                     res.cookie('jwtauth', token, options).json(user)
                 })
