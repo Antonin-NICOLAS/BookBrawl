@@ -16,7 +16,7 @@ import UserDetails from './relative/user-details'
 import Home from '../src/pages/home';
 import Classement from './classement/classement';
 import Books from './book/books';
-import Predictions from './predictions/predictions'
+import News from './news/news'
 import APropos from './a-propos/a-propos';
 import Accounts from './account/accounts';
 import ErrorPage from '../src/pages/error';
@@ -87,7 +87,7 @@ export default function App() {
                     <Route path="/user/:userId" element={<UserDetails />} />
                     <Route exact path="/books" element={<Books />} />
                     <Route path="/book/:bookId" element={<BookDetails />} />
-                    <Route exact path="/predict" element={<Predictions />} />
+                    <Route exact path="/news" element={<News />} />
                     <Route path="/about" element={<APropos />} />
                     <Route path="/accounts" element={<Accounts onPasswordClick={handlePasswordClick} />} />
                     <Route path="*" element={<ErrorPage />} />
