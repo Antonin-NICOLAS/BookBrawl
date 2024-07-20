@@ -1,0 +1,8 @@
+/*.news{
+  width: 90%;
+}*/
+.coming{
+  background-color: var(--navbar);
+  padding: calc(3px + 2vh);
+  color: #FFF;
+}
