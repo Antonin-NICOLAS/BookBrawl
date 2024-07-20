@@ -65,6 +65,12 @@
   font-size: calc(6px + 1.5vh);
 }
 
+@media screen and (max-width: 600px) {
+  .identity-right{
+    font-size: calc(6px + 1vh);
+  }
+}
+
 /* avatar form open*/
 
 .identity-card.large {
@@ -161,6 +167,9 @@
 
 .identity-right span {
   margin-bottom: calc(2px + 1.5vh);
+  width: 100%;
+  white-space: normal; 
+  word-wrap: break-word;
 }
 
 .identity-right button {
