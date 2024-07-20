@@ -90,19 +90,19 @@ function Navbar({onLoginClick, onLoginClickWhenOnRegister}) {
           <div className="navbar-o-p">
             <ul className="navbar_links">
               <li className="navbar_link first">
-                <Link to="/"><i className="fa-solid fa-house"></i>&nbsp;&nbsp;&nbsp;Accueil</Link>
+                <Link to="/" onClick={() => setShowLinks(false)}><i className="fa-solid fa-house"></i>&nbsp;&nbsp;&nbsp;Accueil</Link>
               </li>
               <li className="navbar_link second">
-                <Link to="/ranking"><i className="fa-solid fa-ranking-star"></i>&nbsp;&nbsp;&nbsp;Classement</Link>
+                <Link to="/ranking" onClick={() => setShowLinks(false)}><i className="fa-solid fa-ranking-star"></i>&nbsp;&nbsp;&nbsp;Classement</Link>
               </li>
               <li className="navbar_link third">
-                <Link to="/books"><i className="fa-solid fa-book"></i>&nbsp;&nbsp;&nbsp;Mes livres</Link>
+                <Link to="/books" onClick={() => setShowLinks(false)}><i className="fa-solid fa-book"></i>&nbsp;&nbsp;&nbsp;Mes livres</Link>
               </li>
               <li className="navbar_link four">
-                <Link to="/predict"><i className="fa-solid fa-calculator"></i>&nbsp;&nbsp;&nbsp;Prédictions</Link>
+                <Link to="/news" onClick={() => setShowLinks(false)}><i className="fa-solid fa-newspaper"></i>&nbsp;&nbsp;&nbsp;Actualités</Link>
               </li>
               <li className="navbar_link fifth">
-                <Link to="/about"><i className="fa-solid fa-question"></i>&nbsp;&nbsp;&nbsp;À propos</Link>
+                <Link to="/about" onClick={() => setShowLinks(false)}><i className="fa-solid fa-question"></i>&nbsp;&nbsp;&nbsp;À propos</Link>
               </li>
             </ul>
             <input type="checkbox" id="switch" checked={checked} onChange={handleChange} name="theme" />

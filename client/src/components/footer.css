@@ -1,0 +1,54 @@
+/*footer*/
+.footer {
+    height: auto;
+    width: 100%;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-top: 20px;
+    position: sticky;
+    top: 100%;
+  }
+  .footer a{
+    text-decoration: none;
+    list-style: none;
+    color: #000;
+  }
+  
+  .top-footer {
+    width: 100%;
+    background-color: #C9CBA3;
+    padding: calc(3px + 1vh);
+  }
+  
+  .footer-slogan {
+    width: 100%;
+    text-align: center;
+    background-color: #E7EFC5; 
+    padding: calc(3px + 1vh);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .footer strong{
+    font-size: calc(6px + 2vh);
+    letter-spacing: 3px;
+  }
+  
+  
+  /*table*/
+  .footer table{
+    width: 100%;
+  }
+  
+  .footer .contact{
+    width: 60%;
+  }
+  .footer .whatsapp{
+    width: 5%;
+  }
+  .footer .whatsapp a i {
+    font-size: calc(5px + 2vw);
+  }
+  .footer .condition {
+    width: 35%;
+    text-align: center;
+  }

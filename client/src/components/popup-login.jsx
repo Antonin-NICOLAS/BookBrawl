@@ -21,7 +21,8 @@ function LoginPopup(props) {
     });
     const [loginData, setLoginData] = useState({
         email: '',
-        password: ''
+        password: '',
+        stayLoggedIn: false
     });
 
     const handleClose = () => {
@@ -51,7 +52,8 @@ function LoginPopup(props) {
     };
 
     const handleLoginChange = (e) => {
-        setLoginData({ ...loginData, [e.target.name]: e.target.value });
+        const { name, value, type, checked } = e.target;
+        setLoginData({ ...loginData, [name]: type === 'checkbox' ? checked : value });
     };
 
     const handlePasswordChange = (e) => {
@@ -118,10 +120,10 @@ function LoginPopup(props) {
     //login
     const handleLogin = async (event) => {
         event.preventDefault();
-        const { email, password } = loginData
+        const { email, password, stayLoggedIn } = loginData
         try {
             const { data } = await axios.post(process.env.NODE_ENV === "production" ? '/api/login' : '/login', {
-                email, password,
+                email, password, stayLoggedIn,
                 withCredentials: true,
                 headers: {'Content-Type': 'application/json'
                 }
@@ -163,7 +165,7 @@ function LoginPopup(props) {
                                     <label htmlFor="password">Mot de passe</label>
                                 </div>
                                 <div className="remember-forgot">
-                                    <label><input type="checkbox" />Me le rappeler</label>
+                                    <label><input type="checkbox" name="stayLoggedIn" checked={loginData.stayLoggedIn} onChange={handleLoginChange} />Resté connecté</label>
                                     <a href="#">J'ai oublié mon mot de passe</a>
                                 </div>
                                 <button type="submit" className="submit-login">Login</button>
