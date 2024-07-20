@@ -1,0 +1,264 @@
+/*overlay*/
+.predict-overlay {
+    position: absolute;
+    z-index: 9996;
+    top: calc(8vh + 20px);
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 8vh - 20px);
+    transition: all ease-in-out 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.predict-overlay.hide {
+    transform: translateX(-100vw);
+}
+
+.predict-overlay.show {
+    transform: translateX(0);
+}
+
+/*wrapper*/
+.wrapper-future-book {
+    height: calc(100% - 8vh - 4vh);
+    width: 40vw;
+    background-color: var(--title-transparent);
+    backdrop-filter: blur(15px);
+    border-right: 2px #000 solid;
+    border-top: 2px #000 solid;
+    border-bottom: 2px #000 solid;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.wrapper-future-book .close-book {
+    background: #030303;
+    color: #edeeee;
+    width: calc(20px + 2vh);
+    height: calc(20px + 2vh);
+    position: fixed;
+    top: 0;
+    right: 0;
+    font-size: calc(10px + 1.2vh);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 30px;
+    border-top-right-radius: 18px;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 1800px) {
+    .wrapper-future-book {
+        width: 30vw;
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    .wrapper-future-book {
+        width: 50vw;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .wrapper-future-book {
+        width: 60vw;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .wrapper-future-book {
+        width: 75vw;
+    }
+}
+
+@media screen and (max-width: 710px) {
+    .wrapper-future-book {
+        width: 80%;
+        border-radius: 20px;
+        border: 2px #000 solid;
+    }
+
+    .predict-overlay {
+        justify-content: center;
+    }
+
+    .predict-overlay.hide {
+        animation: fadeOut 0.3s ease-out;
+        transform: translateX(0);
+        z-index: -4;
+    }
+
+    .predict-overlay.show {
+        animation: fadeIn 0.3s ease-out;
+        transform: translateX(0);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        to {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+    }
+}
+
+/*form*/
+.predict-form {
+    height: 100%;
+    width: 100%;
+    padding: calc(6px + 1vh);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*titre*/
+.wrapper-future-book .predict-form h2 {
+    font-size: calc(10px + 2vh);
+    text-decoration: underline;
+    color: var(--color-text-body);
+    text-align: center;
+    margin-block-start: calc(5px + 1vh);
+    margin-block-end: calc(5px + 1vh);
+}
+
+/*big group*/
+.wrapper-future-book .big-form-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: calc(3px + 2vh);
+}
+
+.wrapper-future-book .big-form-group .sub-form-group {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/*button calculer*/
+.wrapper-future-book .sub-form-group button {
+    padding: calc(3px + 1.2vh) calc(4px + 1vw);
+    color: var(--color-text-body);
+    border: none;
+    background-color: var(--1);
+    cursor: pointer;
+}
+.wrapper-future-book .sub-form-group button:hover {
+    background-color: var(--1-transparent);
+}
+
+/*form group*/
+.wrapper-future-book .form-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: calc(3px + 1vh);
+}
+
+.wrapper-future-book .form-group label,
+.wrapper-future-book .sub-form-group label {
+    margin-bottom: calc(2px + 0.5vh);
+    color: var(--color-text-body);
+}
+
+/*inputs*/
+.wrapper-future-book .form-group input,
+.wrapper-future-book .sub-form-group input {
+    background-color: transparent;
+    border: 1px var(--color-text-body) solid;
+    padding: calc(1px + 0.5vh) calc(1px + 0.5vw);
+    text-align: center;
+    border-radius: 5px;
+}
+.wrapper-future-book .form-group input::placeholder,
+.wrapper-future-book .sub-form-group input::placeholder {
+    color: var(--color-text-body);
+}
+
+.wrapper-future-book .form-group textarea {
+    background-color: transparent;
+    border: 1px var(--color-text-body) solid;
+    padding: calc(1px + 0.5vh) calc(1px + 0.5vw);
+    border-radius: 5px;
+    width: 100%;
+}
+.wrapper-future-book .form-group textarea::placeholder {
+    color: var(--color-text-body);
+}
+
+/*file input*/
+.wrapper-future-book .form-group input[type=file] {
+    color: var(--color-text-body);
+    min-width: 300px;
+    border: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wrapper-future-book .form-group input[type=file]::file-selector-button {
+    margin-right: 8px;
+    border: none;
+    background: var(--1);
+    padding: calc(3px + 1.2vh) calc(4px + 1vw);
+    color: var(--color-text-body);
+    cursor: pointer;
+}
+
+.wrapper-future-book .form-group input[type=file]::file-selector-button:hover {
+    background: var(--1-transparent);
+}
+
+.wrapper-future-book .form-group input[type=url] {
+    width: 100%;
+}
+
+/* placeholder text style */
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="date"]::-webkit-datetime-edit {
+  color: var(--color-text-body);
+}
+input[type="date"]::-webkit-calendar-picker-indicator{
+    display: none;
+}
+
+/*submit*/
+.wrapper-future-book .submitpredictform {
+    background-color: #030303;
+    padding: calc(3px + 1.2vh) calc(4px + 1vw);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #edeeee;
+    font-size: calc(5px + 2vh);
+    font-weight: 500;
+    margin-top: calc(7px + 1.5vh) 0;
+}

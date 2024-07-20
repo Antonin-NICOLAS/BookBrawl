@@ -1,11 +1,22 @@
 .books {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   width: 90%;
   margin-left: auto;
   margin-right: auto;
 }
+.nowbooks{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.futurebooks{
+  display: flex;
+  justify-content: space-between;
+}
 
+.future-book-container,
 .book-container {
   display: flex;
   flex-direction: column;
@@ -17,6 +28,7 @@
   color: black;
 }
 
+.current-book-container,
 .favorite-book-container {
   display: flex;
   flex-direction: column;
@@ -31,41 +43,29 @@
 /*titres*/
 .book-container h1,
 .favorite-book-container h1 {
-  padding: calc(3px + 1vh) 0;
+  padding: calc(3px + 1vh);
   width: 100%;
   border-bottom: 2px solid var(--navbar);
 }
 
-/*mes favoris*/
-.favorite-book-container .books-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: calc(3px + 1vh);
+/*mes favoris/current */
+
+.current-book-container .books-list.fornobook,
+.favorite-book-container .books-list.fornobook {
+  justify-content: center;
 }
 
+.current-book-container .books-list .nocurrentbook,
 .favorite-book-container .books-list .nofavoritebook {
   margin-top: auto;
   margin-bottom: auto;
-}
-
-/*/* Ma bibliothèque */
-.book-container .books-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: calc(3px + 1vh);
+  width: 75%;
 }
 
 /*sans livre*/
-.book-container .books-list.fornobook {
-  align-items: center;
-}
 
-.favorite-book-container .books-list.fornobook {
-  justify-content: center;
+.books-list.fornobook {
+  align-items: center;
 }
 
 .books-list .nobook {
@@ -80,7 +80,15 @@
 }
 
 /*livres*/
-.book-item {
+.books-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: calc(3px + 1vh);
+}
+
+.books-list .book-item {
   display: flex;
   flex-direction: column;
   position: relative;
@@ -89,11 +97,15 @@
   margin: calc(3px + 0.3vh);
 }
 
-.book-item p {
+.books-list .book-item h4 {
   font-size: calc(5px + 1vh);
 }
 
-.book-item .delete-button {
+.books-list .book-item p {
+  font-size: calc(2px + 1vh);
+}
+
+.books-list .book-item .delete-button {
   position: absolute;
   z-index: 2;
   top: calc(3px + 0.3vh - 10px);
@@ -110,7 +122,7 @@
   cursor: pointer;
 }
 
-.book-item:hover .delete-button {
+.books-list .book-item:hover .delete-button {
   display: flex;
 }
 
@@ -139,33 +151,50 @@
   aspect-ratio: 1/1.3;
 }
 
-/*form*/
+/*titres*/
+.current-book-container h1,
+.future-book-container h1 {
+  padding: calc(3px + 1vh) 0;
+  width: 100%;
+  border-bottom: 2px solid var(--navbar);
+}
 
+/*/* Ma bibliothèque */
+.future-book-container .books-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: calc(3px + 1vh);
+}
 
-@media screen and (max-width: 1200px) {
-  .books {
+@media screen and (max-width: 1050px) {
+  .books{
     width: 95%;
+  }
+  .favorite-book-container,
+  .current-book-container{
+    width: 35vw;
   }
 }
 
-@media screen and (max-width: 1070px) {
-  .books {
+@media screen and (max-width: 730px) {
+  .nowbooks,
+  .futurebooks{
     flex-direction: column;
-    justify-content: center;
-    height: fit-content;
   }
-
   .book-container,
-  .favorite-book-container {
+  .favorite-book-container,
+  .future-book-container,
+  .current-book-container {
     width: 100%;
   }
-  
-  .book-container {
-    margin-top: 30px;
+  .favorite-book-container,
+  .current-book-container{
+    margin-bottom: 20px;
   }
-
   /*sans livres*/
-  .books-list .add-book-button {
+  .books-list .add-book-button, .books-list .book-item {
     width: calc(7.5vh + 7.5vw);
   }
 
