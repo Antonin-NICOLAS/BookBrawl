@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Footer from '../components/footer'
 //Context
 import { UserContext } from '../context/userContext';
 import { useLoading } from '../context/LoadingContext';
@@ -46,10 +47,10 @@ const Classement = () => {
     };
 
     const calculateRanks = (users) => {
-    
+
         // Initialiser le rang et une variable pour suivre le nombre de mots du précédent utilisateur
         let rank = 1;
-    
+
         // Parcourir les utilisateurs triés pour assigner les rangs
         return users.map((user, index) => {
             let prevWordsRead = users[0].wordsRead;
@@ -75,43 +76,46 @@ const Classement = () => {
     const rankedUsers = calculateRanks(users);
 
     return (
-        <div className='classement'>
-            <h1>Classement des utilisateurs par nombre de mots lus</h1>
-            {isUsersLoading ? (
-                <LoadingAnimation />
-            ) : (
-                <>
-                    <table className='classement-table'>
-                        <thead className="table-head">
-                            <tr>
-                                <th className="column1">Rang</th>
-                                <th className="column2">Nom</th>
-                                <th className="column3">Mots lus</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {rankedUsers && rankedUsers.length > 0 ? (
-                                rankedUsers.map((userItem, index) => (
-                                    <tr
-                                        key={userItem._id}
-                                        className={user && String(userItem._id) === String(user.id) ? 'table-highlight' : ''}
-                                    >
-                                        <td className='column1'>{userItem.rank}</td>
-                                        <td className="column2"><Link to={`/user/${userItem._id}`}>{userItem.prenom} {userItem.nom}</Link></td>
-                                        <td className="column3">{userItem.wordsRead}</td>
-                                    </tr>
-                                ))
-                            ) : (
+        <>
+            <div className='classement'>
+                <h1>Classement des utilisateurs par nombre de mots lus</h1>
+                {isUsersLoading ? (
+                    <LoadingAnimation />
+                ) : (
+                    <>
+                        <table className='classement-table'>
+                            <thead className="table-head">
                                 <tr>
-                                    <td colSpan="3">Aucun utilisateur trouvé</td>
+                                    <th className="column1">Rang</th>
+                                    <th className="column2">Nom</th>
+                                    <th className="column3">Mots lus</th>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
-                    <ClassementChart users={users} className="chart"/>
-                </>
-            )}
-        </div>
+                            </thead>
+                            <tbody>
+                                {rankedUsers && rankedUsers.length > 0 ? (
+                                    rankedUsers.map((userItem, index) => (
+                                        <tr
+                                            key={userItem._id}
+                                            className={user && String(userItem._id) === String(user.id) ? 'table-highlight' : ''}
+                                        >
+                                            <td className='column1'>{userItem.rank}</td>
+                                            <td className="column2"><Link to={`/user/${userItem._id}`}>{userItem.prenom} {userItem.nom}</Link></td>
+                                            <td className="column3">{userItem.wordsRead}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="3">Aucun utilisateur trouvé</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                        <ClassementChart users={users} className="chart" />
+                    </>
+                )}
+            </div>
+            <Footer />
+        </>
     );
 };
 
