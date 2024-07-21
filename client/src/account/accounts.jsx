@@ -521,7 +521,7 @@ function Compte({ onPasswordClick }) {
             </div>
           </div>
         </div>
-        <div className={`account2 ${activeSection === 'words' && recentBooks.length > 1 ? 'large' : ''} ${activeSection === 'words' && recentBooks.length === 1 ? 'medium' : ''} ${activeSection === 'rewards' && rewards.length >= 1 ? 'large' : ''} ${activeSection === 'rewards' && rewards.length === 0 ? 'medium' : ''} ${activeSection === 'status' && showStatusForm ? 'large' : ''}`} >
+        <div className={`account2 ${activeSection === 'words' && recentBooks.length > 1 ? 'large' : ''} ${activeSection === 'words' && recentBooks.length === 1 ? 'medium' : ''} ${activeSection === 'rewards' && rewards.length >= 2 ? 'extralarge' : ''} ${activeSection === 'rewards' && rewards.length === 1 ? 'large' : ''} ${activeSection === 'rewards' && rewards.length === 0 ? 'medium' : ''} ${activeSection === 'status' && showStatusForm ? 'large' : ''}`} >
           <div className="renderSection">
             <div className="accountnav">
               <button onClick={() => setActiveSection('status')} className={activeSection === 'status' ? 'active' : ''}>

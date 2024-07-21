@@ -32,7 +32,8 @@
   flex-direction: column;
   align-items: center;
   height: calc(51px + 30vh);
-  width: calc(30vh + 20vw); 
+  width: 32.5vw; 
+  padding: calc(3px + 1vh);
   background-color: var(--title);
   border-radius: 20px;
   color: black;
@@ -55,7 +56,8 @@
 }
 
 .identity-right {
-  width:60%;
+  width: calc(60% - 2px - 1vh);
+  margin-left: calc(2px + 1vh);
   height: 100%;
   display: flex;
   float: right;
@@ -224,14 +226,17 @@ label .imagebutton:hover {
 }
 
 .account2.large .renderSection {
-  height: calc(330px + 35vh);
+  height: calc(240px + 40vh);
+}
+.account2.extralarge .renderSection {
+  height: calc(260px + 46vh);
 }
 
 .renderSection {
   background-color: var(--title);
   border-radius: 20px;
   height: calc(51px + 30vh);
-  width: 50vw;
+  width: 52.5vw;
   display: flex;
   flex-direction: column;
   transition: ease-in-out 0.5s;
@@ -310,6 +315,9 @@ label .imagebutton:hover {
   border-radius: 20px;
   padding: 10px;
   width: 80%;
+  min-width: 200px;
+  max-width: 50vw;
+  resize: horizontal;
 }
 
 /* status form open*/
@@ -442,13 +450,16 @@ table.books-table button:hover {
   .account{
     width: 95%;
   }
+  .identity-card{
+    width: 40vw;
+  }
 }
 @media screen and (max-height: 600px) {
   .avatar{
     width: calc(30px + 10vh + 4vw);
   }
 }
-@media screen and (max-width: 1100px) and (max-height: 1050px){
+@media screen and (max-width: 1100px){
   .account{
     flex-direction: column;
   }
@@ -458,11 +469,11 @@ table.books-table button:hover {
   }
   .identity-card{
     margin: 0 0 30px 0;
-    width: 70vw;
+    width: 90vw;
   }
   .renderSection{
     margin: 0 0 30px 0;
-    width: 70vw;
+    width: 90vw;
   }
 }
 @media screen and (max-width: 650px){
