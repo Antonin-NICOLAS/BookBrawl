@@ -17,7 +17,7 @@ const ClassementChart = ({ users }) => {
                 borderWidth: 1
             },
             {
-                label: 'Mots totaux',
+                label: 'Mots totaux (lectures futures comprises)',
                 data: users.map(user => user.wordsRead + user.futureWordsRead),
                 backgroundColor: 'rgba(153, 102, 255, 0.5)',
                 borderColor: 'rgba(153, 102, 255, 1)',
