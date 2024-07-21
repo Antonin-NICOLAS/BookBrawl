@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { checkAdmin, getUnverifiedBooks, verifyBook } = require('../controllers/admincontroller');
+const { checkAdmin, getUnverifiedBooks, verifyBook, updateBook } = require('../controllers/admincontroller');
 const { secure } = require("../middlewares/authsecure");
 const { admin } = require('../middlewares/adminsecure')
 
@@ -22,6 +22,7 @@ router.use(admin);
 
 router.get('/unverified', getUnverifiedBooks);
 router.put('/verify/:bookId', verifyBook);
+router.put('/update/:bookId', updateBook);
 router
 
 module.exports = router;
