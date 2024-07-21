@@ -13,7 +13,7 @@ const Footer = () => {
             <td className="condition" rowSpan="2"><a href="./src/assets/conditions.pdf" target="_blank">TERMS OR SERVICES</a></td>
           </tr>
           <tr>
-            <td>©BOOKBRAWL: ALL RIGHTS RESERVED</td>
+            <td className='copyright'>©BOOKBRAWL: ALL RIGHTS RESERVED</td>
           </tr>
         </tbody>
       </table>

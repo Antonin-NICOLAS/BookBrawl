@@ -1,3 +1,13 @@
+html {
+  --green: #C9CBA3;
+  --greenlight: #E7EFC5;
+}
+
+html[data-theme='dark'] {
+  --green: #82845c;
+  --greenlight: #868f5e;
+}
+
 /*footer*/
 .footer {
     height: auto;
@@ -11,19 +21,19 @@
   .footer a{
     text-decoration: none;
     list-style: none;
-    color: #000;
+    color: #333;
   }
   
   .top-footer {
     width: 100%;
-    background-color: #C9CBA3;
+    background-color: var(--green);
     padding: calc(3px + 1vh);
   }
   
   .footer-slogan {
     width: 100%;
     text-align: center;
-    background-color: #E7EFC5; 
+    background-color: var(--greenlight); 
     padding: calc(3px + 1vh);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
   }
@@ -43,12 +53,15 @@
     width: 60%;
   }
   .footer .whatsapp{
-    width: 5%;
+    width: 15%;
   }
   .footer .whatsapp a i {
     font-size: calc(5px + 2vw);
   }
   .footer .condition {
-    width: 35%;
+    width: 25%;
     text-align: center;
+  }
+  .copyright{
+    font-size: 10px;
   }

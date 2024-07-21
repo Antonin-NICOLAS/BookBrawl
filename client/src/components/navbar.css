@@ -154,6 +154,10 @@ ul li a i {
   transition: all 1.8s ease-out;
 }
 
+.show-nav .sixth {
+  transition: all 2.0s ease-out;
+}
+
 
 /*login*/
 .linkaccount{

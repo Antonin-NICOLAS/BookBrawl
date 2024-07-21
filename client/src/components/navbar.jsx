@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import './navbar.css';
 import { Link, useLocation } from 'react-router-dom';
-import logo from "/src/assets/logo.png";
 import { useContext } from "react";
+//context
+import { AdminContext } from "../context/adminContext";
 import { UserContext } from "../context/userContext"
-import { toast } from 'react-hot-toast'
-import axios from "axios";
+//CSS
+import './navbar.css';
+//images
+import logo from "/src/assets/logo.png";
 
-function Navbar({onLoginClick, onLoginClickWhenOnRegister}) {
+function Navbar({ onLoginClick, onLoginClickWhenOnRegister }) {
   const [checked, setChecked] = useState(false);
   const { user } = useContext(UserContext)
+  const { isAdmin } = useContext(AdminContext);
   const location = useLocation();
 
   useEffect(() => {
@@ -71,8 +74,8 @@ function Navbar({onLoginClick, onLoginClickWhenOnRegister}) {
     if (location.pathname.endsWith("/register")) {
       onLoginClickWhenOnRegister();
     }
-    else{
-      
+    else {
+
     }
   };
 
@@ -104,6 +107,11 @@ function Navbar({onLoginClick, onLoginClickWhenOnRegister}) {
               <li className="navbar_link fifth">
                 <Link to="/about" onClick={() => setShowLinks(false)}><i className="fa-solid fa-question"></i>&nbsp;&nbsp;&nbsp;À propos</Link>
               </li>
+              {isAdmin && (
+                <li className="navbar_link sixth">
+                  <Link to="/admin" onClick={() => setShowLinks(false)}><i className="fa-solid fa-user-shield"></i>&nbsp;&nbsp;&nbsp;Admin</Link>
+                </li>
+              )}
             </ul>
             <input type="checkbox" id="switch" checked={checked} onChange={handleChange} name="theme" />
             <label htmlFor="switch">Toggle</label>
