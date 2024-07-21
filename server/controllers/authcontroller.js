@@ -27,7 +27,8 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
             prenom, nom, email, password: hashedPassword, wordsRead: 0,
-            avatar: 'https://book-brawl.vercel.app/assets/account-D8hsV5Dv.jpeg'
+            avatar: 'https://book-brawl.vercel.app/assets/account-D8hsV5Dv.jpeg',
+            role: 'user'
         });
         const options = {
             secure: process.env.NODE_ENV === "production" ? true : false,
@@ -42,7 +43,7 @@ const registerUser = async (req, res) => {
             nom: user.nom,
             prenom: user.prenom,
             email: user.email,
-            words: user.wordsRead,
+            role: user.role
         },
             process.env.JWT_SECRET,
             { expiresIn: '2d' })
@@ -81,7 +82,7 @@ const loginUser = async (req, res) => {
                 nom: user.nom,
                 prenom: user.prenom,
                 email: user.email,
-                words: user.wordsRead,
+                role: user.role
             },
                 process.env.JWT_SECRET,
                 { expiresIn: expiration }, (err, token) => {

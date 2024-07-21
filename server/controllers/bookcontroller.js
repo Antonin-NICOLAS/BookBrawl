@@ -7,7 +7,7 @@ const { checkAndAwardRewards, checkAndRevokeRewards } = require('./rewardscontro
 // Route pour ajouter un livre avec une critique
 const addUserBook = async (req, res) => {
     try {
-        const { title, author, language, wordsRead, startDate, endDate, Readingstatus, description, rating, imageUrl } = req.body;
+        const { title, author, language, wordsRead, startDate, endDate, Readingstatus, description, rating, imageUrl, isAdmin } = req.body;
         const userId = req.user.id;
 
         // Vérifier les dates si le statut de lecture est "Lu"
@@ -49,6 +49,7 @@ const addUserBook = async (req, res) => {
                 wordsRead,
                 image,
                 themes: Readingstatus === 'Lu' ? themes : [],
+                isVerified: isAdmin ? true : false,
                 reviews: Readingstatus === 'Lu' ? [{
                     user: userId,
                     description,
@@ -223,6 +224,7 @@ const BookSuggestion = async (req, res) => {
 
 //book details
 const getBookById = async (req, res) => {
+    const userId = req.user.id;
     const { bookId } = req.params;
 
     try {
@@ -244,7 +246,17 @@ const getBookById = async (req, res) => {
             return res.json({ error: 'Aucun livre trouvé' });
         }
 
-        res.status(200).json(book.toJSON());
+        const bookData = book.toJSON();
+
+        // Filtrer les reviews de l'utilisateur connecté
+        bookData.reviews = bookData.reviews.filter(review => review.user._id.toString() !== userId);
+
+        // Filtrer les futureReaders, currentReaders, et pastReaders de l'utilisateur connecté
+        bookData.futureReaders = bookData.futureReaders.filter(reader => reader._id.toString() !== userId);
+        bookData.currentReaders = bookData.currentReaders.filter(reader => reader._id.toString() !== userId);
+        bookData.pastReaders = bookData.pastReaders.filter(reader => reader._id.toString() !== userId);
+
+        res.status(200).json(bookData);
     } catch (error) {
         console.error('Erreur lors de la récupération des détails du livre :', error);
         res.status(500).json({ error: 'Erreur lors de la récupération des détails du livre.' });

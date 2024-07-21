@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Book = require('../models/book');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
@@ -7,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const getProfile = (req, res) => {
     const { jwtauth } = req.cookies
     if (jwtauth) {
-        jwt.verify(jwtauth, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES }, (err, user) => {
+        jwt.verify(jwtauth, process.env.JWT_SECRET, (err, user) => {
             if (err) throw err;
             res.json(user)
         })
@@ -123,4 +124,36 @@ const getUserById = async (req, res) => {
     }
 };
 
-module.exports = { getProfile, addUserAvatar, getUserAvatar, addUserStatus, getUserStatus, getUserById, getUserWords };
+//récupérer le review de l'util connecté
+const getReviews = async (req, res) => {
+    const userId = req.user.id;
+    const { bookId } = req.params;
+
+    try {
+        const book = await Book.findById(bookId)
+            .populate({
+                path: 'reviews.user',
+                model: 'User',
+                select: 'prenom nom avatar'
+            });
+
+        if (!book) {
+            return res.status(404).json({ error: 'Livre non trouvé' });
+        }
+
+        // Filtrer la review de l'utilisateur connecté
+        const userReview = book.reviews.find(review => review.user._id.toString() === userId);
+
+        if (!userReview) {
+            return res.json({ error: 'Review de l\'utilisateur non trouvée pour ce livre' });
+        }
+        else {
+            res.status(200).json(userReview);
+        }
+    } catch (error) {
+        console.error('Error fetching user review:', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+};
+
+module.exports = { getProfile, addUserAvatar, getUserAvatar, addUserStatus, getUserStatus, getUserById, getUserWords, getReviews };
