@@ -45,6 +45,7 @@ html {
   --2: #E7EFC5;
   --2-transparent: #e7efc580;
   --3: #ff7c6b;
+  --3-transparent: #ff7c6b80;
 }
 
 html[data-theme='dark'] {
@@ -56,9 +57,10 @@ html[data-theme='dark'] {
   --title-transparent: #89545A80;
   --1: #9C6770;
   --1-transparent: #9C677080;
-  --2: #E7EFC5;
-  --2-transparent: #e7efc580;
+  --2: #5B3235;
+  --2-transparent: #5B323580;
   --3: #6d362f;
+  --3-transparent: #6d362f80;
 }
 
 /*page ou l'utilisateur doit être connecté*/
