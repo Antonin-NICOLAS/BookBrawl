@@ -1,0 +1,272 @@
+html{
+    --background: #a7d4f4
+}
+
+html[data-theme='dark'] {
+    --background: #1e3b51;
+  }
+
+.backgroundoverlay{
+    position: absolute;
+    top: calc(8vh + 20px);
+    background-color: var(--background);
+    width: 100%;
+    height: 100%;
+}
+
+.book-details-page {
+    margin: 30px 0;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--color-text-body);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.book-details-page h3{
+    margin-bottom: calc(3px + 1vh);
+}
+
+.retour{
+    width: 100%;
+    padding: calc(3px + 1vh);
+    display: flex;
+}
+
+.retour button{
+    background-color: transparent;
+    color: var(--color-text-body);
+    border: none;
+    font-size: calc(3px + 1vh + 0.5vw);
+    cursor: pointer;
+}
+
+/*1st group*/
+.group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/*book*/
+.book-card {
+    width: 52.5vw;
+    height: fit-content;
+    background-color: var(--title);
+    display: flex;
+    padding: calc(3px + 1vh);
+    border-radius: 8px;
+}
+
+.card-left {
+    width: calc(20px + 8vw + 8vh);
+}
+
+.book-card .card-left img {
+    width: calc(20px + 8vw + 8vh);
+    clip-path: inset(0 0 0 0 round 10px);
+}
+
+.book-card .card-right {
+    width: calc(100% - 20px - 8vw - 8vh);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: calc(5px + 0.7vh + 0.7vw);
+}
+
+.book-card .card-right .themes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.book-card .card-right .themes p{
+    margin: 0;
+}
+.book-card .card-right .thème{
+    padding: calc(2px + 0.5vh) calc(2px + 0.5vw);
+    border-radius: 10px;
+}
+
+.book-card .card-right .rating{
+    display: flex;
+}
+
+.book-card .card-right .stars{
+    margin-right: calc(3px + 1vh);
+}
+
+.book-card .card-right .stars img {
+    height: calc(10px + 1.5vh);
+    margin: 0 2px;
+}
+
+.card-right .cartel {
+    padding: calc(3px + 1vh);
+    border-radius: 8px;
+    background-color: var(--3-transparent);
+    margin-bottom: calc(5px + 2vh);
+}
+
+.book-card .card-right p {
+    margin-bottom: calc(5px + 1vh);
+}
+
+/*review*/
+.book-details-page .reviews {
+    width: 32.5vw;
+    background-color: var(--title);
+    padding: calc(3px + 1vh);
+    border-radius: 8px;
+    height: fit-content;
+}
+
+.book-details-page .reviews h3 {
+    padding: calc(3px + 1vh);
+    background-color: var(--3-transparent);
+    border-radius: 10px;
+    margin-bottom: calc(3px + 1vh);
+}
+
+.reader-card {
+    display: flex;
+    width: 100%;
+}
+
+.reader-card .card-left {
+    width: 40%;
+}
+
+.reader-card .card-left img {
+    clip-path: circle(40%);
+    object-fit: cover;
+    width: 100%;
+}
+
+.reader-card .card-right {
+    width: 60%;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.reader-card .card-right p {
+    margin-bottom: calc(3px + 1vh);
+}
+
+.reader-card .stars img {
+    height: 40px;
+    margin: 0 2px;
+}
+
+/*si livre non enregistré*/
+.reviews .addtofuturebooks,
+.reviews .addtocurrentbooks,
+.reviews .addtobooksread {
+    border: 2px solid var(--color-text-body);
+    margin-top: calc(3px + 1vh);
+    border-radius: 10px;
+    background: var(--1);
+    color: var(--color-text-body);
+    padding: calc(2px + 1vh) calc(1px + 1vw);
+    font-size: calc(7px + 1vh);
+    cursor: pointer;
+}
+
+/*current future*/
+.currentreaders,
+.futurereaders {
+    width: 42.5vw;
+    padding: calc(3px + 1vh);
+    border-radius: 15px;
+    background-color: var(--2);
+    display: flex;
+    flex-direction: column;
+}
+.currentreaders-card, .futurereaders-card{
+    height: calc(40px + 10vh);
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.currentreaders-card .readeravatar,
+.futurereaders-card .readeravatar{
+    width: 50%;
+    margin-right: 5%;
+}
+
+.currentreaders-card img, .futurereaders-card img{
+    object-fit: cover;
+    width: 100%;
+    clip-path: inset(0 0 0 0 round 10px);
+}
+
+/*reviews - past*/
+.pastreaders {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.pastreader-card {
+    width: calc(100% / 2 - 2.5vw);
+    height: calc(60px + 13vh);
+    padding: calc(3px + 1vh);
+    background-color: var(--1-transparent);
+    border-radius: 10px;
+    display: flex;
+}
+
+.pastreader-card .card-left {
+    height: 100%;
+    margin-right: 10px;
+}
+.pastreader-card .card-right {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.pastreader-card .card-left img {
+    clip-path: inset(0 0 0 0 round 20px);
+    object-fit: cover;
+    height: calc(60px + 13vh - 6px - 2vh);
+}
+
+.pastreader-card .rating{
+    display: flex;
+}
+
+.pastreader-card .stars {
+    margin-right: calc(3px + 1vh);
+}
+
+.pastreader-card .stars img {
+    height: 20px;
+    margin: 0 2px;
+}
+
+.noreview{
+    margin-bottom: 30px;
+}
+
+.dangerdelete{
+    margin-top: 20px;
+    border: 2px solid red;
+    border-radius: 10px;
+    background-color: var(--background);
+    color: red;
+    padding: calc(2px + 1vh) calc(2px + 0.8vw);
+    cursor: pointer;
+}
