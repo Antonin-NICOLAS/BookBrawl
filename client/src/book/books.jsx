@@ -276,7 +276,7 @@ const Books = () => {
                     </div>
                     <div className="future-book-container">
                         <h1>Mes futures lectures</h1>
-                        {isFutureBooksLoading || isBooksDeleting ? (
+                        {isFutureBooksLoading || isFutureBooksDeleting ? (
                             <LoadingAnimation />
                         ) : (
                             <div className={`books-list ${Futurebooks.length > 0 ? '' : 'fornobook'}`}>
@@ -299,7 +299,7 @@ const Books = () => {
                                     ))
                                 ) : (
                                     <div className='nobook'>
-                                        <p>Aucun livre dans ma bibliothèque</p>
+                                        <p>Aucune lecture prochaine enregistrée</p>
                                     </div>
                                 )}
                             </div>

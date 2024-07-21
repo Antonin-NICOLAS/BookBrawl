@@ -21,7 +21,7 @@
 
 /*wrapper*/
 .wrapper-book {
-    height: calc(100% - 8vh - 4vh);
+    height: auto;
     width: 40vw;
     background-color: var(--title-transparent);
     backdrop-filter: blur(15px);

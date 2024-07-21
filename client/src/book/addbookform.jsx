@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import Select from 'react-select';
@@ -6,6 +6,7 @@ import Select from 'react-select';
 import StarRating from '../components/star-rating';
 //Context
 import { useLoading } from '../context/LoadingContext';
+import { AdminContext } from "../context/adminContext";
 //CSS
 import './addbookform.css';
 //LOADER//
@@ -14,6 +15,7 @@ import LoadingAnimation from '../components/loader';
 function BookForm({ onSuccess, showForm, setShowForm }) {
     //context
     const { setIsLoading, loadingStates } = useLoading();
+    const { isAdmin } = useContext(AdminContext);
     //others
     const [suggestions, setSuggestions] = useState([]);
     const [rating, setRating] = useState(0);
@@ -159,6 +161,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
             formData.append('Readingstatus', ExistingBookData.Readingstatus);
             formData.append('description', ExistingBookData.description);
             formData.append('rating', ExistingBookData.rating);
+            formData.append('isAdmin', isAdmin);
         } else {
             //vérifier les images
             if (!image && !BookData.imageUrl) {
@@ -180,6 +183,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
             formData.append('Readingstatus', BookData.Readingstatus);
             formData.append('description', BookData.description);
             formData.append('rating', BookData.rating);
+            formData.append('isAdmin', isAdmin);
             if (image) {
                 formData.append('image', image); // Utiliser le fichier image téléchargé
             } else if (BookData.imageUrl) {
