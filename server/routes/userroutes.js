@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const { getUserRank } = require('../controllers/rankingcontroller');
-const { getProfile, addUserAvatar, addUserStatus, getUserStatus, getUserAvatar, getUserById, getUserWords } = require('../controllers/usercontroller');
+const { getProfile, addUserAvatar, addUserStatus, getUserStatus, getUserAvatar, getUserById, getUserWords, getReviews } = require('../controllers/usercontroller');
 const { secure } = require("../middlewares/authsecure");
 
 const router = express.Router();
@@ -29,6 +29,8 @@ router.get('/userstatus', getUserStatus);
 router.get('/useravatar', getUserAvatar);
 router.get('/userwords', getUserWords)
 //book details
+router.get('/:bookId', getReviews)
+//user details
 router.get('/:userId', getUserById)
 
 module.exports = router;
