@@ -49,7 +49,7 @@ const addUserBook = async (req, res) => {
                 wordsRead,
                 image,
                 themes: Readingstatus === 'Lu' ? themes : [],
-                isVerified: isAdmin ? true : false,
+                isVerified: isAdmin === 'true' ? true : false,
                 reviews: Readingstatus === 'Lu' ? [{
                     user: userId,
                     description,
