@@ -1,0 +1,73 @@
+.admin-page{
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(5, calc(50px + 10vh + 12px + 4vh));
+    grid-gap: 1%;
+}
+.unverifiedbook{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+.unverifiedbook img{
+    height: calc(50px + 10vh);
+}
+
+.card-layout{
+    width: 100%;
+    background-color: var(--1);
+    margin: calc(3px + 1vh);
+    padding: calc(3px + 1vh);
+    border-radius: 10px;
+}
+
+.card-layout th{
+    width: 20%;
+}
+
+.card-layout button, .bookmodification .update{
+    border: 2px solid var(--color-text-body);
+    margin-top: calc(3px + 1vh);
+    border-radius: 10px;
+    background: var(--title);
+    color: var(--color-text-body);
+    padding: calc(2px + 1vh) calc(1px + 1vw);
+    font-size: calc(7px + 1vh);
+    cursor: pointer;
+}
+
+/*modification*/
+.bookmodification {
+    position: absolute;
+    width: calc(49% - 12px - 4vh - 100px);
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.bookmodification h2, .bookmodification input{
+    margin-bottom: calc(3px + 1vh)
+}
+
+.closeform{
+    color: #FFF;
+    background-color: #000;
+    padding: calc(2px + 1vh);
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
