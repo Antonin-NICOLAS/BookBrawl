@@ -70,7 +70,12 @@ const bookSchema = new Schema({
     pastReaders: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }],
+    isVerified: {
+        type: Boolean,
+        default: false,
+        required: true
+    }
 });
 
 const BookModel = mongoose.model('Book', bookSchema);

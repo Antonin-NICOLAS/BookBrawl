@@ -58,6 +58,11 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Reward'
     }],
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    }
 })
 
 // Définition d'une propriété virtuelle pour calculer totalWords
