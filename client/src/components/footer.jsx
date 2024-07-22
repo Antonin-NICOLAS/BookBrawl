@@ -9,7 +9,7 @@ const Footer = () => {
       <table>
         <tbody>
           <tr>
-            <td className="contact">Contact us at : <a href="mailto:bookbrawl.contact@gmail.com">bookbrawl.contact@gmail.com</a></td>
+            <td className="contact">Contactez nous : <a href="mailto:bookbrawl.contact@gmail.com">bookbrawl.contact@gmail.com</a></td>
             <td className="whatsapp" rowSpan="2"><a href="https://chat.whatsapp.com/CQNSY4nA3OO3ycC0S2hDuj"><i className="fa-brands fa-whatsapp"></i></a></td>
             <td className="condition" rowSpan="2"><a href={Conditions} target="_blank">TERMS OR SERVICES</a></td>
           </tr>
