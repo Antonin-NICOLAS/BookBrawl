@@ -9,18 +9,22 @@ import { AdminContextProvider } from './context/adminContext';
 //Componenets
 import LoadingAnimation from './components/loader';
 import Navbar from './components/navbar';
-import LoginPopup from './components/popup-login';
-import PasswordPopup from './components/popup-changepassword'
-//pages
+//auth
+import LoginPopup from './pages/popup-login';
+import PasswordPopup from './pages/popup-changepassword'
+//relative
 import BookDetails from './relative/book-details';
-import UserDetails from './relative/user-details'
-import Home from '../src/pages/home';
+import UserDetails from './relative/user-details';
+//pages
+import Home from './home/home';
 import Classement from './classement/classement';
 import Books from './book/books';
 import News from './news/news'
 import APropos from './a-propos/a-propos';
 import Accounts from './account/accounts';
-import ErrorPage from '../src/pages/error';
+import ForgotPassword from './pages/changepassword'
+import ResetPassword from './pages/resetpassword'
+import ErrorPage from './pages/error';
 //admin
 import AdminPage from './admin/checkbook';
 
@@ -94,6 +98,8 @@ export default function App() {
                         <Route exact path="/news" element={<News />} />
                         <Route path="/about" element={<APropos />} />
                         <Route path="/accounts" element={<Accounts onPasswordClick={handlePasswordClick} />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
                         <Route path="*" element={<ErrorPage />} />
                         <Route path="/admin" element={<AdminPage />} />
                     </Routes>
