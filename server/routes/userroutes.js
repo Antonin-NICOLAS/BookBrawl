@@ -29,8 +29,8 @@ router.get('/userstatus', getUserStatus);
 router.get('/useravatar', getUserAvatar);
 router.get('/userwords', getUserWords)
 //book details
-router.get('/:bookId', getReviews)
+router.get('/bookdetails/:bookId', getReviews)
 //user details
-router.get('/:userId', getUserById)
+router.get('/userdetails/:userId', getUserById)
 
 module.exports = router;
