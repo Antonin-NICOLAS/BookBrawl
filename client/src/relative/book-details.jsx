@@ -206,8 +206,6 @@ const BookDetails = () => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
 
-    console.log(rating, fullStars)
-
     const isBookLoading = loadingStates.book;
     const isReviewLoading = loadingStates.review;
     const isCurrentLoading = loadingStates.currentbook;
