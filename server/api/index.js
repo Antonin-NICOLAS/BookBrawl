@@ -21,6 +21,8 @@ app.use('/admin', require('../routes/adminroutes'))
 app.use('/books', require('../routes/bookroutes'))
 app.use('/rewards', require('../routes/rewardroutes'));
 app.use('/predict', require('../routes/predictroutes'));
+
+app.use('/images', express.static('assets'));
 //cors origin
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', process.env.FRONTEND_SERVER);
