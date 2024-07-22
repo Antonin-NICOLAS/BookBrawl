@@ -58,7 +58,15 @@
   transition: ease-in-out 0.4s;
 }
 
-@keyframes fadeIn {
+.login-overlay.animate-popup {
+  animation: LoginfadeIn 0.3s ease-out;
+}
+
+.login-overlay.animate-popup-close {
+  animation: LoginfadeOut 0.3s ease-out;
+}
+
+@keyframes LoginfadeIn {
   from {
       opacity: 0;
       transform: scale(0.9);
@@ -69,7 +77,7 @@
   }
 }
 
-@keyframes fadeOut {
+@keyframes LoginfadeOut {
   from {
       opacity: 1;
       transform: scale(1);
@@ -78,14 +86,6 @@
       opacity: 0;
       transform: scale(0.9);
   }
-}
-
-.animate-popup {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.animate-popup-close {
-  animation: fadeOut 0.3s ease-out;
 }
 
 .wrapper .close-login {
