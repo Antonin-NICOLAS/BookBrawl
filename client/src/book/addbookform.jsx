@@ -17,7 +17,12 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
     const { setIsLoading, loadingStates } = useLoading();
     const { isAdmin } = useContext(AdminContext);
     //others
+    //suggestions
     const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const inputRef = useRef(null);
+    const suggestionRef = useRef(null);
+    //form
     const [rating, setRating] = useState(0);
     const [BookData, setBookData] = useState({
         title: '',
@@ -52,6 +57,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
         setBookData({ ...BookData, [name]: value });
 
         if (e.target.name === 'title') {
+            setSuggestions([]);
             if (e.target.value.length > 2) { // Commencez à chercher après 3 caractères
                 try {
                     const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/books/suggest' : '/books/suggest', {
@@ -61,14 +67,14 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                         console.log(response.data.error)
                     }
                     else {
-                        setSuggestions([]);
                         setSuggestions(response.data);
+                        setShowSuggestions(true)
                     }
                 } catch (error) {
                     console.error('Error fetching suggestions:', error);
                 }
             } else {
-                setSuggestions([]);
+                setShowSuggestions(false);
             }
         }
     };
@@ -92,6 +98,10 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
         { value: 'Espagnol', label: 'Espagnol', color: "#D44C47", backgroundcolor: "#FDEBEC90", backgroundcolorhover: "#FDEBEC", selectedcolor: "#FF7369" }
     ];
 
+    const getCssVariableValue = (variableName) => {
+        return getComputedStyle(document.documentElement).getPropertyValue(variableName);
+    };
+
     //gérer les valeurs du form si livre existe déjà
     const handleExistingBookChange = (e) => {
         setExistingBookData({ ...ExistingBookData, [e.target.name]: e.target.value });
@@ -100,6 +110,10 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
     const handleNewRatingChange = (newRating) => {
         setRating(newRating);
         setExistingBookData({ ...ExistingBookData, rating: newRating });
+    };
+
+    const getThemeOption = (theme) => {
+        return themeOptions.find(option => option.value === theme);
     };
 
     //suggestions de titre
@@ -128,9 +142,17 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                     rating: 0
                 });
                 setSuggestions([]);
+                setShowSuggestions(false)
             }
         } catch (error) {
             console.error('Error fetching book data:', error);
+        }
+    };
+
+    //affichage des suggestions
+    const handleBlur = (event) => {
+        if (suggestionRef.current && !suggestionRef.current.contains(event.relatedTarget)) {
+            setShowSuggestions(false);
         }
     };
 
@@ -261,7 +283,23 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
     }, [showForm]);
 
     //function close
-    const handleBookClose = () => setShowForm(false)
+    const handleBookClose = () => {
+        setShowForm(false)
+        setBookData({
+            title: '',
+            author: '',
+            language: '',
+            themes: [],
+            wordsRead: '',
+            startDate: new Date().toISOString().split('T')[0],
+            endDate: new Date().toISOString().split('T')[0],
+            Readingstatus: 'Lu',
+            description: '',
+            rating: 0,
+            imageUrl: ''
+        });
+        setExistingBookData(null);
+    }
 
     const isNewBookLoading = loadingStates.addbook;
 
@@ -273,76 +311,67 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                 <div ref={wrapperBookRef} className="wrapper-book">
                     <span className="close-book" onClick={handleBookClose}><i className="fa-solid fa-xmark"></i></span>
                     <form onSubmit={handleSubmit} className="book-form">
-                        <h2>Ajouter un livre</h2>
+                        <h2>Ajouter un livre lu</h2>
                         {ExistingBookData ? (
                             <>
-                                <div className="form-group">
-                                    <label htmlFor="title">Titre :</label>
-                                    <input
-                                        type="text"
-                                        id="title"
-                                        name='title'
-                                        value={ExistingBookData.title}
-                                        autoComplete="off"
-                                        readOnly
-                                    />
+                                <div className="existingbook-card">
+                                <div className="card-left">
+                                    <img src={ExistingBookData.image} alt={ExistingBookData.title} />
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="author">Auteur :</label>
-                                    <input
-                                        type="text"
-                                        id="author"
-                                        name='author'
-                                        value={ExistingBookData.author}
-                                        autoComplete="off"
-                                        readOnly
-                                    />
+                                <div className="card-right">
+                                    <div className="cartel">
+                                        <h2>{ExistingBookData.title}, {ExistingBookData.author}</h2>
+                                    </div>
+                                    <p>Langage : {ExistingBookData.language}</p>
+                                    <p>Contient <strong>{ExistingBookData.wordsRead}</strong> mots</p>
+                                    <div className="themes">
+                                        <ul>
+                                            {ExistingBookData.themes && ExistingBookData.themes.length > 0 ? (
+                                                ExistingBookData.themes.map((theme, index) => {
+                                                    const themeOption = getThemeOption(theme);
+                                                    return (
+                                                        <li
+                                                            key={index}
+                                                            className='thème'
+                                                            style={{
+                                                                color: themeOption ? themeOption.color : 'inherit',
+                                                                backgroundColor: themeOption ? themeOption.backgroundcolor : 'inherit'
+                                                            }}
+                                                        >
+                                                            {themeOption.label}
+                                                        </li>
+                                                    );
+                                                })
+                                            ) : (
+                                                <li>Pas de thèmes associé</li>
+                                            )}
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="image">Image :</label>
-                                    <img src={ExistingBookData.image} alt={ExistingBookData.title} className="book-image" />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="language">Langue :</label>
-                                    <p>{ExistingBookData.language}</p>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="themes">Thèmes :</label>
-                                    {ExistingBookData.themes.map(theme => (
-                                        <p key={theme} value={theme}>{theme}</p>
-                                    ))}
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="wordsRead">Mots lus :</label>
-                                    <input
-                                        type="number"
-                                        id="wordsRead"
-                                        name='wordsRead'
-                                        value={ExistingBookData.wordsRead}
-                                        readOnly
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="startDate">Date de commencement :</label>
-                                    <input
-                                        type="date"
-                                        id="startDate"
-                                        name='startDate'
-                                        value={ExistingBookData.startDate || ''}
-                                        onChange={handleExistingBookChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="endDate">Date de fin :</label>
-                                    <input
-                                        type="date"
-                                        id="endDate"
-                                        name='endDate'
-                                        value={ExistingBookData.endDate || ''}
-                                        onChange={handleExistingBookChange}
-                                        required
-                                    />
+                            </div>
+                                <div className="big-form-group">
+                                    <div className="sub-form-group">
+                                        <label htmlFor="startDate">Date de commencement :</label>
+                                        <input
+                                            type="date"
+                                            id="startDate"
+                                            name='startDate'
+                                            value={ExistingBookData.startDate || ''}
+                                            onChange={handleExistingBookChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="sub-form-group">
+                                        <label htmlFor="endDate">Date de fin :</label>
+                                        <input
+                                            type="date"
+                                            id="endDate"
+                                            name='endDate'
+                                            value={ExistingBookData.endDate || ''}
+                                            onChange={handleExistingBookChange}
+                                            required
+                                        />
+                                    </div>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="description">Avis :</label>
@@ -372,14 +401,17 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                                             name='title'
                                             placeholder='Titre'
                                             value={BookData.title}
+                                            ref={inputRef}
                                             onChange={handleBookChange}
+                                            onFocus={() => setShowSuggestions(true)}
+                                            onBlur={handleBlur}
                                             required
                                             autoComplete="off"
                                         />
-                                        {suggestions.length > 0 && (
-                                            <ul className="suggestions">
-                                                {suggestions.map((suggestion) => (
-                                                    <li key={suggestion._id} onClick={() => handleSuggestionClick(suggestion)}>
+                                        {showSuggestions && suggestions.length > 0 && (
+                                            <ul className="suggestions-list" ref={suggestionRef} tabIndex="-1">
+                                                {suggestions.map((suggestion, index) => (
+                                                    <li key={index} className="suggestion-item" onClick={() => { handleSuggestionClick(suggestion); setShowSuggestions(false) }}>
                                                         {suggestion.title}
                                                     </li>
                                                 ))}
@@ -434,18 +466,18 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                                             styles={{
                                                 placeholder: (baseStyles) => ({
                                                     ...baseStyles,
-                                                    color: "black"
+                                                    color: 'var(--color-text-body)'
                                                 }),
                                                 control: (baseStyles) => ({
                                                     ...baseStyles,
                                                     backgroundColor: "transparent",
                                                     borderRadius: "5px",
-                                                    borderColor: "gray",
-                                                    '&:hover': { borderColor: 'black' }
+                                                    borderColor: "var(--color-text-body)",
+                                                    '&:hover': { borderColor: 'gray' }
                                                 }),
                                                 dropdownIndicator: (baseStyles) => ({
                                                     ...baseStyles,
-                                                    color: "black"
+                                                    color: "var(--color-text-body)"
                                                 }),
                                                 option: (baseStyles, { data }) => ({
                                                     ...baseStyles,
@@ -510,18 +542,18 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                                             styles={{
                                                 placeholder: (baseStyles) => ({
                                                     ...baseStyles,
-                                                    color: "black"
+                                                    color: "var(--color-text-body)"
                                                 }),
                                                 control: (baseStyles) => ({
                                                     ...baseStyles,
                                                     backgroundColor: "transparent",
                                                     borderRadius: "5px",
-                                                    borderColor: "gray",
-                                                    '&:hover': { borderColor: 'black' }
+                                                    borderColor: "var(--color-text-body)",
+                                                    '&:hover': { borderColor: 'gray' }
                                                 }),
                                                 dropdownIndicator: (baseStyles) => ({
                                                     ...baseStyles,
-                                                    color: "black"
+                                                    color: "var(--color-text-body)"
                                                 }),
                                                 option: (baseStyles, { data }) => ({
                                                     ...baseStyles,
