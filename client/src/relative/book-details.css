@@ -11,7 +11,6 @@ html[data-theme='dark'] {
     top: calc(8vh + 20px);
     background-color: var(--background);
     width: 100%;
-    height: 100%;
 }
 
 .book-details-page {
@@ -62,16 +61,16 @@ html[data-theme='dark'] {
 }
 
 .card-left {
-    width: calc(20px + 8vw + 8vh);
+    width: 40%;
 }
 
 .book-card .card-left img {
-    width: calc(20px + 8vw + 8vh);
+    width: 100%;
     clip-path: inset(0 0 0 0 round 10px);
 }
 
 .book-card .card-right {
-    width: calc(100% - 20px - 8vw - 8vh);
+    width: 60%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -79,13 +78,13 @@ html[data-theme='dark'] {
     font-size: calc(5px + 0.7vh + 0.7vw);
 }
 
-.book-card .card-right .themes{
+.book-card .card-right .themes ul{
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.book-card .card-right .themes p{
-    margin: 0;
+.book-card .card-right .themes li{
+    margin: calc(3px + 1vh) calc(3px + 0.5vw);
 }
 .book-card .card-right .thème{
     padding: calc(2px + 0.5vh) calc(2px + 0.5vw);

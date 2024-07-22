@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 //images
 import FullStar from '../assets/starrating.png';
 import HalfStar from '../assets/halfstarrating.png';
@@ -61,7 +61,7 @@ const BookDetails = () => {
     const fetchUserReview = async () => {
         setIsLoading('review', true);
         try {
-            const response = await axios.get(process.env.NODE_ENV === "production" ? `/api/user/${bookId}` : `/user/${bookId}`);
+            const response = await axios.get(process.env.NODE_ENV === "production" ? `/api/user/bookdetails/${bookId}` : `/user/bookdetails/${bookId}`);
             if (response.data.error) {
                 console.log(response.data.error);
             } else {
@@ -206,6 +206,8 @@ const BookDetails = () => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
 
+    console.log(rating, fullStars)
+
     const isBookLoading = loadingStates.book;
     const isReviewLoading = loadingStates.review;
     const isCurrentLoading = loadingStates.currentbook;
@@ -277,7 +279,7 @@ const BookDetails = () => {
                                 {isReviewLoading || isDeletingBook ? (
                                     <LoadingAnimation />
                                 ) : (
-                                    review.user ? (
+                                    review.user && review.description && review.rating ? (
                                         <div key={review._id} className='reader-card'>
                                             <div className="card-left">
                                                 <img src={review.user.avatar} alt={`${review.user.prenom} ${review.user.nom}`} />
@@ -339,7 +341,7 @@ const BookDetails = () => {
                                     book.currentReaders.map(reader => (
                                         <div key={reader._id} className='currentreaders-card'>
                                             <div className="readeravatar">
-                                                <img src={reader.avatar} alt={`${reader.prenom} ${reader.nom}`} />
+                                                <Link to={`/user/${reader._id}`}><img src={reader.avatar} alt={`${reader.prenom} ${reader.nom}`} /></Link>
                                             </div>
                                             <div className="readerinfos">
                                                 <p>{reader.prenom}</p>
@@ -381,7 +383,7 @@ const BookDetails = () => {
                                         <div key={review._id} className='pastreader-card'>
                                             <div className="card-left">
                                                 <div className="readeravatar">
-                                                    <img src={review.user.avatar} alt={`${review.user.prenom} ${review.user.nom}`} />
+                                                <Link to={`/user/${review.user._id}`}><img src={review.user.avatar} alt={`${review.user.prenom} ${review.user.nom}`} /></Link>
                                                 </div>
                                             </div>
                                             <div className="card-right">
