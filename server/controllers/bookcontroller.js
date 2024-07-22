@@ -28,17 +28,19 @@ const addUserBook = async (req, res) => {
             return res.json({ error: "Le livre existe déjà parmi vos livres." });
         }
 
+        //image
+        let image;
+        if (req.file) {
+            image = req.file.path;
+        } else if (imageUrl) {
+            const uploadedImage = await cloudinary.uploader.upload(imageUrl, {
+                folder: 'books',
+                public_id: slugify(title, { lower: true, strict: true })
+            });
+            image = uploadedImage.secure_url;
+        }
+
         if (!book) {
-            let image;
-            if (req.file) {
-                image = req.file.path;
-            } else if (imageUrl) {
-                const uploadedImage = await cloudinary.uploader.upload(imageUrl, {
-                    folder: 'books',
-                    public_id: slugify(title, { lower: true, strict: true })
-                });
-                image = uploadedImage.secure_url;
-            }
 
             const themes = req.body.themes ? JSON.parse(req.body.themes) : [];
 
@@ -54,29 +56,30 @@ const addUserBook = async (req, res) => {
                     user: userId,
                     description,
                     rating,
-                    Readingstatus,
                     startDate,
                     endDate,
-                }] : []
+                }] : [{
+                    user: userId,
+                    startDate,
+                    endDate
+                }]
             });
         } else if (Readingstatus === 'Lu') {
             book.reviews.push({
                 user: userId,
                 description,
                 rating,
-                Readingstatus,
                 startDate,
                 endDate,
             });
         } else if (Readingstatus === 'À lire' || 'En train de lire') {
-            book.push({
-                title,
-                author,
-                language,
-                wordsRead,
-                image
+            book.reviews.push({
+                user: userId,
+                startDate,
+                endDate,
             })
         }
+        //si le livre existe et que l'utilisateur ne l'a pas encore lu, pas besoin d'ajouter de données
 
         // Mettre à jour les lecteurs selon le statut de lecture
         if (Readingstatus === 'Lu') {
