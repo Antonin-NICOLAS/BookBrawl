@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import Select from 'react-select';
 //rating
 import StarRating from '../components/star-rating';
+import WordsCalculator from './wordcalculator'
 //Context
 import { useLoading } from '../context/LoadingContext';
 import { AdminContext } from "../context/adminContext";
@@ -12,11 +13,12 @@ import './addbookform.css';
 //LOADER//
 import LoadingAnimation from '../components/loader';
 
-function BookForm({ onSuccess, showForm, setShowForm }) {
+function BookForm(props) {
     //context
     const { setIsLoading, loadingStates } = useLoading();
     const { isAdmin } = useContext(AdminContext);
     //others
+    const [closing, setClosing] = useState(false);
     //suggestions
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -39,6 +41,31 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
     });
     const [ExistingBookData, setExistingBookData] = useState(null);
     const [image, setImage] = useState(null);
+    //nombre de mots
+    const [showWordCountMenu, setShowWordCountMenu] = useState(false);
+
+    //fermer la popup
+    const handleBookClose = () => {
+        //setBookData({
+        //    title: '',
+        //    author: '',
+        //    language: '',
+        //    themes: [],
+        //    wordsRead: '',
+        //    startDate: new Date().toISOString().split('T')[0],
+        //    endDate: new Date().toISOString().split('T')[0],
+        //    Readingstatus: 'Lu',
+        //    description: '',
+        //    rating: 0,
+        //    imageUrl: ''
+        //});
+        setExistingBookData(null);
+        setClosing(true);
+        setTimeout(() => {
+            setClosing(false);
+            props.setTrigger(false);
+        }, 300);
+    }
 
     //gérer les valeurs du form
     //rating
@@ -52,9 +79,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
 
     //reste
     const handleBookChange = async (e) => {
-        const { name, value } = e.target;
-
-        setBookData({ ...BookData, [name]: value });
+        setBookData({ ...BookData, [e.target.name]: e.target.value });
 
         if (e.target.name === 'title') {
             setSuggestions([]);
@@ -97,10 +122,6 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
         { value: 'Anglais', label: 'Anglais', color: "#C14C8A", backgroundcolor: "#FAF1F590", backgroundcolorhover: "#FAF1F5", selectedcolor: "#E255A1" },
         { value: 'Espagnol', label: 'Espagnol', color: "#D44C47", backgroundcolor: "#FDEBEC90", backgroundcolorhover: "#FDEBEC", selectedcolor: "#FF7369" }
     ];
-
-    const getCssVariableValue = (variableName) => {
-        return getComputedStyle(document.documentElement).getPropertyValue(variableName);
-    };
 
     //gérer les valeurs du form si livre existe déjà
     const handleExistingBookChange = (e) => {
@@ -161,8 +182,12 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
         setImage(event.target.files[0]);
     };
 
+    console.log(BookData)
+    console.log(ExistingBookData)
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log("Form submitted");
 
         setIsLoading('addbook', true);
         const formData = new FormData();
@@ -241,7 +266,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
             } else {
                 toast.success('Votre livre a été ajouté');
                 setImage(null);
-                onSuccess();
+                handleBookClose();
                 setBookData({
                     title: '',
                     author: '',
@@ -274,81 +299,62 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
         }
     };
     useEffect(() => {
-        if (showForm) {
+        if (props.trigger) {
             document.addEventListener("click", handleClickOutside);
         }
         return () => {
             document.removeEventListener("click", handleClickOutside);
         };
-    }, [showForm]);
-
-    //function close
-    const handleBookClose = () => {
-        setShowForm(false)
-        setBookData({
-            title: '',
-            author: '',
-            language: '',
-            themes: [],
-            wordsRead: '',
-            startDate: new Date().toISOString().split('T')[0],
-            endDate: new Date().toISOString().split('T')[0],
-            Readingstatus: 'Lu',
-            description: '',
-            rating: 0,
-            imageUrl: ''
-        });
-        setExistingBookData(null);
-    }
+    }, [props.trigger]);
 
     const isNewBookLoading = loadingStates.addbook;
 
     return (
-        <div ref={overlayBookRef} className={`book-overlay ${showForm ? 'show' : 'hide'}`}>
+        <div ref={overlayBookRef} className="book-overlay">
             {isNewBookLoading ? (
                 <LoadingAnimation />
             ) : (
-                <div ref={wrapperBookRef} className="wrapper-book">
+                <div ref={wrapperBookRef} className={`wrapper-book ${closing ? "animate-bookpopup-close" : "animate-bookpopup"}`}>
                     <span className="close-book" onClick={handleBookClose}><i className="fa-solid fa-xmark"></i></span>
                     <form onSubmit={handleSubmit} className="book-form">
                         <h2>Ajouter un livre lu</h2>
                         {ExistingBookData ? (
                             <>
                                 <div className="existingbook-card">
-                                <div className="card-left">
-                                    <img src={ExistingBookData.image} alt={ExistingBookData.title} />
-                                </div>
-                                <div className="card-right">
-                                    <div className="cartel">
-                                        <h2>{ExistingBookData.title}, {ExistingBookData.author}</h2>
+                                    <div className="card-left">
+                                        <img src={ExistingBookData.image} alt={ExistingBookData.title} />
                                     </div>
-                                    <p>Langage : {ExistingBookData.language}</p>
-                                    <p>Contient <strong>{ExistingBookData.wordsRead}</strong> mots</p>
-                                    <div className="themes">
-                                        <ul>
-                                            {ExistingBookData.themes && ExistingBookData.themes.length > 0 ? (
-                                                ExistingBookData.themes.map((theme, index) => {
-                                                    const themeOption = getThemeOption(theme);
-                                                    return (
-                                                        <li
-                                                            key={index}
-                                                            className='thème'
-                                                            style={{
-                                                                color: themeOption ? themeOption.color : 'inherit',
-                                                                backgroundColor: themeOption ? themeOption.backgroundcolor : 'inherit'
-                                                            }}
-                                                        >
-                                                            {themeOption.label}
-                                                        </li>
-                                                    );
-                                                })
-                                            ) : (
-                                                <li>Pas de thèmes associé</li>
-                                            )}
-                                        </ul>
+                                    <div className="card-right">
+                                        <div className="cartel">
+                                            <h2>{ExistingBookData.title}, {ExistingBookData.author}</h2>
+                                        </div>
+                                        <p>Langage : {ExistingBookData.language}</p>
+                                        <p>Contient <strong>{ExistingBookData.wordsRead}</strong> mots</p>
+                                        <div className="themes">
+                                            <ul>
+                                                {ExistingBookData.themes && ExistingBookData.themes.length > 0 ? (
+                                                    ExistingBookData.themes.map((theme, index) => {
+                                                        const themeOption = getThemeOption(theme);
+                                                        return (
+                                                            <li
+                                                                key={index}
+                                                                className='thème'
+                                                                style={{
+                                                                    color: themeOption ? themeOption.color : 'inherit',
+                                                                    backgroundColor: themeOption ? themeOption.backgroundcolor : 'inherit'
+                                                                }}
+                                                            >
+                                                                {themeOption.label}
+                                                            </li>
+                                                        );
+                                                    })
+                                                ) : (
+                                                    <li>Pas de thèmes associé</li>
+                                                )}
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                                 <div className="big-form-group">
                                     <div className="sub-form-group">
                                         <label htmlFor="startDate">Date de commencement :</label>
@@ -445,7 +451,7 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                                         id="imageUrl"
                                         name="imageUrl"
                                         placeholder='ou inclure un URL de la couverture'
-                                        value={BookData.imageUrl}
+                                        value={BookData.imageUrl || ''}
                                         onChange={handleBookChange}
                                     />
                                 </div>
@@ -611,8 +617,13 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                                             required
                                         />
                                     </div>
+                                    <WordsCalculator
+                                        showWordCountMenu={showWordCountMenu}
+                                        setShowWordCountMenu={setShowWordCountMenu}
+                                        BookData={BookData}
+                                        setBookData={setBookData} />
                                     <div className="sub-form-group">
-                                        <button type="button">Calculer le nombre de mots</button>
+                                        <button type="button" onClick={() => setShowWordCountMenu(true)}>Calculer le nombre de mots</button>
                                     </div>
                                 </div>
                                 <div className="big-form-group">
@@ -664,8 +675,9 @@ function BookForm({ onSuccess, showForm, setShowForm }) {
                         )}
                         <button type="submit" className="submitbookform">Ajouter le livre</button>
                     </form>
-                </div>)}
-        </div>
+                </div>)
+            }
+        </div >
     );
 }
 

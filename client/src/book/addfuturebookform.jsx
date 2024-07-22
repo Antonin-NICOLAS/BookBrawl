@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import Select from 'react-select';
+
+import WordsCalculator from './wordcalculator'
 //Context
 import { useLoading } from '../context/LoadingContext';
 //CSS
@@ -9,10 +11,11 @@ import './addfuturebookform.css';
 //LOADER//
 import LoadingAnimation from '../components/loader';
 
-function FutureBookForm({ onSuccess, showForm, setShowForm }) {
+function FutureBookForm(props) {
     //context
     const { setIsLoading, loadingStates } = useLoading();
     //others
+    const [closing, setClosing] = useState(false);
     //suggestions
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -33,6 +36,48 @@ function FutureBookForm({ onSuccess, showForm, setShowForm }) {
     });
     const [ExistingBookData, setExistingBookData] = useState(null);
     const [image, setImage] = useState(null);
+    //nombre de mots
+    const [showWordCountMenu, setShowWordCountMenu] = useState(false);
+
+    //fermeture
+    const handleBookClose = () => {
+        setFutureBookData({
+            title: '',
+            author: '',
+            language: '',
+            themes: [],
+            wordsRead: '',
+            startDate: new Date().toISOString().split('T')[0],
+            endDate: new Date().toISOString().split('T')[0],
+            Readingstatus: 'Lu',
+            description: '',
+            rating: 0,
+            imageUrl: ''
+        });
+        setExistingBookData(null);
+        setClosing(true);
+        setTimeout(() => {
+            setClosing(false);
+            props.setTrigger(false);
+        }, 300);
+    }
+
+    //overlay click
+    const overlayFutureBookRef = useRef(null);
+    const wrapperFutureBookRef = useRef(null);
+    const handleClickOutside = (event) => {
+        if (overlayFutureBookRef.current && wrapperFutureBookRef.current && overlayFutureBookRef.current.contains(event.target) && !wrapperFutureBookRef.current.contains(event.target)) {
+            handleBookClose();
+        }
+    };
+    useEffect(() => {
+        if (props.trigger) {
+            document.addEventListener("click", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [props.trigger]);
 
     //gérer les valeurs du form
 
@@ -145,7 +190,9 @@ function FutureBookForm({ onSuccess, showForm, setShowForm }) {
         setImage(event.target.files[0]);
     };
 
-    const handleSubmit = async (event) => {
+    console.log(FutureBookData)
+
+    const handleFutureBookSubmit = async (event) => {
         event.preventDefault();
 
         setIsLoading('addfuturebook', true);
@@ -208,7 +255,7 @@ function FutureBookForm({ onSuccess, showForm, setShowForm }) {
             } else {
                 toast.success('Votre livre a été ajouté');
                 setImage(null);
-                onSuccess();
+                handleBookClose();
                 setFutureBookData({
                     title: '',
                     author: '',
@@ -231,52 +278,16 @@ function FutureBookForm({ onSuccess, showForm, setShowForm }) {
         }
     };
 
-    //overlay click
-    const overlayFutureBookRef = useRef(null);
-    const wrapperFutureBookRef = useRef(null);
-    const handleClickOutside = (event) => {
-        if (overlayFutureBookRef.current && wrapperFutureBookRef.current && overlayFutureBookRef.current.contains(event.target) && !wrapperFutureBookRef.current.contains(event.target)) {
-            handleBookClose();
-        }
-    };
-    useEffect(() => {
-        if (showForm) {
-            document.addEventListener("click", handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener("click", handleClickOutside);
-        };
-    }, [showForm]);
-
-    //function close
-    const handleBookClose = () => {
-        setShowForm(false)
-        setFutureBookData({
-            title: '',
-            author: '',
-            language: '',
-            themes: [],
-            wordsRead: '',
-            startDate: new Date().toISOString().split('T')[0],
-            endDate: new Date().toISOString().split('T')[0],
-            Readingstatus: 'Lu',
-            description: '',
-            rating: 0,
-            imageUrl: ''
-        });
-        setExistingBookData(null);
-    }
-
     const isNewBookLoading = loadingStates.addfuturebook;
 
     return (
-        <div ref={overlayFutureBookRef} className={`predict-overlay ${showForm ? 'show' : 'hide'}`}>
+        <div ref={overlayFutureBookRef} className="predict-overlay">
             {isNewBookLoading ? (
                 <LoadingAnimation />
             ) : (
-                <div ref={wrapperFutureBookRef} className="wrapper-future-book">
+                <div ref={wrapperFutureBookRef} className={`wrapper-future-book ${closing ? "animate-futurebookpopup-close" : "animate-futurebookpopup"}`}>
                     <span className="close-book" onClick={handleBookClose}><i className="fa-solid fa-xmark"></i></span>
-                    <form onSubmit={handleSubmit} className="predict-form">
+                    <form onSubmit={handleFutureBookSubmit} method="POST" className="predict-form">
                         <h2>Ajouter un livre à lire</h2>
                         {ExistingBookData ? (
                             <>
@@ -414,7 +425,7 @@ function FutureBookForm({ onSuccess, showForm, setShowForm }) {
                         ) : (
                             <>
                                 <div className="big-form-group">
-                                <div className="sub-form-group">
+                                    <div className="sub-form-group">
                                         <input
                                             type="text"
                                             id="title"
@@ -630,8 +641,13 @@ function FutureBookForm({ onSuccess, showForm, setShowForm }) {
                                             required
                                         />
                                     </div>
+                                    <WordsCalculator
+                                        showWordCountMenu={showWordCountMenu}
+                                        setShowWordCountMenu={setShowWordCountMenu}
+                                        BookData={FutureBookData}
+                                        setBookData={setFutureBookData} />
                                     <div className="sub-form-group">
-                                        <button type="button">Calculer le nombre de mots</button>
+                                        <button type="button" onClick={() => setShowWordCountMenu(true)}>Calculer le nombre de mots</button>
                                     </div>
                                 </div>
                                 <div className="big-form-group">

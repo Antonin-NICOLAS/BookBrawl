@@ -1,31 +1,31 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Footer from '../components/footer'
 //Context
 import { UserContext } from '../context/userContext';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-hot-toast';
-//Form
-import AddBookForm from './addbookform';
-import AddFutureBookForm from './addfuturebookform';
 //CSS
 import './books.css';
 //LOADER//
 import LoadingAnimation from '../components/loader';
 
-const Books = () => {
+const Books = ({ onFutureBookClick,
+    onBookClick,
+    shouldUpdateBooks,
+    shouldUpdateFavoriteBooks,
+    shouldUpdateFutureBooks,
+    shouldUpdateCurrentBooks,
+    onBooksUpdate }) => {
     //Context
     const { user, isLoading } = useContext(UserContext);
     const { setIsLoading, loadingStates } = useLoading();
     //others
     const [books, setBooks] = useState([]);
     const [favoriteBooks, setFavoriteBooks] = useState([]);
-    const [showForm, setShowForm] = useState(false);
     //future
     const [Futurebooks, setFutureBooks] = useState([]);
     const [CurrentBooks, setCurrentBooks] = useState([]);
-    const [showFutureForm, setShowFutureForm] = useState(false);
 
     //attendre Usercontext
     useEffect(() => {
@@ -36,6 +36,16 @@ const Books = () => {
             fetchCurrentBooks();
         }
     }, [isLoading, user]);
+
+    useEffect(() => {
+        if (shouldUpdateBooks || shouldUpdateFavoriteBooks || shouldUpdateFutureBooks || shouldUpdateCurrentBooks) {
+            if (shouldUpdateBooks) fetchBooks();
+            if (shouldUpdateFavoriteBooks) fetchFavoriteBooks();
+            if (shouldUpdateFutureBooks) fetchFutureBooks();
+            if (shouldUpdateCurrentBooks) fetchCurrentBooks();
+            onBooksUpdate();
+        }
+    }, [shouldUpdateBooks, shouldUpdateFavoriteBooks, shouldUpdateFutureBooks, shouldUpdateCurrentBooks, onBooksUpdate]);
 
     //livres
     const fetchBooks = async () => {
@@ -155,16 +165,12 @@ const Books = () => {
         }
     };
 
-    const closeForm = () => {
-        fetchBooks();
-        fetchFavoriteBooks();
-        setShowForm(false);
+    //ouvrir les popup
+    const handleNewFutureBookClick = () => {
+        onFutureBookClick();
     };
-
-    const closeFutureForm = () => {
-        fetchFutureBooks();
-        fetchCurrentBooks();
-        setShowFutureForm(false);
+    const handleNewBookClick = () => {
+        onBookClick();
     };
 
     if (!user) {
@@ -220,7 +226,7 @@ const Books = () => {
                             <LoadingAnimation />
                         ) : (
                             <div className={`books-list ${books.length > 0 ? '' : 'fornobook'}`}>
-                                <button type='button' className="add-book-button" onClick={() => setShowForm(!showForm)}>
+                                <button type='button' className="add-book-button" onClick={handleNewBookClick}>
                                     <i className="fa-solid fa-circle-plus"></i>
                                     Ajouter un livre
                                 </button>
@@ -280,7 +286,7 @@ const Books = () => {
                             <LoadingAnimation />
                         ) : (
                             <div className={`books-list ${Futurebooks.length > 0 ? '' : 'fornobook'}`}>
-                                <button type='button' className="add-book-button" onClick={() => setShowFutureForm(!showFutureForm)}>
+                                <button type='button' className="add-book-button" onClick={handleNewFutureBookClick}>
                                     <i className="fa-solid fa-circle-plus"></i>
                                     Ajouter un livre
                                 </button>
@@ -305,20 +311,8 @@ const Books = () => {
                             </div>
                         )}
                     </div>
-                    </div>
-                <AddBookForm
-                    showForm={showForm}
-                    setShowForm={setShowForm}
-                    onSuccess={closeForm}
-                />
-                <AddFutureBookForm
-                    showForm={showFutureForm}
-                    setShowForm={setShowFutureForm}
-                    onSuccess={closeFutureForm}
-                />
+                </div>
             </div>
-
-            <Footer />
         </>
     );
 };

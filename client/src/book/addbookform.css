@@ -1,30 +1,23 @@
 /*overlay*/
 .book-overlay {
-    position: absolute;
+    position: fixed;
     z-index: 9996;
     top: calc(8vh + 20px);
     left: 0;
-    width: 100vw;
-    height: calc(100vh - 8vh - 20px);
-    transition: all ease-in-out 0.3s;
+    right: 0;
+    bottom: 0;
     display: flex;
     align-items: center;
-}
-
-.book-overlay.hide {
-    transform: translateX(-100vw);
-}
-
-.book-overlay.show {
-    transform: translateX(0);
 }
 
 /*wrapper*/
 .wrapper-book {
     height: calc(100vh - 8vh - 80px);
+    max-height: 750px;
     width: 40vw;
     background-color: var(--title-transparent);
     backdrop-filter: blur(15px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     border-right: 2px #000 solid;
     border-top: 2px #000 solid;
     border-bottom: 2px #000 solid;
@@ -49,11 +42,43 @@
     cursor: pointer;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+
+.animate-bookpopup {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.animate-bookpopup-close {
+    animation: fadeOut 0.3s ease-out;
+}
+
 /*form*/
 .book-form {
     height: 100%;
     width: 100%;
-    padding: calc(6px + 1vh);
+    padding: calc(10px + 2vh);
     overflow-x: hidden;
     overflow-y: scroll;
     display: flex;
@@ -67,8 +92,7 @@
     text-decoration: underline;
     color: var(--color-text-body);
     text-align: center;
-    margin-block-start: calc(5px + 1vh);
-    margin-block-end: calc(5px + 1vh);
+    margin-bottom: calc(10px + 2vh);
 }
 
 /*big group*/
@@ -197,9 +221,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* Suggestions */
-.suggestions-list {
+.wrapper-book .suggestions-list {
     position: absolute;
-    top: calc(47px + 6.5vh);
+    transform: translateY(calc(92% - 1px));
     background-color: white;
     border-radius: 10px;
     max-height: 200px;
@@ -207,12 +231,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 30%;
 }
 
-.suggestion-item {
+.wrapper-book .suggestion-item {
     padding: 10px;
     cursor: pointer;
 }
 
-.suggestion-item:hover {
+.wrapper-book .suggestion-item:hover {
     background-color: #f0f0f0;
 }
 
@@ -310,17 +334,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         justify-content: center;
     }
 
-    .book-overlay.hide {
-        animation: fadeOut 0.3s ease-out;
-        transform: translateX(0);
-        z-index: -4;
-    }
-
-    .book-overlay.show {
-        animation: fadeIn 0.3s ease-out;
-        transform: translateX(0);
-    }
-
     .wrapper-book .big-form-group {
         flex-direction: column;
         margin: 0;
@@ -328,6 +341,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
     .wrapper-book .big-form-group .sub-form-group {
         margin-bottom: calc(3px + 1vh);
+    }
+
+    .animate-bookpopup {
+        animation: fadeIn 0.3s ease-out;
+    }
+    
+    .animate-bookpopup-close {
+        animation: fadeOut 0.3s ease-out;
     }
 
     @keyframes fadeIn {
