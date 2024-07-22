@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './wordcalculator.css';
-import { motion } from 'framer-motion';
 
 function WordsCalculator({ showWordCountMenu, setShowWordCountMenu, BookData, setBookData }) {
     const [pages, setPages] = useState('');
@@ -112,20 +111,7 @@ function WordsCalculator({ showWordCountMenu, setShowWordCountMenu, BookData, se
                 </div>
                 <button className='submitwords' type="button" onClick={calculateWordCount}>Calculer</button>
                 {BookData.wordsRead && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
-                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                        exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-                        style={{
-                            marginTop: 'calc(3px + 2vh)',
-                            fontSize: 'calc(6px + 2vh)',
-                            color: 'var(--3)',
-                            fontWeight: '800'
-                        }}
-                    >
-                        {BookData.wordsRead}
-                    </motion.div>
+                        <div className="words">{BookData.wordsRead}</div>
                 )}
             </div>
         </div>
