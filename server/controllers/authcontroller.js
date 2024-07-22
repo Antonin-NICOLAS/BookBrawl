@@ -182,399 +182,826 @@ const ForgotPassword = async (req, res) => {
             text: `Vous avez demandé à réinitialiser votre mot de passe. 
             Veuillez suivre ce lien ${resetPasswordLink} pour définir votre noueau mot de passe`,
             html: `
-             <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+            <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office">
+
 <head>
-<!--[if gte mso 9]>
+  <!--[if gte mso 15]>
 <xml>
-  <o:OfficeDocumentSettings>
-    <o:AllowPNG/>
-    <o:PixelsPerInch>96</o:PixelsPerInch>
-  </o:OfficeDocumentSettings>
+<o:OfficeDocumentSettings>
+<o:AllowPNG/>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
 </xml>
 <![endif]-->
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="x-apple-disable-message-reformatting">
-  <!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]-->
-  <title></title>
-  
-    <style type="text/css">
-      @media only screen and (min-width: 730px) {
-  .u-row {
-    width: 710px !important;
-  }
-  .u-row .u-col {
-    vertical-align: top;
-  }
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Réinitialiser votre mot de passe</title>
+  <style>
+    img {
+      -ms-interpolation-mode: bicubic;
+    }
 
-  .u-row .u-col-33p33 {
-    width: 236.643px !important;
-  }
+    table,
+    td {
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
 
-  .u-row .u-col-66p67 {
-    width: 473.357px !important;
-  }
+    .mceStandardButton,
+    .mceStandardButton td,
+    .mceStandardButton td a {
+      mso-hide: all !important;
+    }
 
-  .u-row .u-col-100 {
-    width: 710px !important;
-  }
+    p,
+    a,
+    li,
+    td,
+    blockquote {
+      mso-line-height-rule: exactly;
+    }
 
-}
+    p,
+    a,
+    li,
+    td,
+    body,
+    table,
+    blockquote {
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
 
-@media (max-width: 730px) {
-  .u-row-container {
-    max-width: 100% !important;
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-  }
-  .u-row .u-col {
-    min-width: 320px !important;
-    max-width: 100% !important;
-    display: block !important;
-  }
-  .u-row {
-    width: 100% !important;
-  }
-  .u-col {
-    width: 100% !important;
-  }
-  .u-col > div {
-    margin: 0 auto;
-  }
-}
-body {
-  margin: 0;
-  padding: 0;
-}
+    @media only screen and (max-width: 480px) {
 
-table,
-tr,
-td {
-  vertical-align: top;
-  border-collapse: collapse;
-}
+      body,
+      table,
+      td,
+      p,
+      a,
+      li,
+      blockquote {
+        -webkit-text-size-adjust: none !important;
+      }
+    }
 
-p {
-  margin: 0;
-}
+    .mcnPreviewText {
+      display: none !important;
+    }
 
-.ie-container table,
-.mso-container table {
-  table-layout: fixed;
-}
+    .bodyCell {
+      margin: 0 auto;
+      padding: 0;
+      width: 100%;
+    }
 
-* {
-  line-height: inherit;
-}
+    .ExternalClass,
+    .ExternalClass p,
+    .ExternalClass td,
+    .ExternalClass div,
+    .ExternalClass span,
+    .ExternalClass font {
+      line-height: 100%;
+    }
 
-a[x-apple-data-detectors='true'] {
-  color: inherit !important;
-  text-decoration: none !important;
-}
+    .ReadMsgBody {
+      width: 100%;
+    }
 
-table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: underline; } #u_content_text_1 a { color: #573c95; text-decoration: none; } #u_content_text_2 a { color: #564489; text-decoration: none; } #u_content_text_5 a { color: #564489; text-decoration: none; } #u_content_text_4 a { color: #000000; text-decoration: none; }
-    </style>
-  
-  
+    .ExternalClass {
+      width: 100%;
+    }
 
+    a[x-apple-data-detectors] {
+      color: inherit !important;
+      text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
+    }
+
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: #ffffff;
+    }
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    td,
+    p,
+    a {
+      word-break: break-word;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+
+    img,
+    a img {
+      border: 0;
+      height: auto;
+      outline: none;
+      text-decoration: none;
+    }
+
+    a[href^="tel"],
+    a[href^="sms"] {
+      color: inherit;
+      cursor: default;
+      text-decoration: none;
+    }
+
+    li p {
+      margin: 0 !important;
+    }
+
+    .ProseMirror a {
+      pointer-events: none;
+    }
+
+    @media only screen and (max-width: 640px) {
+      .mceClusterLayout td {
+        padding: 4px !important;
+      }
+    }
+
+    @media only screen and (max-width: 480px) {
+      body {
+        width: 100% !important;
+        min-width: 100% !important;
+      }
+
+      body.mobile-native {
+        -webkit-user-select: none;
+        user-select: none;
+        transition: transform 0.2s ease-in;
+        transform-origin: top center;
+      }
+
+      body.mobile-native.selection-allowed a,
+      body.mobile-native.selection-allowed .ProseMirror {
+        user-select: auto;
+        -webkit-user-select: auto;
+      }
+
+      colgroup {
+        display: none;
+      }
+
+      img {
+        height: auto !important;
+      }
+
+      .mceWidthContainer {
+        max-width: 660px !important;
+      }
+
+      .mceColumn {
+        display: block !important;
+        width: 100% !important;
+      }
+
+      .mceColumn-forceSpan {
+        display: table-cell !important;
+        width: auto !important;
+      }
+
+      .mceColumn-forceSpan .mceButton a {
+        min-width: 0 !important;
+      }
+
+      .mceBlockContainer {
+        padding-right: 16px !important;
+        padding-left: 16px !important;
+      }
+
+      .mceTextBlockContainer {
+        padding-right: 16px !important;
+        padding-left: 16px !important;
+      }
+
+      .mceBlockContainerE2E {
+        padding-right: 0px;
+        padding-left: 0px;
+      }
+
+      .mceSpacing-24 {
+        padding-right: 16px !important;
+        padding-left: 16px !important;
+      }
+
+      .mceImage,
+      .mceLogo {
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      .mceFooterSection .mceText,
+      .mceFooterSection .mceText p {
+        font-size: 16px !important;
+        line-height: 140% !important;
+      }
+    }
+
+    div[contenteditable="true"] {
+      outline: 0;
+    }
+
+    .ProseMirror h1.empty-node:only-child::before,
+    .ProseMirror h2.empty-node:only-child::before,
+    .ProseMirror h3.empty-node:only-child::before,
+    .ProseMirror h4.empty-node:only-child::before {
+      content: 'Heading';
+    }
+
+    .ProseMirror p.empty-node:only-child::before,
+    .ProseMirror:empty::before {
+      content: 'Start typing...';
+    }
+
+    .mceImageBorder {
+      display: inline-block;
+    }
+
+    .mceImageBorder img {
+      border: 0 !important;
+    }
+
+    body,
+    #bodyTable {
+      background-color: rgb(244, 244, 244);
+    }
+
+    .mceText,
+    .mceLabel {
+      font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+    }
+
+    .mceText,
+    .mceLabel {
+      color: rgb(77, 34, 46);
+    }
+
+    .mceText h1 {
+      margin-bottom: 0px;
+    }
+
+    .mceText p {
+      margin-bottom: 0px;
+    }
+
+    .mceText label {
+      margin-bottom: 0px;
+    }
+
+    .mceText input {
+      margin-bottom: 0px;
+    }
+
+    .mceSpacing-12 .mceInput+.mceErrorMessage {
+      margin-top: -6px;
+    }
+
+    .mceText h1 {
+      margin-bottom: 0px;
+    }
+
+    .mceText p {
+      margin-bottom: 0px;
+    }
+
+    .mceText label {
+      margin-bottom: 0px;
+    }
+
+    .mceText input {
+      margin-bottom: 0px;
+    }
+
+    .mceSpacing-24 .mceInput+.mceErrorMessage {
+      margin-top: -12px;
+    }
+
+    .mceInput {
+      background-color: transparent;
+      border: 2px solid rgb(208, 208, 208);
+      width: 60%;
+      color: rgb(77, 77, 77);
+      display: block;
+    }
+
+    .mceInput[type="radio"],
+    .mceInput[type="checkbox"] {
+      float: left;
+      margin-right: 12px;
+      display: inline;
+      width: auto !important;
+    }
+
+    .mceLabel>.mceInput {
+      margin-bottom: 0px;
+      margin-top: 2px;
+    }
+
+    .mceLabel {
+      display: block;
+    }
+
+    .mceText p {
+      color: rgb(77, 34, 46);
+      font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+      font-size: 16px;
+      font-weight: normal;
+      line-height: 150%;
+      text-align: center;
+      direction: ltr;
+    }
+
+    .mceText h1 {
+      color: rgb(0, 0, 0);
+      font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+      font-size: 31px;
+      font-weight: bold;
+      line-height: 150%;
+      text-align: center;
+      direction: ltr;
+    }
+
+    .mceText a {
+      color: rgb(0, 0, 0);
+      font-style: normal;
+      font-weight: normal;
+      text-decoration: underline;
+      direction: ltr;
+    }
+
+    @media only screen and (max-width: 480px) {
+      .mceText p {
+        font-size: 16px !important;
+        line-height: 150% !important;
+      }
+    }
+
+    @media only screen and (max-width: 480px) {
+      .mceText h1 {
+        font-size: 31px !important;
+        line-height: 150% !important;
+      }
+    }
+
+    @media only screen and (max-width: 480px) {
+      .mceBlockContainer {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+      }
+    }
+
+    @media only screen and (max-width: 480px) {
+      .mceButtonContainer {}
+
+      .mceButtonLink {
+        padding: 18px 28px !important;
+        font-size: 16px !important;
+      }
+    }
+
+    @media only screen and (max-width: 480px) {
+      .mceDividerContainer {
+        width: 100% !important;
+      }
+    }
+
+    #dataBlockId-5 p,
+    #dataBlockId-5 h1,
+    #dataBlockId-5 h2,
+    #dataBlockId-5 h3,
+    #dataBlockId-5 h4,
+    #dataBlockId-5 ul {
+      text-align: center;
+    }
+  </style>
 </head>
 
-<body class="clean-body u_body" style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #f8cac6;color: #000000">
-  <!--[if IE]><div class="ie-container"><![endif]-->
-  <!--[if mso]><div class="mso-container"><![endif]-->
-  <table id="u_body" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 320px;Margin: 0 auto;background-color: #f8cac6;width:100%" cellpadding="0" cellspacing="0">
-  <tbody>
-  <tr style="vertical-align: top">
-    <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-    <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: #f8cac6;"><![endif]-->
-    
-  
-  
-<div class="u-row-container" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 710px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:710px;"><tr style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="236" style="width: 236px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 236.67px;display: table-cell;vertical-align: top;">
-  <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:times new roman,times;" align="left">
-        
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr>
-    <td style="padding-right: 0px;padding-left: 0px;" align="center">
-      <a href="https://book-brawl.vercel.app" target="_blank">
-      <img align="center" border="0" src="https://book-brawl.vercel.app/assets/logo-C7WeNO5g.png" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 63%;max-width: 136.5px;" width="136.5"/>
-      </a>
-    </td>
-  </tr>
-</table>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-<!--[if (mso)|(IE)]><td align="center" width="473" style="width: 473px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-66p67" style="max-width: 320px;min-width: 473.33px;display: table-cell;vertical-align: top;">
-  <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:57px 10px;font-family:times new roman,times;" align="left">
-        
-  <!--[if mso]><table width="100%"><tr><td><![endif]-->
-    <h1 style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: verdana,geneva; font-size: 28px; font-weight: 400;"><span><span><span><span><span><span><span><span><span><span><span><span><span><span><span><span><span><span style="text-decoration: underline;">Réinitialisation du mot de passe</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></h1>
-  <!--[if mso]></td></tr></table><![endif]-->
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
-
-
-  
-  
-<div class="u-row-container" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 710px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:710px;"><tr style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="710" style="width: 710px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-100" style="max-width: 320px;min-width: 710px;display: table-cell;vertical-align: top;">
-  <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:times new roman,times;" align="left">
-        
-  <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 5px dotted #b181e2;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-    <tbody>
-      <tr style="vertical-align: top">
-        <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top;font-size: 0px;line-height: 0px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-          <span>&#160;</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table id="u_content_text_1" style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:times new roman,times;" align="left">
-        
-  <div style="font-size: 16px; line-height: 140%; text-align: center; word-wrap: break-word;">
-    <p style="line-height: 140%;">Vous avez récemment demandé à réinitialiser votre mot de passe depuis <a rel="noopener" href="https://book-brawl.vercel.app" target="_blank">https://book-brawl.vercel.app</a></p>
-<p style="line-height: 140%;">Veuillez cliquer sur le bouton ci-dessous pour terminer la configuration de votre nouveau mot de passe.</p>
-  </div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
-
-
-  
-  
-<div class="u-row-container" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 710px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:710px;"><tr style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="710" style="width: 710px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-100" style="max-width: 320px;min-width: 710px;display: table-cell;vertical-align: top;">
-  <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:times new roman,times;" align="left">
-        
-  <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
-<div align="center">
-  <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:37px; v-text-anchor:middle; width:213px;" arcsize="11%"  stroke="f" fillcolor="#b181e2"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-    <a href="${resetPasswordLink}" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #b181e2; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
-      <span style="display:block;padding:10px 20px;line-height:120%;"><span style="line-height: 16.8px;">Réinitialiser mon mot de passe</span></span>
-    </a>
-    <!--[if mso]></center></v:roundrect><![endif]-->
-</div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:times new roman,times;" align="left">
-        
-  <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 5px dotted #b181e2;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-    <tbody>
-      <tr style="vertical-align: top">
-        <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top;font-size: 0px;line-height: 0px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-          <span>&#160;</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
-
-
-  
-  
-<div class="u-row-container" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 710px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:710px;"><tr style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="236" style="width: 236px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 236.67px;display: table-cell;vertical-align: top;">
-  <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table id="u_content_text_2" style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:times new roman,times;" align="left">
-        
-  <div style="font-family: andale mono,times; font-size: 12px; font-weight: 400; line-height: 140%; text-align: center; word-wrap: break-word;">
-    <p style="line-height: 140%;"><a rel="noopener" href="https://chat.whatsapp.com/CQNSY4nA3OO3ycC0S2hDuj" target="_blank">Rejoindre la communauté WhatsApp</a></p>
-  </div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-<!--[if (mso)|(IE)]><td align="center" width="473" style="width: 473px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-66p67" style="max-width: 320px;min-width: 473.33px;display: table-cell;vertical-align: top;">
-  <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table id="u_content_text_5" style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:times new roman,times;" align="left">
-        
-  <div style="font-family: andale mono,times; font-size: 12px; line-height: 140%; text-align: center; word-wrap: break-word;">
-    <p style="line-height: 140%;">Contactez nous : <a rel="noopener" href="mailto:bookbrawl.contact@gmail.com" target="_blank">bookbrawl.contact@gmail.com</a></p>
-  </div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table id="u_content_text_4" style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:times new roman,times;" align="left">
-        
-  <div style="font-family: andale mono,times; font-size: 11px; line-height: 140%; text-align: center; word-wrap: break-word;">
-    <p style="line-height: 140%;"><span style="line-height: 15.4px;"><a rel="noopener" href="https://book-brawl.vercel.app/assets/conditions-BI64dnVI.pdf" target="_blank">TERMS OR SERVICES</a></span></p>
-  </div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table style="font-family:times new roman,times;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:times new roman,times;" align="left">
-        
-  <div style="font-family: andale mono,times; font-size: 11px; line-height: 140%; text-align: center; word-wrap: break-word;">
-    <div>©BOOKBRAWL: ALL RIGHTS RESERVED</div>
-<div>
-<div>
-<div>FEED YOUR NEED TO READ</div>
-</div>
-</div>
-  </div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
-
-
-    <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
-    </td>
-  </tr>
-  </tbody>
-  </table>
-  <!--[if mso]></div><![endif]-->
-  <!--[if IE]></div><![endif]-->
+<body>
+  <!---->
+  <!--[if !gte mso 9]><!----><span class="mcnPreviewText"
+    style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;">Vous
+    avez fait une demande de réinitialisation</span><!--<![endif]-->
+  <!---->
+  <center>
+    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable"
+      style="background-color: rgb(244, 244, 244);">
+      <tbody>
+        <tr>
+          <td class="bodyCell" align="center" valign="top">
+            <table id="root" border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tbody data-block-id="9" class="mceWrapper">
+                <tr>
+                  <td align="center" valign="top" class="mceWrapperOuter">
+                    <!--[if (gte mso 9)|(IE)]><table align="center" border="0" cellspacing="0" cellpadding="0" width="660" style="width:660px;"><tr><td><![endif]-->
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:660px"
+                      role="presentation">
+                      <tbody>
+                        <tr>
+                          <td
+                            style="background-color:#ffffff;background-position:center;background-repeat:no-repeat;background-size:cover"
+                            class="mceWrapperInner" valign="top">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
+                              role="presentation" data-block-id="8">
+                              <tbody>
+                                <tr class="mceRow">
+                                  <td
+                                    style="background-position:center;background-repeat:no-repeat;background-size:cover"
+                                    valign="top">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                      <tbody>
+                                        <tr>
+                                          <td style="padding-top:0;padding-bottom:0" class="mceColumn"
+                                            data-block-id="-4" valign="top" colspan="12" width="100%">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                              role="presentation">
+                                              <tbody>
+                                                <tr>
+                                                  <td
+                                                    style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0"
+                                                    class="mceBlockContainer" align="center" valign="top"><a
+                                                      href="https://book-brawl.vercel.app/" style="display:block"
+                                                      target="_blank" data-block-id="11"><span class="mceImageBorder"
+                                                        style="border:0;border-radius:0;vertical-align:top;margin:0"><img
+                                                          width="660" height="auto"
+                                                          style="width:660px;height:auto;max-width:660px !important;border-radius:0;display:block"
+                                                          alt=""
+                                                          src="https://mcusercontent.com/d82671e0cb0299b9581802a77/images/7bf347ae-213d-34b6-b490-d77c30936ec6.jpeg"
+                                                          role="presentation" class="imageDropZone mceImage"></span></a>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0"
+                                                    valign="top">
+                                                    <table width="100%" style="border:0;border-collapse:separate">
+                                                      <tbody>
+                                                        <tr>
+                                                          <td
+                                                            style="padding-left:24px;padding-right:24px;padding-top:12px;padding-bottom:12px"
+                                                            class="mceTextBlockContainer">
+                                                            <div data-block-id="13" class="mceText" id="dataBlockId-13"
+                                                              style="width:100%">
+                                                              <h1 class="last-child"><span
+                                                                  style="color:#79313c;">Réinitialisation du mot de
+                                                                  passe</span></h1>
+                                                            </div>
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0"
+                                                    valign="top">
+                                                    <table width="100%" style="border:0;border-collapse:separate">
+                                                      <tbody>
+                                                        <tr>
+                                                          <td
+                                                            style="padding-left:18px;padding-right:18px;padding-top:12px;padding-bottom:12px"
+                                                            class="mceTextBlockContainer">
+                                                            <div data-block-id="3" class="mceText" id="dataBlockId-3"
+                                                              style="width:100%">
+                                                              <p style="text-align: left;"><span
+                                                                  style="color:#4d222e;">Hello &lt;&lt; Test First Name
+                                                                  &gt;&gt; !</span></p>
+                                                              <p style="text-align: justify;"><span
+                                                                  style="color:#4d222e;">Tu as fait une demande de
+                                                                  réinitialisation de mot de passe depuis </span><a
+                                                                  href="https://book-brawl.vercel.app/" target="_blank"
+                                                                  style="color: #4d222e;">BookBrawl - Website</a><span
+                                                                  style="color:#4d222e;">.</span></p>
+                                                              <p style="text-align: center;" class="last-child"><span
+                                                                  style="color:#4d222e;">Clique sur le bouton ci-dessous
+                                                                  pour terminer la configuration du nouveau mot de
+                                                                  passe</span> 👇</p>
+                                                            </div>
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="padding-top:4px;padding-bottom:12px;padding-right:24px;padding-left:24px"
+                                                    class="mceBlockContainer" align="center" valign="top">
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                      role="presentation" data-block-id="12" class="mceButtonContainer">
+                                                      <tbody>
+                                                        <tr><!--[if !mso]><!--></tr>
+                                                        <tr class="mceStandardButton">
+                                                          <td
+                                                            style="background-color:#ffe5d9;border-radius:0;text-align:center"
+                                                            class="mceButton" valign="top"><a href="" target="_blank"
+                                                              class="mceButtonLink"
+                                                              style="background-color:#ffe5d9;border-radius:0;border:1px solid #ffdbd8;color:#79313c;display:block;font-family:'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;font-size:16px;font-weight:bold;font-style:normal;padding:16px 28px;text-decoration:none;min-width:30px;text-align:center;direction:ltr;letter-spacing:0px">Modifier
+                                                              mon mot de passe</a></td>
+                                                        </tr>
+                                                        <tr><!--<![endif]--></tr>
+                                                        <tr>
+                                                          <!--[if mso]>
+<td align="center">
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+href=""
+style="v-text-anchor:middle; width:264.75px; height:52px;"
+arcsize="0%"
+strokecolor="#ffdbd8"
+strokeweight="1px"
+fillcolor="#ffe5d9">
+<v:stroke dashstyle="solid"/>
+<w:anchorlock />
+<center style="
+color: #79313c;
+display: block;
+font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
+font-size: 16;
+font-style: normal;
+font-weight: bold;
+letter-spacing: 0px;
+text-decoration: none;
+text-align: center;
+direction: ltr;"
+>
+Modifier mon mot de passe
+</center>
+</v:roundrect>
+</td>
+<![endif]-->
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0"
+                                                    valign="top">
+                                                    <table width="100%" style="border:0;border-collapse:separate">
+                                                      <tbody>
+                                                        <tr>
+                                                          <td
+                                                            style="padding-left:24px;padding-right:24px;padding-top:12px;padding-bottom:12px"
+                                                            class="mceTextBlockContainer">
+                                                            <div data-block-id="14" class="mceText" id="dataBlockId-14"
+                                                              style="width:100%">
+                                                              <p class="last-child"><span style="color:#9d8189;">Tu n’as
+                                                                  pas fait de demande ? Ignore simplement cet email
+                                                                  !</span></p>
+                                                            </div>
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="background-color:transparent;padding-top:20px;padding-bottom:20px;padding-right:12px;padding-left:12px"
+                                                    class="mceBlockContainer" valign="top">
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                      width="100%" style="background-color:transparent;width:100%"
+                                                      role="presentation" class="mceDividerContainer"
+                                                      data-block-id="16">
+                                                      <tbody>
+                                                        <tr>
+                                                          <td style="min-width:100%;border-top:1px dashed #9d8189"
+                                                            class="mceDividerBlock" valign="top"></td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0"
+                                                    valign="top">
+                                                    <table width="100%" style="border:0;border-collapse:separate">
+                                                      <tbody>
+                                                        <tr>
+                                                          <td
+                                                            style="padding-left:24px;padding-right:24px;padding-top:0;padding-bottom:0"
+                                                            class="mceTextBlockContainer">
+                                                            <div data-block-id="15" class="mceText" id="dataBlockId-15"
+                                                              style="width:100%">
+                                                              <p class="last-child"><strong><span
+                                                                    style="color:#79313c;"><span
+                                                                      style="font-size: 24px">Bonne lecture
+                                                                      !</span></span></strong><br><span
+                                                                  style="color:#4d222e;">L’équipe Bookbrawl</span></p>
+                                                            </div>
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="background-color:transparent;padding-top:20px;padding-bottom:20px;padding-right:16px;padding-left:16px"
+                                                    class="mceBlockContainer" valign="top">
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                      width="100%" style="background-color:transparent;width:100%"
+                                                      role="presentation" class="mceDividerContainer"
+                                                      data-block-id="30">
+                                                      <tbody>
+                                                        <tr>
+                                                          <td style="min-width:100%;border-top:1px solid #9d8189"
+                                                            class="mceDividerBlock" valign="top"></td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0"
+                                                    valign="top">
+                                                    <table width="100%" style="border:0;border-collapse:separate">
+                                                      <tbody>
+                                                        <tr>
+                                                          <td
+                                                            style="padding-left:24px;padding-right:24px;padding-top:12px;padding-bottom:3px"
+                                                            class="mceTextBlockContainer">
+                                                            <div data-block-id="18" class="mceText" id="dataBlockId-18"
+                                                              style="width:100%">
+                                                              <p style="text-align: center; direction: ltr;"
+                                                                class="last-child"><span style="color:#9d8189;"><span
+                                                                    style="font-size: 14px">Une question ? Contacte nous
+                                                                    à</span></span><strong><span
+                                                                    style="color:#9d8189;"><span
+                                                                      style="font-size: 14px">
+                                                                      bookbrawl.contact@gmail.com</span></span></strong><span
+                                                                  style="color:rgb(157, 129, 137);"><span
+                                                                    style="font-size: 14px"> OU
+                                                                  </span></span><strong><span
+                                                                    style="color:rgb(157, 129, 137);"><span
+                                                                      style="font-size: 14px">répond
+                                                                    </span></span></strong><span
+                                                                  style="color:rgb(157, 129, 137);"><span
+                                                                    style="font-size: 14px">à cet email</span></span>
+                                                              </p>
+                                                            </div>
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0"
+                                                    valign="top">
+                                                    <table width="100%" style="border:0;border-collapse:separate">
+                                                      <tbody>
+                                                        <tr>
+                                                          <td
+                                                            style="padding-left:24px;padding-right:24px;padding-top:0;padding-bottom:12px"
+                                                            class="mceTextBlockContainer">
+                                                            <div data-block-id="25" class="mceText" id="dataBlockId-25"
+                                                              style="width:100%">
+                                                              <p style="text-align: center;" class="last-child"><span
+                                                                  style="color:#9d8189;"><span
+                                                                    style="font-size: 14px">Rejoint la communauté
+                                                                    WhatsApp : </span></span><a
+                                                                  href="https://chat.whatsapp.com/CQNSY4nA3OO3ycC0S2hDuj"
+                                                                  target="_blank" style="color: #9d8189;"><strong><span
+                                                                      style="font-size: 14px">IMAGE</span></strong></a>
+                                                              </p>
+                                                            </div>
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    style="background-color:#f4f4f4;padding-top:8px;padding-bottom:8px;padding-right:8px;padding-left:8px"
+                                                    class="mceLayoutContainer" valign="top">
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                      width="100%" role="presentation" data-block-id="7"
+                                                      id="section_e07f8515b63dc8d27955c950784070bc"
+                                                      class="mceFooterSection">
+                                                      <tbody>
+                                                        <tr class="mceRow">
+                                                          <td
+                                                            style="background-color:#f4f4f4;background-position:center;background-repeat:no-repeat;background-size:cover;padding-top:0px;padding-bottom:0px"
+                                                            valign="top">
+                                                            <table border="0" cellpadding="0" cellspacing="12"
+                                                              width="100%" role="presentation">
+                                                              <tbody>
+                                                                <tr>
+                                                                  <td
+                                                                    style="padding-top:0;padding-bottom:0;margin-bottom:12px"
+                                                                    class="mceColumn" data-block-id="-3" valign="top"
+                                                                    colspan="12" width="100%">
+                                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                                      width="100%" role="presentation">
+                                                                      <tbody>
+                                                                        <tr>
+                                                                          <td
+                                                                            style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0"
+                                                                            align="center" valign="top">
+                                                                            <table width="100%"
+                                                                              style="border:0;border-collapse:separate">
+                                                                              <tbody>
+                                                                                <tr>
+                                                                                  <td
+                                                                                    style="padding-left:16px;padding-right:16px;padding-top:12px;padding-bottom:12px"
+                                                                                    class="mceTextBlockContainer">
+                                                                                    <div data-block-id="5"
+                                                                                      class="mceText" id="dataBlockId-5"
+                                                                                      style="display:inline-block;width:100%">
+                                                                                      <p class="last-child"><a
+                                                                                          href="https://mailchi.mp/38e0a080bca3/rinitialiser-votre-mot-de-passe?e=[UNIQID]"><span
+                                                                                            style="font-size: 11px">View
+                                                                                            email in
+                                                                                            browser</span></a><span
+                                                                                          style="font-size: 11px"><br>Copyright
+                                                                                          (C) 2024 BookBrawlTM. All
+                                                                                          rights reserved.<br></span><a
+                                                                                          href="https://app.us17.list-manage.com/profile?u=d82671e0cb0299b9581802a77&id=a6398fea74&e=[UNIQID]&c=045b5e8156"><span
+                                                                                            style="font-size: 11px">update
+                                                                                            your
+                                                                                            preferences</span></a><span
+                                                                                          style="font-size: 11px"> or
+                                                                                        </span><a
+                                                                                          href="https://app.us17.list-manage.com/unsubscribe?u=d82671e0cb0299b9581802a77&id=a6398fea74&t=b&e=[UNIQID]&c=045b5e8156"><span
+                                                                                            style="font-size: 11px">unsubscribe</span></a>
+                                                                                      </p>
+                                                                                    </div>
+                                                                                  </td>
+                                                                                </tr>
+                                                                              </tbody>
+                                                                            </table>
+                                                                          </td>
+                                                                        </tr>
+                                                                      </tbody>
+                                                                    </table>
+                                                                  </td>
+                                                                </tr>
+                                                              </tbody>
+                                                            </table>
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table><!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </center>
 </body>
 
 </html>
