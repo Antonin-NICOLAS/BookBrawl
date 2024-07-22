@@ -32,7 +32,7 @@
 
 .divlogo a {
   display: flex;
-  margin: 1px 2vh;
+  margin: 1px 0.5vw;
   height: 8vh;
   align-items: center;
   text-decoration: none;
@@ -50,7 +50,7 @@
   font-family: 'Courier New', Courier, monospace;
   color: var(--bg);
   font-size: calc(5px + 1.5vh + 1.5vw);
-  padding-left: calc(1.5vh + 1.5vw);
+  padding-left: calc(0.75vh + 0.75vw);
   margin: 0;
 }
 
@@ -115,7 +115,7 @@ ul li a i {
 
 .navbar-o-p {
   display: flex;
-  padding-right: 2vh;
+  padding-right: 0.5vw;
   text-decoration: none;
   align-items: center;
 }

@@ -12,6 +12,13 @@ const StarRating = ({ rating, setRating }) => {
     setHover(index + (percent > 0.5 ? 1 : 0.5));
   };
 
+  const handleClick = (e, index) => {
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percent = x / rect.width;
+    setRating(index + (percent > 0.5 ? 1 : 0.5));
+  };
+
   const containerStyle = {
     display: 'flex',
     alignItems: 'center',
@@ -35,8 +42,8 @@ const StarRating = ({ rating, setRating }) => {
         <div style={{ position: 'relative', display: 'inline-block' }}>
           {[...Array(5)].map((_, index) => {
             const value = index + 1;
-            const isHalfStar = (hover || rating) - index > 0 && (hover || rating) - index < 1;
-            const isFullStar = (hover || rating) >= value;
+            const isHalfStar = (hover || safeRating) - index > 0 && (hover || safeRating) - index < 1;
+            const isFullStar = (hover || safeRating) >= value;
 
             return (
               <span
@@ -44,7 +51,7 @@ const StarRating = ({ rating, setRating }) => {
                 onMouseEnter={(e) => handleMouseMove(e, index)}
                 onMouseMove={(e) => handleMouseMove(e, index)}
                 onMouseLeave={() => setHover(null)}
-                onClick={() => setRating(hover)}
+                onClick={(e) => handleClick(e, index)}
                 style={{ cursor: 'pointer' }}
               >
                 {isFullStar ? (
@@ -63,7 +70,7 @@ const StarRating = ({ rating, setRating }) => {
           min={0}
           max={5}
           step={0.1}
-          value={rating || ''}
+          value={safeRating}
           onChange={(e) => setRating(parseFloat(e.target.value))}
           style={{
             width: '150px',

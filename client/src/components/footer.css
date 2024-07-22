@@ -10,58 +10,64 @@ html[data-theme='dark'] {
 
 /*footer*/
 .footer {
-    height: auto;
-    width: 100%;
-    font-family: 'Arial', sans-serif;
-    color: #333;
-    margin-top: 20px;
-    position: sticky;
-    top: 100%;
-  }
-  .footer a{
-    text-decoration: none;
-    list-style: none;
-    color: #333;
-  }
-  
-  .top-footer {
-    width: 100%;
-    background-color: var(--green);
-    padding: calc(3px + 1vh);
-  }
-  
-  .footer-slogan {
-    width: 100%;
-    text-align: center;
-    background-color: var(--greenlight); 
-    padding: calc(3px + 1vh);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-  }
-  
-  .footer strong{
-    font-size: calc(6px + 2vh);
-    letter-spacing: 3px;
-  }
-  
-  
-  /*table*/
-  .footer table{
-    width: 100%;
-  }
-  
-  .footer .contact{
-    width: 60%;
-  }
-  .footer .whatsapp{
-    width: 15%;
-  }
-  .footer .whatsapp a i {
-    font-size: calc(5px + 2vw);
-  }
-  .footer .condition {
-    width: 25%;
-    text-align: center;
-  }
-  .copyright{
-    font-size: 10px;
-  }
+  background-color: var(--green);
+  width: 100%;
+  font-family: 'Arial', sans-serif;
+  font-size: calc(3px + 1.5vh);
+  color: #333;
+  margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+.footer a {
+  text-decoration: none;
+  list-style: none;
+  width: 100%;
+  color: #333;
+}
+
+.top-footer {
+  width: 100%;
+  background-color: var(--green);
+  padding: calc(3px + 1vh);
+}
+
+.footer-slogan {
+  width: 100%;
+  text-align: center;
+  background-color: var(--greenlight);
+  padding: calc(3px + 1vh);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer strong {
+  font-size: calc(6px + 2vh);
+  letter-spacing: 3px;
+}
+
+
+/*table*/
+.footer table {
+  width: 100%;
+}
+
+.footer .contact {
+  width: 60%;
+}
+
+.footer .whatsapp {
+  width: 15%;
+}
+
+.footer .whatsapp a i {
+  font-size: calc(10px + 2vw);
+  width: 100%;
+}
+
+.footer .condition {
+  width: 25%;
+  text-align: center;
+}
+
+.copyright {
+  font-size: 10px;
+}
