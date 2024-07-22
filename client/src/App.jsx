@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast'
-import { AnimatePresence, motion } from 'framer-motion';
 // Contexts
 import { UserContextProvider } from './context/userContext';
 import { LoadingProvider, useLoading } from './context/LoadingContext';
