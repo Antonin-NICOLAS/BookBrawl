@@ -46,19 +46,19 @@ function BookForm(props) {
 
     //fermer la popup
     const handleBookClose = () => {
-        //setBookData({
-        //    title: '',
-        //    author: '',
-        //    language: '',
-        //    themes: [],
-        //    wordsRead: '',
-        //    startDate: new Date().toISOString().split('T')[0],
-        //    endDate: new Date().toISOString().split('T')[0],
-        //    Readingstatus: 'Lu',
-        //    description: '',
-        //    rating: 0,
-        //    imageUrl: ''
-        //});
+        setBookData({
+            title: '',
+            author: '',
+            language: '',
+            themes: [],
+            wordsRead: '',
+            startDate: new Date().toISOString().split('T')[0],
+            endDate: new Date().toISOString().split('T')[0],
+            Readingstatus: 'Lu',
+            description: '',
+            rating: 0,
+            imageUrl: ''
+        });
         setExistingBookData(null);
         setClosing(true);
         setTimeout(() => {
@@ -66,6 +66,22 @@ function BookForm(props) {
             props.setTrigger(false);
         }, 300);
     }
+    //overlay click
+    const overlayBookRef = useRef(null);
+    const wrapperBookRef = useRef(null);
+    const handleClickOutside = (event) => {
+        if (overlayBookRef.current && wrapperBookRef.current && overlayBookRef.current.contains(event.target) && !wrapperBookRef.current.contains(event.target)) {
+            handleBookClose();
+        }
+    };
+    useEffect(() => {
+        if (props.trigger) {
+            document.addEventListener("click", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [props.trigger]);
 
     //gérer les valeurs du form
     //rating
@@ -182,12 +198,8 @@ function BookForm(props) {
         setImage(event.target.files[0]);
     };
 
-    console.log(BookData)
-    console.log(ExistingBookData)
-
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log("Form submitted");
 
         setIsLoading('addbook', true);
         const formData = new FormData();
@@ -195,6 +207,7 @@ function BookForm(props) {
             //vérifier le rating
             if (!ExistingBookData.rating) {
                 toast.error('Vous devez noter le livre');
+                setIsLoading('addbook', false);
                 return;
             }
             //pour la vérification du livre
@@ -213,11 +226,13 @@ function BookForm(props) {
             //vérifier les images
             if (!image && !BookData.imageUrl) {
                 toast.error('Vous devez fournir soit une image, soit une URL d\'image.');
+                setIsLoading('addbook', false);
                 return;
             }
             //vérifier le rating
             if (!BookData.rating) {
                 toast.error('Vous devez noter le livre');
+                setIsLoading('addbook', false);
                 return;
             }
             formData.append('title', BookData.title);
@@ -232,9 +247,9 @@ function BookForm(props) {
             formData.append('rating', BookData.rating);
             formData.append('isAdmin', isAdmin);
             if (image) {
-                formData.append('image', image); // Utiliser le fichier image téléchargé
+                formData.append('image', image);
             } else if (BookData.imageUrl) {
-                formData.append('imageUrl', BookData.imageUrl); // Utiliser l'URL de l'image
+                formData.append('imageUrl', BookData.imageUrl);
             }
         }
 
@@ -267,20 +282,6 @@ function BookForm(props) {
                 toast.success('Votre livre a été ajouté');
                 setImage(null);
                 handleBookClose();
-                setBookData({
-                    title: '',
-                    author: '',
-                    language: '',
-                    wordsRead: '',
-                    startDate: new Date().toISOString().split('T')[0],
-                    endDate: new Date().toISOString().split('T')[0],
-                    Readingstatus: 'Lu',
-                    themes: [],
-                    description: '',
-                    rating: 0,
-                    imageUrl: ''
-                });
-                setExistingBookData(null)
             }
         } catch (error) {
             console.error('Error adding book:', error);
@@ -289,23 +290,6 @@ function BookForm(props) {
             setIsLoading('addbook', false);
         }
     };
-
-    //overlay click
-    const overlayBookRef = useRef(null);
-    const wrapperBookRef = useRef(null);
-    const handleClickOutside = (event) => {
-        if (overlayBookRef.current && wrapperBookRef.current && overlayBookRef.current.contains(event.target) && !wrapperBookRef.current.contains(event.target)) {
-            handleBookClose();
-        }
-    };
-    useEffect(() => {
-        if (props.trigger) {
-            document.addEventListener("click", handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener("click", handleClickOutside);
-        };
-    }, [props.trigger]);
 
     const isNewBookLoading = loadingStates.addbook;
 
@@ -611,20 +595,22 @@ function BookForm(props) {
                                             type="number"
                                             id="wordsRead"
                                             name='wordsRead'
+                                            min="0"
                                             placeholder='Nombre de mots lus'
                                             value={BookData.wordsRead || ''}
                                             onChange={handleBookChange}
                                             required
                                         />
                                     </div>
+                                    <div className="sub-form-group">
+                                        <button type="button" onClick={() => setShowWordCountMenu(true)}>Calculer le nombre de mots</button>
+                                    </div>
                                     <WordsCalculator
                                         showWordCountMenu={showWordCountMenu}
                                         setShowWordCountMenu={setShowWordCountMenu}
                                         BookData={BookData}
-                                        setBookData={setBookData} />
-                                    <div className="sub-form-group">
-                                        <button type="button" onClick={() => setShowWordCountMenu(true)}>Calculer le nombre de mots</button>
-                                    </div>
+                                        setBookData={setBookData}
+                                    />
                                 </div>
                                 <div className="big-form-group">
                                     <div className="sub-form-group">

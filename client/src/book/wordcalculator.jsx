@@ -54,9 +54,9 @@ function WordsCalculator({ showWordCountMenu, setShowWordCountMenu, BookData, se
                     <input
                         type="number"
                         id="line1"
+                        min="0"
                         value={line1}
                         onChange={(e) => setLine1(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="form-group">
@@ -64,9 +64,9 @@ function WordsCalculator({ showWordCountMenu, setShowWordCountMenu, BookData, se
                     <input
                         type="number"
                         id="line2"
+                        min="0"
                         value={line2}
                         onChange={(e) => setLine2(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="form-group">
@@ -74,9 +74,9 @@ function WordsCalculator({ showWordCountMenu, setShowWordCountMenu, BookData, se
                     <input
                         type="number"
                         id="line3"
+                        min="0"
                         value={line3}
                         onChange={(e) => setLine3(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="form-group">
@@ -84,9 +84,9 @@ function WordsCalculator({ showWordCountMenu, setShowWordCountMenu, BookData, se
                     <input
                         type="number"
                         id="page1"
+                        min="0"
                         value={page1}
                         onChange={(e) => setPage1(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="form-group">
@@ -94,9 +94,9 @@ function WordsCalculator({ showWordCountMenu, setShowWordCountMenu, BookData, se
                     <input
                         type="number"
                         id="page2"
+                        min="0"
                         value={page2}
                         onChange={(e) => setPage2(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="form-group">
@@ -104,9 +104,9 @@ function WordsCalculator({ showWordCountMenu, setShowWordCountMenu, BookData, se
                     <input
                         type="number"
                         id="pages"
+                        min="0"
                         value={pages}
                         onChange={(e) => setPages(e.target.value)}
-                        required
                     />
                 </div>
                 <button className='submitwords' type="button" onClick={calculateWordCount}>Calculer</button>
