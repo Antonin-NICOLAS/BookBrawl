@@ -1,10 +1,6 @@
 {
     "version": 2,
     "rewrites": [
-        {
-            "source": "/images/(.*)",
-            "destination": "/assets/$1"
-          },
         { 
             "source": "/(.*)", 
             "destination": "/api" 
