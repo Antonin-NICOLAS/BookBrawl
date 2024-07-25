@@ -17,6 +17,7 @@ app.use(cors({credentials: true, origin: process.env.FRONTEND_SERVER}))
 //routes
 app.use('/', require('../routes/authroutes'))
 app.use('/user', require('../routes/userroutes'))
+app.use('/home', require('../routes/homeroutes'))
 app.use('/admin', require('../routes/adminroutes'))
 app.use('/books', require('../routes/bookroutes'))
 app.use('/rewards', require('../routes/rewardroutes'));
