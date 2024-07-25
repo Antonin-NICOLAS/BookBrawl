@@ -3,7 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { useContext } from "react";
 //context
 import { AdminContext } from "../context/adminContext";
-import { UserContext } from "../context/userContext"
+import { UserContext } from "../context/userContext";
+import { motion, AnimatePresence } from 'framer-motion'
 //CSS
 import './navbar.css';
 //images
@@ -74,9 +75,11 @@ function Navbar({ onLoginClick, onLoginClickWhenOnRegister }) {
     if (location.pathname.endsWith("/register")) {
       onLoginClickWhenOnRegister();
     }
-    else {
+  };
 
-    }
+  const navVariants = {
+    hidden: { opacity: 0, y: -50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
 
@@ -90,7 +93,12 @@ function Navbar({ onLoginClick, onLoginClickWhenOnRegister }) {
               <h1 className="Title">BookBrawl</h1>
             </a>
           </div>
-          <div className="navbar-o-p">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={navVariants}
+            className="navbar-o-p"
+          >
             <ul className="navbar_links">
               <li className="navbar_link first">
                 <Link to="/" onClick={() => setShowLinks(false)}><i className="fa-solid fa-house"></i>&nbsp;&nbsp;&nbsp;Accueil</Link>
@@ -120,7 +128,7 @@ function Navbar({ onLoginClick, onLoginClickWhenOnRegister }) {
             ) : (
               <button className="login" onClick={handleLoginClick}><i className="fa-solid fa-user"></i>Login</button>
             )}
-          </div>
+            </motion.div>
           <button className="burger" onClick={handleShowLinks}>
             <span className="bar"></span>
           </button>
