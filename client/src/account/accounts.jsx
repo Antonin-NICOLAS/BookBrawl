@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
-import defaultaccountimage from "../assets/account.jpeg";
 //images
+import defaultaccountimage from "../assets/account.jpeg";
 import FullStar from '../assets/starrating.png';
 import HalfStar from '../assets/halfstarrating.png';
 //Context
