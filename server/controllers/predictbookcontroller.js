@@ -1,6 +1,7 @@
 const Book = require('../models/book');
 const User = require('../models/user');
 const cloudinary = require('../config/cloudinary');
+const { checkAndAwardRewards } = require('./rewardscontroller');
 
 
 //Current user books
@@ -219,6 +220,7 @@ const markBookAsRead = async (req, res) => {
 
         await user.save();
         await book.save();
+        await checkAndAwardRewards(userId);
 
         res.status(200).json({ message: 'Livre marqué comme lu avec succès' });
     } catch (error) {
