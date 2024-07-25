@@ -31,12 +31,11 @@ const getUserFutureBooks = async (req, res) => {
 const deleteFutureUserBook = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { bookTitle } = req.query;
+        const { bookId } = req.params;
 
         // Supprimer le livre de toutes les listes de l'utilisateur
         const user = await User.findById(userId);
-        const book = await Book.findOne({ title: bookTitle }).exec();
-        const bookId = book._id
+        const book = await Book.findById(bookId);
 
         user.CurrentReader.pull(bookId);
         user.FutureReader.pull(bookId);
@@ -46,7 +45,7 @@ const deleteFutureUserBook = async (req, res) => {
         await user.save();
 
         // Supprimer les critiques de l'utilisateur sur ce livre
-
+        book.reviews = book.reviews.filter(review => !review.user.equals(userId));
         book.currentReaders.pull(userId);
         book.futureReaders.pull(userId);
 
@@ -77,7 +76,7 @@ const deleteFutureUserBook = async (req, res) => {
     }
 };
 
-//ajouter aux lectures futures d'un util les le livre consulté
+//ajouter aux lectures futures d'un util le livre consulté
 const addFutureReader = async (req, res) => {
     const userId = req.user.id;
     const { bookId } = req.params;
@@ -94,7 +93,7 @@ const addFutureReader = async (req, res) => {
         if (user.booksRead.includes(bookId) || book.pastReaders.includes(userId)) {
             return res.json({ error: 'Ce livre existe déjà parmis vos lectures' });
         }
-        
+
         if (user.FutureReader.includes(bookId) || book.futureReaders.includes(userId)) {
             return res.json({ error: 'Ce livre existe déjà parmis vos lectures futures' });
         }
@@ -114,6 +113,120 @@ const addFutureReader = async (req, res) => {
     }
 };
 
+//passer le livre des lectures futures aux lectures actuelles
+const markBookAsCurrent = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { bookId } = req.params;
+
+        // Trouver le livre et l'utilisateur
+        const book = await Book.findById(bookId);
+        const user = await User.findById(userId);
+
+        if (!book || !user) {
+            return res.status(404).json({ error: 'Livre ou utilisateur non trouvé' });
+        }
+
+        // Vérifier si le livre est bien dans les lectures futures
+        if (!user.FutureReader.includes(bookId)) {
+            return res.json({ error: 'Le livre n\'est pas dans vos lectures futures' });
+        }
+
+        // Passer le livre aux lectures actuelles
+        user.FutureReader.pull(bookId);
+        user.CurrentReader.push(bookId);
+
+        // Passer l'utilisateur de futureReaders à currentReaders
+        book.futureReaders.pull(userId);
+        book.currentReaders.push(userId);
+
+        await user.save();
+        await book.save();
+
+        res.status(200).json({ message: 'Livre marqué comme en cours de lecture avec succès' });
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour du statut de lecture :', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+};
+
+//livre terminée d'un util
+const markBookAsRead = async (req, res) => {
+    try {
+        const { startDate, endDate, description, rating, themes } = req.body;
+
+        console.log('Received data:', req.body);
+
+        const parsedThemes = themes ? JSON.parse(themes) : [];
+
+        const userId = req.user.id;
+        const { bookId } = req.params;
+
+        console.log(description, rating, startDate, endDate, parsedThemes);
+
+        // Trouver le livre et l'utilisateur
+        const book = await Book.findById(bookId);
+        const user = await User.findById(userId);
+
+        if (!book || !user) {
+            return res.status(404).json({ error: 'Livre ou utilisateur non trouvé' });
+        }
+
+        // Vérifier si le livre est bien dans les lectures actuelles
+        if (!user.CurrentReader.includes(bookId)) {
+            return res.json({ error: 'Le livre n\'est pas dans vos lectures actuelles' });
+        }
+
+        // Vérifier les dates
+        if (startDate > endDate) {
+            return res.json({ error: "La date de début doit être avant celle de fin" });
+        }
+
+        // Trouver la revue existante de l'utilisateur pour ce livre
+        const existingReview = book.reviews.find(review => review.user.toString() === userId);
+
+        if (existingReview) {
+            // Mettre à jour la revue existante
+            existingReview.description = description;
+            existingReview.rating = rating;
+            existingReview.startDate = startDate;
+            existingReview.endDate = endDate;
+        } else {
+            // Ajouter une nouvelle revue si elle n'existe pas
+            book.reviews.push({
+                user: userId,
+                description,
+                rating,
+                startDate,
+                endDate,
+            });
+        }
+
+        // Ajouter les thèmes s'ils n'existent pas encore
+        if (parsedThemes && parsedThemes.length > 0 && book.themes.length === 0) {
+            book.themes = parsedThemes;
+        }
+
+        // Passer le livre aux lectures terminées
+        user.CurrentReader.pull(bookId);
+        user.booksRead.push(bookId); // Ajouter aux livres lus
+        user.futureWordsRead -= book.wordsRead;
+        user.wordsRead += book.wordsRead;
+
+        // Passer l'utilisateur de currentReaders à pastReaders
+        book.currentReaders.pull(userId);
+        book.pastReaders.push(userId);
+
+        await user.save();
+        await book.save();
+
+        res.status(200).json({ message: 'Livre marqué comme lu avec succès' });
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour du statut de lecture :', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+};
+
 //récupérer le statut du livre consulté pour l'util connecté
 const getFutureStatus = async (req, res) => {
     const userId = req.user.id;
@@ -130,10 +243,10 @@ const getFutureStatus = async (req, res) => {
         const futureReading = book.futureReaders.find(reader => reader.id.toString() === userId);
 
         if (futureReading) {
-            res.status(200).json({ message: 'Livre trouvé parmi les lectures futures'});
+            res.status(200).json({ message: 'Livre trouvé parmi les lectures futures' });
         }
         else {
-            res.json({error: 'livre non trouvé'})
+            res.json({ error: 'livre non trouvé' })
         }
     } catch (error) {
         console.error('Erreur lors de la vérification des lectures futures de l\'utilisateur :', error);
@@ -156,10 +269,10 @@ const getCurrentStatus = async (req, res) => {
         const currentReading = book.currentReaders.find(reader => reader.id.toString() === userId);
 
         if (currentReading) {
-            res.status(200).json({ message: 'Livre trouvé parmi les lectures actuelles'});
+            res.status(200).json({ message: 'Livre trouvé parmi les lectures actuelles' });
         }
         else {
-            res.json({error: 'livre non trouvé'})
+            res.json({ error: 'livre non trouvé' })
         }
     } catch (error) {
         console.error('Erreur lors de la vérification des lectures actuelles de l\'utilisateur :', error);
@@ -167,4 +280,4 @@ const getCurrentStatus = async (req, res) => {
     }
 };
 
-module.exports = { getUserCurrentBooks, getUserFutureBooks, deleteFutureUserBook, addFutureReader, getFutureStatus, getCurrentStatus };
+module.exports = { getUserCurrentBooks, getUserFutureBooks, deleteFutureUserBook, addFutureReader, markBookAsCurrent, markBookAsRead, getFutureStatus, getCurrentStatus };

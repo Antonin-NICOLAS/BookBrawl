@@ -259,6 +259,13 @@ const getBookById = async (req, res) => {
         bookData.currentReaders = bookData.currentReaders.filter(reader => reader._id.toString() !== userId);
         bookData.pastReaders = bookData.pastReaders.filter(reader => reader._id.toString() !== userId);
 
+        // Récupérer les dates prévues pour l'utilisateur actuel s'il est dans futureReaders {/*TODO il faut changer de place car les review de l'utilisateur sont filtrés pour récupérer la date de début et de fin}
+        const futureReading = book.futureReaders.find(reader => reader._id.toString() === userId);
+        if (futureReading) {
+            bookData.startDate = futureReading.startDate;
+            bookData.endDate = futureReading.endDate;
+        }
+
         res.status(200).json(bookData);
     } catch (error) {
         console.error('Erreur lors de la récupération des détails du livre :', error);
