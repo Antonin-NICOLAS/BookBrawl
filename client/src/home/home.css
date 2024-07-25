@@ -1,7 +1,73 @@
 iframe{
     width: 100%;
     height: calc(100vh - 8vh - 20px);
+    min-height: 800px;
     position: relative;
     z-index: 0;
     top: -30px;
+}
+
+/* table 10 recent books*/
+
+.last-read-books-table-container {
+    padding: 20px;
+    background-color: var(--bg);
+    color: var(--color-text-body);
+    border-radius: 8px;
+}
+
+.last-read-books-table-container a{
+    color: var(--color-text-body);
+    text-decoration: none;
+}
+
+.last-read-books-table-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--color-text-body);
+}
+
+.last-read-books-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.last-read-books-table th,
+.last-read-books-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.last-read-books-table th {
+    background-color: var(--navbar);
+    color: white;
+}
+
+.last-read-books-table tr:hover {
+    background-color: var(--1);
+}
+
+.book-image {
+    width: 50px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/*themes*/
+.last-read-books-table .themes{
+    width: 30%;
+}
+
+.last-read-books-table .themes ul{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.last-read-books-table .themes li{
+    margin: calc(3px + 1vh) calc(3px + 0.5vw);
+    padding: calc(2px + 0.5vh) calc(2px + 0.5vw);
+    border-radius: 10px;
 }
