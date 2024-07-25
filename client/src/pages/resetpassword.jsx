@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
+//Context
+import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-hot-toast';
 //css
 import './resetpassword.css';
+//LOADER//
+import LoadingAnimation from '../components/loader';
 
 function ResetPassword() {
+    //context
+    const { setIsLoading, loadingStates } = useLoading();
     const navigate = useNavigate();
-    const { id, token} = useParams();
-
+    //others
+    const { id, token } = useParams();
     const [PasswordData, setPasswordData] = useState({
         newPassword: '',
         confirmnewPassword: ''
@@ -38,6 +44,7 @@ function ResetPassword() {
     const handleChangePassword = async (event) => {
         event.preventDefault();
         const { newPassword } = PasswordData;
+        setIsLoading('resetforgotpassword', true);
         try {
             const response = await axios.post(
                 process.env.NODE_ENV === "production" ? `/api/change-forgot-password/${id}/${token}` : `/change-forgot-password/${id}/${token}`,
@@ -57,43 +64,51 @@ function ResetPassword() {
         } catch (error) {
             toast.error('Une erreur est survenue. Réessayez plus tard.');
             console.error('Error changing password:', error);
+        } finally {
+            setIsLoading('resetforgotpassword', false);
         }
     };
 
+    const isPasswordChanging = loadingStates.resetforgotpassword;
+
     return (
         <>
-            <div className="resetpassword-overlay">
-                <div className="resetpassword-wrapper">
-                    <div className="form-box-resetpassword">
-                        <h2>Changer de mot de passe</h2>
-                        <form onSubmit={handleChangePassword}>
-                            <div className="input-password-box">
-                                <input
-                                    type="password"
-                                    id="newpassword"
-                                    name="newPassword"
-                                    value={PasswordData.newPassword || ''}
-                                    onChange={handleNewPasswordChange}
-                                    required
-                                />
-                                <label htmlFor="newpassword">Nouveau mot de passe</label>
-                            </div>
-                            <div className="input-password-box">
-                                <input
-                                    type="password"
-                                    id="confirmnewpassword"
-                                    name="confirmnewPassword"
-                                    value={PasswordData.confirmnewPassword || ''}
-                                    onChange={handleNewPasswordChange}
-                                    required
-                                />
-                                <label htmlFor="confirmnewpassword">Confirmer le nouveau mot de passe</label>
-                            </div>
-                            <button type="submit" className="submit-reset">Changer le mot de passe</button>
-                        </form>
+            {isPasswordChanging ? (
+                <LoadingAnimation />
+            ) : (
+                <div className="resetpassword-overlay">
+                    <div className="resetpassword-wrapper">
+                        <div className="form-box-resetpassword">
+                            <h2>Changer de mot de passe</h2>
+                            <form onSubmit={handleChangePassword}>
+                                <div className="input-password-box">
+                                    <input
+                                        type="password"
+                                        id="newpassword"
+                                        name="newPassword"
+                                        value={PasswordData.newPassword || ''}
+                                        onChange={handleNewPasswordChange}
+                                        required
+                                    />
+                                    <label htmlFor="newpassword">Nouveau mot de passe</label>
+                                </div>
+                                <div className="input-password-box">
+                                    <input
+                                        type="password"
+                                        id="confirmnewpassword"
+                                        name="confirmnewPassword"
+                                        value={PasswordData.confirmnewPassword || ''}
+                                        onChange={handleNewPasswordChange}
+                                        required
+                                    />
+                                    <label htmlFor="confirmnewpassword">Confirmer le nouveau mot de passe</label>
+                                </div>
+                                <button type="submit" className="submit-reset">Changer le mot de passe</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </>
     );
 }

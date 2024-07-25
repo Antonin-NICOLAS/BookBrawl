@@ -1,13 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios'
-import { toast } from 'react-hot-toast'
 import conditions from '../assets/conditions.pdf'
-
-//css
+//Context
+import { UserContext } from '../context/userContext';
+import { useLoading } from '../context/LoadingContext';
+import { toast } from 'react-hot-toast'
+//CSS
 import './popup-login.css';
+//LOADER//
+import LoadingAnimation from '../components/loader';
 
 function LoginPopup(props) {
+    //Context
+    const { setIsLoading, loadingStates } = useLoading();
     const [closing, setClosing] = useState(false);
     const navigate = useNavigate();
 
@@ -92,7 +98,8 @@ function LoginPopup(props) {
     //register
     const handleRegister = async (event) => {
         event.preventDefault();
-        const { prenom, nom, email, password } = data
+        const { prenom, nom, email, password } = data;
+        setIsLoading('register', true);
         try {
             const { data } = await axios.post(process.env.NODE_ENV === "production" ? '/api/register' : '/register', {
                 prenom, nom, email, password,
@@ -113,13 +120,16 @@ function LoginPopup(props) {
         } catch (error) {
             console.log("erreur lors de l'inscription :", error)
             toast.error('Un problème est survenu. réessayez plus tard.')
+        } finally {
+            setIsLoading('register', false);
         }
     };
 
     //login
     const handleLogin = async (event) => {
         event.preventDefault();
-        const { email, password, stayLoggedIn } = loginData
+        const { email, password, stayLoggedIn } = loginData;
+        setIsLoading('login', true);
         try {
             const { data } = await axios.post(process.env.NODE_ENV === "production" ? '/api/login' : '/login', {
                 email, password, stayLoggedIn,
@@ -141,79 +151,88 @@ function LoginPopup(props) {
         } catch (error) {
             console.log("erreur lors de la connection :", error)
             toast.error('Un problème est survenu. réessayez plus tard.')
+        } finally {
+            setIsLoading('login', false);
         }
     };
 
+    const isuserLoading = loadingStates.login;
+    const isAccountCreating = loadingStates.register;
+
     return (props.trigger) ? (
         <>
+        {isuserLoading || isAccountCreating ? (
+            <LoadingAnimation/>
+        ) : (
             <div ref={overlayRef} className={`login-overlay ${closing ? "animate-popup-close" : "animate-popup"} ${props.formType === 'register' ? "active" : ""}`}>
-                <div ref={wrapperRef} className="wrapper">
-                    <span className="close-login" onClick={handleClose}><i className="fa-solid fa-xmark"></i></span>
-                    {props.formType === 'login' ? (
-                        <div className="form-box-login">
-                            <h2>Login</h2>
-                            <form onSubmit={handleLogin} method="POST">
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-signature"></i></span>
-                                    <input type="email" id="email" name="email" value={loginData.email || ''} onChange={handleLoginChange} required autoComplete="off" />
-                                    <label htmlFor="email">Email</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="password" name="password" value={loginData.password || ''} onChange={handleLoginChange} required autoComplete="current-password" />
-                                    <label htmlFor="password">Mot de passe</label> {/*TODO fonction oeil pour voir le mot de passe*/}
-                                </div>
-                                <div className="remember-forgot">
-                                    <label><input type="checkbox" name="stayLoggedIn" checked={loginData.stayLoggedIn} onChange={handleLoginChange} />Resté connecté</label>
-                                    <Link to="/forgot-password">J'ai oublié mon mot de passe</Link>
-                                </div>
-                                <button type="submit" className="submit-login">Login</button>
-                                <div className="login-register">
-                                    <p>Pas de compte ?&nbsp;&nbsp;&nbsp;<a onClick={registerLink} className="register">Créez en un</a></p>
-                                </div>
-                            </form>
-                        </div>
-                    ) : (
-                        <div className="form-box-register">
-                            <h2>Registration</h2>
-                            <form onSubmit={handleRegister} method="POST">
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-font"></i></span>
-                                    <input type="text" id="prenom" name="prenom" value={data.prenom || ''} onChange={handleRegisterChange} required autoComplete="off" />
-                                    <label htmlFor="prenom">Prénom</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-signature"></i></span>
-                                    <input type="text" id="nom" name="nom" value={data.nom || ''} onChange={handleRegisterChange} required autoComplete="off" />
-                                    <label htmlFor="nom">Nom</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-envelope"></i></span>
-                                    <input type="email" id="email" name="email" value={data.email || ''} onChange={handleRegisterChange} required autoComplete="off" />
-                                    <label htmlFor="email">Email</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="password" name="password" value={data.password || ''} onChange={handlePasswordChange} required autoComplete="off" />
-                                    <label htmlFor="password">Mot de passe</label>
-                                </div>
-                                <div className="input-box">
-                                    <span className="icon"><i className="fa-solid fa-key"></i></span>
-                                    <input type="password" id="confirm_password" name="confirmPassword" value={data.confirmPassword || ''} onChange={handlePasswordChange} required autoComplete="new-password" />
-                                    <label htmlFor="confirm_password">Confirmer mot de passe</label>
-                                </div>
-                                <div className="remember-forgot">
-                                    <label>&nbsp;&nbsp;<input type="checkbox" required /><a href={conditions} target="_blank">Accepter les conditions d'utilisation</a></label>
-                                </div>
-                                <button type="submit" className="submit-login">Register</button>
-                                <div className="login-register">
-                                    <p>Vous avez déjà un compte ?&nbsp;&nbsp;&nbsp;<a onClick={loginLink} className="login-link">Se connecter</a></p>
-                                </div>
-                            </form>
-                        </div>
-                    )}
-                </div>
+            <div ref={wrapperRef} className="wrapper">
+                <span className="close-login" onClick={handleClose}><i className="fa-solid fa-xmark"></i></span>
+                {props.formType === 'login' ? (
+                    <div className="form-box-login">
+                        <h2>Login</h2>
+                        <form onSubmit={handleLogin} method="POST">
+                            <div className="input-box">
+                                <span className="icon"><i className="fa-solid fa-signature"></i></span>
+                                <input type="email" id="email" name="email" value={loginData.email || ''} onChange={handleLoginChange} required autoComplete="off" />
+                                <label htmlFor="email">Email</label>
+                            </div>
+                            <div className="input-box">
+                                <span className="icon"><i className="fa-solid fa-key"></i></span>
+                                <input type="password" id="password" name="password" value={loginData.password || ''} onChange={handleLoginChange} required autoComplete="current-password" />
+                                <label htmlFor="password">Mot de passe</label> {/*TODO fonction oeil pour voir le mot de passe*/}
+                            </div>
+                            <div className="remember-forgot">
+                                <label><input type="checkbox" name="stayLoggedIn" checked={loginData.stayLoggedIn} onChange={handleLoginChange} />Resté connecté</label>
+                                <Link to="/forgot-password">J'ai oublié mon mot de passe</Link>
+                            </div>
+                            <button type="submit" className="submit-login">Login</button>
+                            <div className="login-register">
+                                <p>Pas de compte ?&nbsp;&nbsp;&nbsp;<a onClick={registerLink} className="register">Créez en un</a></p>
+                            </div>
+                        </form>
+                    </div>
+                ) : (
+                    <div className="form-box-register">
+                        <h2>Registration</h2>
+                        <form onSubmit={handleRegister} method="POST">
+                            <div className="input-box">
+                                <span className="icon"><i className="fa-solid fa-font"></i></span>
+                                <input type="text" id="prenom" name="prenom" value={data.prenom || ''} onChange={handleRegisterChange} required autoComplete="off" />
+                                <label htmlFor="prenom">Prénom</label>
+                            </div>
+                            <div className="input-box">
+                                <span className="icon"><i className="fa-solid fa-signature"></i></span>
+                                <input type="text" id="nom" name="nom" value={data.nom || ''} onChange={handleRegisterChange} required autoComplete="off" />
+                                <label htmlFor="nom">Nom</label>
+                            </div>
+                            <div className="input-box">
+                                <span className="icon"><i className="fa-solid fa-envelope"></i></span>
+                                <input type="email" id="email" name="email" value={data.email || ''} onChange={handleRegisterChange} required autoComplete="off" />
+                                <label htmlFor="email">Email</label>
+                            </div>
+                            <div className="input-box">
+                                <span className="icon"><i className="fa-solid fa-key"></i></span>
+                                <input type="password" id="password" name="password" value={data.password || ''} onChange={handlePasswordChange} required autoComplete="off" />
+                                <label htmlFor="password">Mot de passe</label>
+                            </div>
+                            <div className="input-box">
+                                <span className="icon"><i className="fa-solid fa-key"></i></span>
+                                <input type="password" id="confirm_password" name="confirmPassword" value={data.confirmPassword || ''} onChange={handlePasswordChange} required autoComplete="new-password" />
+                                <label htmlFor="confirm_password">Confirmer mot de passe</label>
+                            </div>
+                            <div className="remember-forgot">
+                                <label>&nbsp;&nbsp;<input type="checkbox" required /><a href={conditions} target="_blank">Accepter les conditions d'utilisation</a></label>
+                            </div>
+                            <button type="submit" className="submit-login">Register</button>
+                            <div className="login-register">
+                                <p>Vous avez déjà un compte ?&nbsp;&nbsp;&nbsp;<a onClick={loginLink} className="login-link">Se connecter</a></p>
+                            </div>
+                        </form>
+                    </div>
+                )}
             </div>
+        </div>
+        )}
         </>
     ) : "";
 }
