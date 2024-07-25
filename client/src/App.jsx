@@ -28,6 +28,7 @@ import Accounts from './account/accounts';
 //popups
 import BookPopup from './book/addbookform'
 import FutureBookPopup from './book/addfuturebookform'
+import BookReadPopup from './relative/markasread'
 //error
 import ErrorPage from './pages/error';
 //admin
@@ -44,6 +45,9 @@ export default function App() {
     const [formType, setFormType] = useState('login');
     //popup change password
     const [ButtonPasswordPopup, setButtonPasswordPopup] = useState(false);
+    //popup mark book as read
+    const [ButtonBookReadPopup, setButtonBookReadPopup] = useState(false);
+    const [bookIdForPopup, setBookIdForPopup] = useState(null);
     //popup future book
     const [ButtonFutureBookPopup, setButtonFutureBookPopup] = useState(false);
     //popup book
@@ -81,6 +85,20 @@ export default function App() {
         navigate(initialPath);
         setInitialPath(null);
     };
+    //popup mark as read
+    const handleReadBookClick = (bookId) => {
+        setBookIdForPopup(bookId);
+        setButtonBookReadPopup(true);
+        const currentPath = location.pathname === '/' ? '' : location.pathname;
+        setInitialPath(currentPath);
+        navigate(`/book/markasread/${bookId}`, { state: { background: location } });
+    };
+
+    const handlePopupBookReadClose = () => {
+        setButtonBookReadPopup(false);
+        navigate(initialPath);
+        setInitialPath(null);
+    }
 
     //popup past book
     const handleNewBookClick = () => {
@@ -100,7 +118,6 @@ export default function App() {
 
     //update books
     const handleBooksUpdate = () => {
-        // Vous pouvez déclencher les fetchs ici ou les passer comme props
         setUpdateBooks(false);
         setUpdateFavoriteBooks(false);
         setUpdateFutureBooks(false);
@@ -144,19 +161,11 @@ export default function App() {
                     <Navbar onLoginClick={handleLoginClick} onLoginClickWhenOnRegister={handleRegistrationClick} />
                     <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
                     <Routes location={background || location} key={location.pathname}>
-                        <Route exact path="/" element={
-                            <Home />
-                        }
-                        />
-                        <Route exact path="/ranking" element={
-                            <Classement />
-                        }
-                        />
-                        <Route path="/user/:userId" element={
-                            <UserDetails />
-                        }
-                        />
+                        <Route exact path="/" element={<Home />} />
+                        <Route exact path="/ranking" element={<Classement />} />
+                        <Route path="/user/:userId" element={<UserDetails />} />
                         <Route exact path="/books" element={
+
                             <Books onFutureBookClick={handleNewFutureBookClick}
                                 onBookClick={handleNewBookClick}
                                 shouldUpdateBooks={updateBooks}
@@ -164,40 +173,16 @@ export default function App() {
                                 shouldUpdateFutureBooks={updateFutureBooks}
                                 shouldUpdateCurrentBooks={updateCurrentBooks}
                                 onBooksUpdate={handleBooksUpdate} />
-                        }
-                        />
-                        <Route path="/book/:bookId" element={
-                            <BookDetails />
-                        }
-                        />
-                        <Route exact path="/news" element={
-                            <News />
-                        }
-                        />
-                        <Route path="/about" element={
-                            <APropos />
-                        }
-                        />
-                        <Route path="/accounts" element={
-                            <Accounts onPasswordClick={handlePasswordClick} />
-                        }
-                        />
-                        <Route path="/forgot-password" element={
-                            <ForgotPassword />
-                        }
-                        />
-                        <Route path="/reset-password/:id/:token" element={
-                            <ResetPassword />
-                        }
-                        />
-                        <Route path="*" element={
-                            <ErrorPage />
-                        }
-                        />
-                        <Route path="/admin" element={
-                            <AdminPage />
-                        }
-                        />
+
+                        } />
+                        <Route path="/book/:bookId" element={<BookDetails onReadClick={handleReadBookClick} />} />
+                        <Route exact path="/news" element={<News />} />
+                        <Route path="/about" element={<APropos />} />
+                        <Route path="/accounts" element={<Accounts onPasswordClick={handlePasswordClick} />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
+                        <Route path="*" element={<ErrorPage />} />
+                        <Route path="/admin" element={<AdminPage />} />
                         {/*redirects*/}
                         <Route path="/login" element={<Navigate to="/" replace />} />
                         <Route path="/register" element={<Navigate to="/" replace />} />
@@ -207,6 +192,7 @@ export default function App() {
                         <Route path="/books/register" element={<Navigate to="/books" replace />} />
                         <Route path="/books/addbook" element={<Navigate to="/books" replace />} />
                         <Route path="/books/addfuturebook" element={<Navigate to="/books" replace />} />
+                        <Route path="/book/markasread/:bookId" element={<Navigate to={`/book/${bookIdForPopup}`} replace />} />
                         <Route path="/news/login" element={<Navigate to="/news" replace />} />
                         <Route path="/news/register" element={<Navigate to="/news" replace />} />
                         <Route path="/about/login" element={<Navigate to="/about" replace />} />
@@ -231,6 +217,11 @@ export default function App() {
                     {ButtonPasswordPopup && (
                         <Routes>
                             <Route path="/accounts/changepassword" element={<PasswordPopup trigger={ButtonPasswordPopup} setTrigger={handlePopupPasswordClose} location={location} />} />
+                        </Routes>
+                    )}
+                    {ButtonBookReadPopup && (
+                        <Routes>
+                            <Route path="/book/markasread/:bookId" element={<BookReadPopup trigger={ButtonBookReadPopup} setTrigger={handlePopupBookReadClose} location={location} bookId={bookIdForPopup} />} />
                         </Routes>
                     )}
                     {ButtonBookPopup && (
