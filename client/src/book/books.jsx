@@ -144,11 +144,11 @@ const Books = ({ onFutureBookClick,
     };
 
     //supprimer un livre futur
-    const deleteFutureBook = async (bookTitle) => {
+    const deleteFutureBook = async (bookId) => {
         if (window.confirm("Voulez-vous vraiment supprimer ce livre ? Cette action est irréversible.")) {
             setIsLoading('futuredeletebook', true);
             try {
-                const response = await axios.get(process.env.NODE_ENV === "production" ? '/api/predict/delete' : '/predict/delete', { params: { bookTitle } });
+                const response = await axios.get(process.env.NODE_ENV === "production" ? `/api/predict/delete/${bookId}` : `/predict/delete/${bookId}` );
                 if (response.data.error) {
                     toast.error(response.data.error);
                 } else {
@@ -262,7 +262,7 @@ const Books = ({ onFutureBookClick,
                                 {CurrentBooks.length > 0 ? (
                                     CurrentBooks.map((book) => (
                                         <div key={book._id} className="book-item">
-                                            <button className="delete-button" onClick={() => deleteFutureBook(book.title)}>x</button>
+                                            <button className="delete-button" onClick={() => deleteFutureBook(book._id)}>x</button>
                                             <Link to={`/book/${book._id}`}>
                                                 <img src={book.image} alt={book.title} className="book-image" />
                                             </Link>
@@ -293,7 +293,7 @@ const Books = ({ onFutureBookClick,
                                 {Futurebooks.length > 0 ? (
                                     Futurebooks.map((book) => (
                                         <div key={book._id} className="book-item">
-                                            <button className="delete-button" onClick={() => deleteFutureBook(book.title)}><i className="fa-solid fa-xmark"></i></button>
+                                            <button className="delete-button" onClick={() => deleteFutureBook(book._id)}><i className="fa-solid fa-xmark"></i></button>
                                             <Link to={`/book/${book._id}`}>
                                                 <img src={book.image} alt={book.title} className="book-image" />
                                             </Link>
