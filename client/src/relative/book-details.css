@@ -269,3 +269,12 @@ html[data-theme='dark'] {
     padding: calc(2px + 1vh) calc(2px + 0.8vw);
     cursor: pointer;
 }
+.dangermodify{
+    margin-top: 20px;
+    border: 2px solid red;
+    border-radius: 10px;
+    background-color: transparent;
+    color: red;
+    padding: calc(2px + 1vh) calc(2px + 0.8vw);
+    cursor: pointer;
+}

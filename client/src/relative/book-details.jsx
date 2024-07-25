@@ -13,7 +13,7 @@ import './book-details.css'
 //LOADER//
 import LoadingAnimation from '../components/loader';
 
-const BookDetails = () => {
+const BookDetails = ({onReadClick}) => {
     //Context
     const navigate = useNavigate();
     const { user, isLoading } = useContext(UserContext);
@@ -66,7 +66,9 @@ const BookDetails = () => {
                 console.log(response.data.error);
             } else {
                 setReview(response.data);
-                setRead(true)
+                if (response.data.rating) {
+                    setRead(true);
+                }
             }
         } catch (error) {
             console.error('Error fetching your book review:', error);
@@ -128,15 +130,41 @@ const BookDetails = () => {
             setIsLoading('addToFutureReadings', false);
         }
     };
+
     //bouton ajouter aux lectures actuelles
+    const markAsCurrent = async () => {
+        setIsLoading('markascurrent', true);
+        try {
+            const response = await axios.post(process.env.NODE_ENV === "production" ? `/api/predict/${bookId}/markascurrent` : `/predict/${bookId}/markascurrent`);
+            if (response.data.error) {
+                toast.error(response.data.error);
+                console.log(response.data.error);
+            } else {
+                toast.success('Livre ajouté à vos lectures actuelles');
+                setToRead(false)
+                setCurrentRead(true)
+                fetchFutureBook();
+                fetchCurrentBook();
+            }
+        } catch (error) {
+            console.error('Error adding book to current readings:', error);
+            toast.error('Erreur lors de l\'ajout du livre à vos lectures actuelles');
+        } finally {
+            setIsLoading('markascurrent', false);
+        }
+    };
 
     //bouton ajouter aux livres lus
+          //ouvrir la popup
+  const handleReadClick = () => {
+    onReadClick(bookId);
+  };
 
     //delete
-    const deleteBook = async () => {
+    const deleteBook = async (bookTitle) => {
         setIsLoading('deletebook', true);
         try {
-            const response = await axios.get(process.env.NODE_ENV === "production" ? `/api/books/delete` : `/books/delete`);
+            const response = await axios.get(process.env.NODE_ENV === "production" ? `/api/books/delete` : `/books/delete`, { params: { bookTitle } });
             if (response.data.error) {
                 toast.error(response.data.error);
                 console.log(response.data.error);
@@ -144,6 +172,9 @@ const BookDetails = () => {
                 toast.success('Livre supprimé avec succès');
                 setRead(false)
                 fetchUserReview();
+                setTimeout(() => {
+                    window.location.href = '/books';
+                  }, 1000);
             }
         } catch (error) {
             console.error('Error deleting book from readings:', error);
@@ -156,7 +187,7 @@ const BookDetails = () => {
     const deleteFutureBook = async () => {
         setIsLoading('deletfuturebook', true);
         try {
-            const response = await axios.get(process.env.NODE_ENV === "production" ? `/api/predict/delete` : `/predict/delete`);
+            const response = await axios.get(process.env.NODE_ENV === "production" ? `/api/predict/delete/${bookId}` : `/predict/delete/${bookId}`);
             if (response.data.error) {
                 toast.error(response.data.error);
                 console.log(response.data.error);
@@ -192,16 +223,21 @@ const BookDetails = () => {
     };
 
     //average rating :
-    const calculateAverageRating = (reviews) => {
-        if (!reviews || reviews.length === 0) return 0;
-        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-        return totalRating / reviews.length;
+    const calculateAverageRating = (reviews = [], userReview = {}) => {
+        const allReviews = Array.isArray(reviews) ? [...reviews] : [];
+        if (userReview && userReview.rating) {
+            allReviews.push(userReview);
+        }
+        if (allReviews.length === 0) return 0;
+        const totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
+        return totalRating / allReviews.length;
     };
 
-    const averageRating = calculateAverageRating(book.reviews);
+    const averageRating = calculateAverageRating(book.reviews, review);
     const averageFullStars = Math.floor(averageRating);
     const averageHasHalfStar = averageRating % 1 !== 0;
 
+    //rating
     const rating = review.rating;
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
@@ -210,7 +246,11 @@ const BookDetails = () => {
     const isReviewLoading = loadingStates.review;
     const isCurrentLoading = loadingStates.currentbook;
     const isFutureLoading = loadingStates.futurebook;
+
     const isAddingToFutureReadings = loadingStates.addToFutureReadings;
+    const isMarkingAsCurrent = loadingStates.markascurrent;
+    const isMarkingAsRead = loadingStates.markasread;
+
     const isDeletingBook = loadingStates.deletebook;
     const isDeletingFutureBook = loadingStates.deletefuturebook;
 
@@ -299,12 +339,12 @@ const BookDetails = () => {
                                                     <p>
                                                         {review.rating}
                                                     </p>
-                                                    <button>Modifier votre appréciation</button>
+                                                    <button className='dangermodify'>Modifier mon appréciation</button> {/* TODO: faire ca*/}
                                                 </div>
                                             </div>
                                         </div>
                                     ) : (
-                                        isAddingToFutureReadings || isCurrentLoading || isFutureLoading || isDeletingFutureBook ?
+                                        isAddingToFutureReadings || isMarkingAsCurrent || isMarkingAsRead || isCurrentLoading || isFutureLoading || isDeletingFutureBook ?
                                             (
                                                 <LoadingAnimation />
                                             ) : (
@@ -318,13 +358,13 @@ const BookDetails = () => {
                                                     {currentRead === true && (
                                                         <>
                                                             <p>Ce livre fait partie de vos lectures actuelles, il faut le finir pour ajouter un avis.</p>
-                                                            <button className='addtobooksread'>J'ai fini le livre</button> {/*TODO avancer sur ca*/}
+                                                            <button className='addtobooksread' onClick={handleReadClick}>J'ai fini le livre</button> 
                                                         </>
                                                     )}
                                                     {toRead === true && (
                                                         <>
                                                             <p>Ce livre fait partie de vos lectures futures, il faut le commencer pour l'ajouter aux lectures actuelles.</p>
-                                                            <button className='addtocurrentbooks'>J'ai commencé le livre</button> {/*TODO avancer sur ca*/}
+                                                            <button className='addtocurrentbooks' onClick={markAsCurrent}>J'ai commencé le livre</button>
                                                         </>
                                                     )}
                                                 </>
@@ -348,7 +388,7 @@ const BookDetails = () => {
                                         </div>
                                     ))
                                 ) : (
-                                    <p>Pas de lecteur en ce moment.</p>
+                                    <p>Pas de lecteur en ce moment{currentRead && (' à part vous')}.</p>
                                 )}
                             </div>
                             <div className="futurereaders">
@@ -366,7 +406,7 @@ const BookDetails = () => {
                                         </div>
                                     ))
                                 ) : (
-                                    <p>Pas de futur lecteur.</p>
+                                    <p>Pas de futur lecteur{toRead && (' à part vous')}.</p>
                                 )}
                             </div>
                         </div>
@@ -381,7 +421,7 @@ const BookDetails = () => {
                                         <div key={review._id} className='pastreader-card'>
                                             <div className="card-left">
                                                 <div className="readeravatar">
-                                                <Link to={`/user/${review.user._id}`}><img src={review.user.avatar} alt={`${review.user.prenom} ${review.user.nom}`} /></Link>
+                                                    <Link to={`/user/${review.user._id}`}><img src={review.user.avatar} alt={`${review.user.prenom} ${review.user.nom}`} /></Link>
                                                 </div>
                                             </div>
                                             <div className="card-right">
@@ -417,10 +457,7 @@ const BookDetails = () => {
                         ) : (
                             <>
                                 {read && (
-                                    <>
-                                        <button className='dangerdelete'>Modifier mon appréciation</button> {/* TODO: faire ca également */}
-                                        <button className='dangerdelete' onClick={() => deleteBook()}>Supprimer de vos livres lus</button>
-                                    </>
+                                    <button className='dangerdelete' onClick={() => deleteBook(book.title)}>Supprimer de vos livres lus</button>
                                 )}
                                 {toRead && (
                                     <button className='dangerdelete' onClick={() => deleteFutureBook()}>Supprimer de vos livres futurs</button>
