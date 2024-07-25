@@ -80,6 +80,7 @@ html[data-theme='dark'] {
 
 .book-card .card-right .themes ul{
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
@@ -240,7 +241,8 @@ html[data-theme='dark'] {
 .pastreader-card .card-left img {
     clip-path: inset(0 0 0 0 round 20px);
     object-fit: cover;
-    height: calc(60px + 13vh - 6px - 2vh);
+    width: 100%;
+    height: calc(60px + 11vh - 6px);
 }
 
 .pastreader-card .rating{
