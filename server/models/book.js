@@ -9,26 +9,17 @@ const reviewSchema = new Schema({
     },
     description: {
         type: String,
-        required: true
     },
     rating: {
         type: Number,
-        required: true,
         min: 0,
         max: 5
     },
-    Readingstatus: {
-        type: String,
-        required: true,
-        enum: ['Lu', 'En train de lire', 'À lire']
-    },
     startDate: {
         type: Date,
-        required: true
     },
     endDate: {
         type: Date,
-        required: true
     },
 });
 
