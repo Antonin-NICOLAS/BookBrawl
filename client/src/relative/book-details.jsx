@@ -296,7 +296,7 @@ const BookDetails = ({onReadClick}) => {
                                                     );
                                                 })
                                             ) : (
-                                                <li>Pas de thèmes associé</li>
+                                                <li>Pas de thème associé</li>
                                             )}
                                         </ul>
                                     </div>
