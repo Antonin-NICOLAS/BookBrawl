@@ -182,7 +182,7 @@ function LoginPopup(props) {
                                 <label htmlFor="password">Mot de passe</label> {/*TODO fonction oeil pour voir le mot de passe*/}
                             </div>
                             <div className="remember-forgot">
-                                <label><input type="checkbox" name="stayLoggedIn" checked={loginData.stayLoggedIn} onChange={handleLoginChange} />Resté connecté</label>
+                                <label><input type="checkbox" name="stayLoggedIn" checked={loginData.stayLoggedIn} onChange={handleLoginChange} />Restez connecté</label>
                                 <Link to="/forgot-password">J'ai oublié mon mot de passe</Link>
                             </div>
                             <button type="submit" className="submit-login">Login</button>
