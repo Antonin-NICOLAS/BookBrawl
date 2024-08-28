@@ -29,6 +29,7 @@ import Accounts from './account/accounts';
 import BookPopup from './book/addbookform'
 import FutureBookPopup from './book/addfuturebookform'
 import BookReadPopup from './relative/markasread'
+import ModifyAppreciation from './relative/modifyappreciation'
 //error
 import ErrorPage from './pages/error';
 //admin
@@ -48,6 +49,9 @@ export default function App() {
     //popup mark book as read
     const [ButtonBookReadPopup, setButtonBookReadPopup] = useState(false);
     const [bookIdForPopup, setBookIdForPopup] = useState(null);
+    //popup modify appreciation
+    const [updateBook, setUpdateBook] = useState(false);
+    const [ButtonModifyAppreciationPopup, setButtonModifyAppreciationPopup] = useState(false);
     //popup future book
     const [ButtonFutureBookPopup, setButtonFutureBookPopup] = useState(false);
     //popup book
@@ -100,6 +104,22 @@ export default function App() {
         setInitialPath(null);
     }
 
+    //popup modify appreciation
+    const handleModifyAppreciationClick = (bookId) => {
+        setBookIdForPopup(bookId);
+        setButtonModifyAppreciationPopup(true);
+        const currentPath = location.pathname === '/' ? '' : location.pathname;
+        setInitialPath(currentPath);
+        navigate(`/book/modify/${bookId}`, { state: { background: location } });
+    };
+
+    const handlePopupModifyAppreciationClose = () => {
+        setButtonModifyAppreciationPopup(false);
+        navigate(initialPath);
+        setInitialPath(null);
+        setUpdateBook(true)
+    }
+
     //popup past book
     const handleNewBookClick = () => {
         setButtonBookPopup(true);
@@ -119,6 +139,7 @@ export default function App() {
     //update books
     const handleBooksUpdate = () => {
         setUpdateBooks(false);
+        setUpdateBook(false);
         setUpdateFavoriteBooks(false);
         setUpdateFutureBooks(false);
         setUpdateCurrentBooks(false);
@@ -175,7 +196,13 @@ export default function App() {
                                 onBooksUpdate={handleBooksUpdate} />
 
                         } />
-                        <Route path="/book/:bookId" element={<BookDetails onReadClick={handleReadBookClick} />} />
+                        <Route path="/book/:bookId" element={
+
+                            <BookDetails onReadClick={handleReadBookClick}
+                                onModifyClick={handleModifyAppreciationClick}
+                                shouldUpdateBook={updateBook}
+                                onBooksUpdate={handleBooksUpdate} />
+                        } />
                         <Route exact path="/news" element={<News />} />
                         <Route path="/about" element={<APropos />} />
                         <Route path="/accounts" element={<Accounts onPasswordClick={handlePasswordClick} />} />
@@ -192,6 +219,7 @@ export default function App() {
                         <Route path="/books/register" element={<Navigate to="/books" replace />} />
                         <Route path="/books/addbook" element={<Navigate to="/books" replace />} />
                         <Route path="/books/addfuturebook" element={<Navigate to="/books" replace />} />
+                        <Route path="/book/modify/:bookId" element={<Navigate to={`/book/${bookIdForPopup}`} replace />} />
                         <Route path="/book/markasread/:bookId" element={<Navigate to={`/book/${bookIdForPopup}`} replace />} />
                         <Route path="/news/login" element={<Navigate to="/news" replace />} />
                         <Route path="/news/register" element={<Navigate to="/news" replace />} />
@@ -222,6 +250,11 @@ export default function App() {
                     {ButtonBookReadPopup && (
                         <Routes>
                             <Route path="/book/markasread/:bookId" element={<BookReadPopup trigger={ButtonBookReadPopup} setTrigger={handlePopupBookReadClose} location={location} bookId={bookIdForPopup} />} />
+                        </Routes>
+                    )}
+                    {ButtonModifyAppreciationPopup && (
+                        <Routes>
+                            <Route path="/book/modify/:bookId" element={<ModifyAppreciation trigger={ButtonModifyAppreciationPopup} setTrigger={handlePopupModifyAppreciationClose} location={location} bookId={bookIdForPopup} />} />
                         </Routes>
                     )}
                     {ButtonBookPopup && (
