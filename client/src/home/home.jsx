@@ -52,7 +52,8 @@ function Home() {
     { value: 'Paranormal', label: '🧿 Paranormal', color: "#D44C47", backgroundcolor: "#FDEBEC90", backgroundcolorhover: "#FDEBEC", selectedcolor: "#FF7369" },
     { value: 'Romance', label: '❤️‍🔥 Romance', color: "#C14C8A", backgroundcolor: "#FAF1F590", backgroundcolorhover: "#FAF1F5", selectedcolor: "#E255A1" },
     { value: 'Philosophie', label: '🧐 Philosophie', color: "#337EA9", backgroundcolor: "#E7F3F890", backgroundcolorhover: "#E7F3F8", selectedcolor: "#529CCA" },
-    { value: 'Science-fiction', label: '👽 Science-fiction', color: "#CB912F", backgroundcolor: "#FBF3DB90", backgroundcolorhover: "#FBF3DB", selectedcolor: "#FFDC49" }
+    { value: 'Science-fiction', label: '👽 Science-fiction', color: "#CB912F", backgroundcolor: "#FBF3DB90", backgroundcolorhover: "#FBF3DB", selectedcolor: "#FFDC49" },
+    { value: 'Policier', label: '👮 Policier', color: "#9F6B53", backgroundcolor: "#F4EEEE90", backgroundcolorhover: "#F4EEEE", selectedcolor: "#937264" }
   ];
 
   const getThemeOption = (theme) => {
@@ -62,14 +63,16 @@ function Home() {
   return (
     <>
       <iframe
-        src="https://mwzqo4yepx20q3.embednotionpage.com/Book-Brawl-a8c34d21f72a4a9dbc73a4b1f7373c16?pvs=4"
+        src="https://o4gxyez9102nrm.embednotionpage.com/Book-Brawl-a8c34d21f72a4a9dbc73a4b1f7373c16?pvs=74"
       ></iframe>
-      <div className="last-read-books-table-container">
+      {user ? (
+        <div className="last-read-books-table-container">
         <h2>Derniers Livres Lus par la Communauté</h2>
         {recentbooks.length === 0 ? (
           <div className="no-books-message">Aucun livre récent trouvé.</div>
         ) : (
-          <table className="last-read-books-table">
+          <div className="last-read-table-container">
+            <table className="last-read-books-table">
             <thead>
               <tr>
                 <th>Image</th>
@@ -77,6 +80,7 @@ function Home() {
                 <th>Auteur</th>
                 <th>Langue</th>
                 <th>Thèmes</th>
+                <th>Lecteur</th>
                 <th>Note</th>
                 <th>Date de Fin</th>
               </tr>
@@ -105,16 +109,24 @@ function Home() {
                       );
                     })
                   ) : (
-                    <li>Pas de thèmes associé</li>
+                    <li>Pas de thème associé</li>
                   )}</ul></td>
+                  <td>{book.pastReaders[book.pastReaders.length - 1].prenom}</td>
                   <td>{book.reviews[book.reviews.length - 1].rating}</td>
                   <td>{new Date(book.reviews[book.reviews.length - 1].endDate).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
+      ) : (
+        <>
+        <h1>Derniers Livres Lus par la Communauté</h1>
+        <p>Veuillez vous connecter pour voir les livres.</p>
+        </>
+      )}
     </>
   );
 }

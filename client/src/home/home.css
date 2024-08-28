@@ -27,6 +27,13 @@ iframe{
     color: var(--color-text-body);
 }
 
+.last-read-table-container{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    white-space: nowrap
+}
+
 .last-read-books-table {
     width: 100%;
     border-collapse: collapse;
@@ -35,6 +42,7 @@ iframe{
 .last-read-books-table th,
 .last-read-books-table td {
     padding: 12px;
+    width: 100%;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
