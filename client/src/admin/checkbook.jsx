@@ -88,7 +88,7 @@ const AdminPage = () => {
       wordsRead: ''
     });
   }
-  
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -142,7 +142,7 @@ const AdminPage = () => {
               <div className='unverifiedbook' key={book._id} ref={el => bookRefs.current[book._id] = el}>
                 <table className="card-layout">
                   <tbody>
-                  <tr>
+                    <tr>
                       <th rowSpan="3"><img src={book.image} alt={book.title} /></th>
                       <th>Auteur</th>
                       <th>Nombre de mots</th>
@@ -153,7 +153,11 @@ const AdminPage = () => {
                       <td>{book.author}</td>
                       <td>{book.wordsRead}</td>
                       <td>{book.language}</td>
-                      <td>{book.pastReaders[0].prenom}</td>
+                      <td>
+                        {book.pastReaders.map(reader => (
+                          <p key={reader._id}>{reader.prenom}</p>
+                        ))}
+                      </td>
                     </tr>
                     <tr>
                       <td colSpan="2"><button onClick={() => handleEditClick(book._id)}>Éditer</button></td>
@@ -168,8 +172,8 @@ const AdminPage = () => {
       )}
       {selectedBook && (
         <div className='bookmodification'
-        ref={editFormRef} 
-        style={{ position: 'absolute', top: editFormPosition.top, left: editFormPosition.left, zIndex: 1000 }}>
+          ref={editFormRef}
+          style={{ position: 'absolute', top: editFormPosition.top, left: editFormPosition.left, zIndex: 1000 }}>
           <button className='closeform' onClick={() => CloseForm()}>X</button>
           <h2>Éditer le Livre</h2>
           <input
