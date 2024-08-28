@@ -106,6 +106,7 @@ function CPPopup(props) {
                             <h2>Changer le mot de passe</h2>
                             <form onSubmit={changePassword} method="POST">
                                 <div className="input-password-box">
+                                    <span className="icon"><i className="fa-solid fa-key"></i></span>
                                     <input
                                         type="password"
                                         id="oldpassword"
@@ -117,6 +118,7 @@ function CPPopup(props) {
                                     <label htmlFor="oldpassword">Ancien mot de passe</label> {/*TODO rajouter les icones*/}
                                 </div>
                                 <div className="input-password-box">
+                                    <span className="icon"><i className="fa-solid fa-lock"></i></span>
                                     <input
                                         type="password"
                                         id="newpassword"
@@ -128,6 +130,7 @@ function CPPopup(props) {
                                     <label htmlFor="newpassword">Nouveau mot de passe</label>
                                 </div>
                                 <div className="input-password-box">
+                                    <span className="icon"><i className="fa-solid fa-lock"></i></span>
                                     <input
                                         type="password"
                                         id="confirmnewpassword"
