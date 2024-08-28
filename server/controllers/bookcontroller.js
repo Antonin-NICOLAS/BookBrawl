@@ -136,7 +136,7 @@ const updateUserBook = async (req, res) => {
             book.author = author || book.author;
             book.language = language || book.language;
             book.wordsRead = wordsRead || book.wordsRead;
-            book.isVerified = false
+            book.isVerified = false;
 
             if (themes) {
                 book.themes = JSON.parse(themes);
@@ -154,35 +154,37 @@ const updateUserBook = async (req, res) => {
             }
 
             // Mise à jour de la critique si elle existe
-            if (review) {
-                review.description = description || review.description;
-                review.rating = rating !== undefined || NaN ? rating : review.rating;
-                review.startDate = startDate || review.startDate;
-                review.endDate = endDate || review.endDate;
+            review.description = description || review.description;
+            review.rating = rating !== undefined ? rating : review.rating;
+            review.startDate = startDate || review.startDate;
+            review.endDate = endDate || review.endDate;
+
+            // Conversion en nombre et validation de wordsRead
+            const parsedWordsRead = parseInt(wordsRead, 10);
+            if (!isNaN(parsedWordsRead) && book.wordsRead !== parsedWordsRead) {
+                user.wordsRead -= book.wordsRead;
+                user.wordsRead += parsedWordsRead;
+                book.wordsRead = parsedWordsRead;
+
+                await checkAndAwardRewards(userId);
+                await checkAndRevokeRewards(userId);
             }
 
-            // Mise à jour des mots de l'utilisateur + vérifier rewards
-            if (book.wordsRead !== wordsRead) {
-                user.wordsRead -= book.wordsRead;
-                user.wordsRead += wordsRead;
-                await checkAndAwardRewards(userId);
-                await checkAndRevokeRewards(userId)
-                await user.save();
-                await book.save();
-                return res.status(200).json({ book });
-            }
-            if (rating === '5') {
+            if (rating === '5' && !user.favoriteBooks.includes(book._id)) {
                 user.favoriteBooks.push(book._id);
             }
 
+            await user.save();
+            await book.save();
+            return res.status(200).json({ book });
         } else {
-            res.json({ error: "Vous n'êtes pas autorisé à modifier ce livre"})
+            return res.status(403).json({ error: "Vous n'êtes pas autorisé à modifier ce livre" });
         }
     } catch (error) {
         console.error("Erreur lors de la mise à jour du livre :", error);
         res.status(500).json({ error: "Erreur lors de la mise à jour du livre" });
-    };
-}
+    }
+};
 
 // Route pour récupérer les livres d'un utilisateur sauf les favoris car affichés par une autre fonction
 const getUserBooks = async (req, res) => {
