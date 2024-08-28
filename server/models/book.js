@@ -47,7 +47,7 @@ const bookSchema = new Schema({
     },
     themes: [{
         type: String,
-        enum: ['Action','Dystopie','Fantaisie','Fiction','Magie','Méditation', 'Young Adult','Paranormal','Philosophie','Romance','Science-fiction']
+        enum: ['Action','Dystopie','Fantaisie','Fiction','Magie','Méditation', 'Young Adult','Paranormal','Philosophie','Romance','Science-fiction', 'Policier']
     }],
     reviews: [reviewSchema],
     futureReaders: [{
