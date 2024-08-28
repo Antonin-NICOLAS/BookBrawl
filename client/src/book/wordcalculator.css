@@ -21,7 +21,7 @@
 
 /*wrapper*/
 .word-count-menu {
-    height: calc(100vh - 8vh - 80px);
+    height: fit-content;
     width: 100%;
     background-color: var(--title);
     opacity: 0.9;
