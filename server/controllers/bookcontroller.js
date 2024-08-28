@@ -11,7 +11,7 @@ const addUserBook = async (req, res) => {
         const userId = req.user.id;
 
         // Vérifier les dates si le statut de lecture est "Lu"
-        if (Readingstatus === 'Lu' && startDate > endDate) {
+        if (startDate > endDate) {
             return res.json({ error: "La date de début doit être avant celle de fin" })
         }
 
@@ -112,6 +112,77 @@ const addUserBook = async (req, res) => {
         res.status(500).json({ error: "Erreur lors de l'ajout du livre" });
     }
 };
+
+// Route pour mettre à jour un livre et sa critique
+const updateUserBook = async (req, res) => {
+    try {
+        const { bookId } = req.params;
+        const { title, author, language, wordsRead, startDate, endDate, description, rating, imageUrl, isAdmin, themes } = req.body;
+        const userId = req.user.id;
+        const user = await User.findById(userId);
+
+        // Trouver le livre par ID
+        const book = await Book.findById(bookId);
+        if (!book) {
+            return res.status(404).json({ error: "Livre non trouvé" });
+        }
+
+        // Vérifier si l'utilisateur a déjà une critique pour ce livre
+        const review = book.reviews.find(review => review.user.equals(userId));
+
+        // Mise à jour des informations du livre si l'utilisateur est créateur de la critique
+        if (review) {
+            book.title = title || book.title;
+            book.author = author || book.author;
+            book.language = language || book.language;
+            book.wordsRead = wordsRead || book.wordsRead;
+            book.isVerified = false
+
+            if (themes) {
+                book.themes = JSON.parse(themes);
+            }
+
+            // Mise à jour de l'image du livre
+            if (req.file) {
+                book.image = req.file.path;
+            } else if (imageUrl) {
+                const uploadedImage = await cloudinary.uploader.upload(imageUrl, {
+                    folder: 'books',
+                    public_id: slugify(title, { lower: true, strict: true })
+                });
+                book.image = uploadedImage.secure_url;
+            }
+
+            // Mise à jour de la critique si elle existe
+            if (review) {
+                review.description = description || review.description;
+                review.rating = rating !== undefined || NaN ? rating : review.rating;
+                review.startDate = startDate || review.startDate;
+                review.endDate = endDate || review.endDate;
+            }
+
+            // Mise à jour des mots de l'utilisateur + vérifier rewards
+            if (book.wordsRead !== wordsRead) {
+                user.wordsRead -= book.wordsRead;
+                user.wordsRead += wordsRead;
+                await checkAndAwardRewards(userId);
+                await checkAndRevokeRewards(userId)
+                await user.save();
+                await book.save();
+                return res.status(200).json({ book });
+            }
+            if (rating === '5') {
+                user.favoriteBooks.push(book._id);
+            }
+
+        } else {
+            res.json({ error: "Vous n'êtes pas autorisé à modifier ce livre"})
+        }
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour du livre :", error);
+        res.status(500).json({ error: "Erreur lors de la mise à jour du livre" });
+    };
+}
 
 // Route pour récupérer les livres d'un utilisateur sauf les favoris car affichés par une autre fonction
 const getUserBooks = async (req, res) => {
@@ -251,6 +322,13 @@ const getBookById = async (req, res) => {
 
         const bookData = book.toJSON();
 
+        // Récupérer les dates prévues pour l'utilisateur actuel s'il est dans futureReaders
+        const futureReading = book.reviews.find(review => review.user._id.toString() === userId);
+        if (futureReading) {
+            bookData.startDate = futureReading.startDate;
+            bookData.endDate = futureReading.endDate;
+        }
+
         // Filtrer les reviews de l'utilisateur connecté
         bookData.reviews = bookData.reviews.filter(review => review.user._id.toString() !== userId);
 
@@ -258,13 +336,6 @@ const getBookById = async (req, res) => {
         bookData.futureReaders = bookData.futureReaders.filter(reader => reader._id.toString() !== userId);
         bookData.currentReaders = bookData.currentReaders.filter(reader => reader._id.toString() !== userId);
         bookData.pastReaders = bookData.pastReaders.filter(reader => reader._id.toString() !== userId);
-
-        // Récupérer les dates prévues pour l'utilisateur actuel s'il est dans futureReaders {/*TODO il faut changer de place car les review de l'utilisateur sont filtrés pour récupérer la date de début et de fin}
-        const futureReading = book.futureReaders.find(reader => reader._id.toString() === userId);
-        if (futureReading) {
-            bookData.startDate = futureReading.startDate;
-            bookData.endDate = futureReading.endDate;
-        }
 
         res.status(200).json(bookData);
     } catch (error) {
@@ -329,4 +400,4 @@ const deleteUserBook = async (req, res) => {
 };
 
 
-module.exports = { addUserBook, getUserBooks, getUserRecentBooks, getUserFavoriteBooks, checkExistingBook, BookSuggestion, getBookById, deleteUserBook };
+module.exports = { addUserBook, updateUserBook, getUserBooks, getUserRecentBooks, getUserFavoriteBooks, checkExistingBook, BookSuggestion, getBookById, deleteUserBook };
