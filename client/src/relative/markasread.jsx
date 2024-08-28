@@ -116,10 +116,6 @@ function BookReadPopup(props) {
         setRating(newRating);
         setBookData({ ...BookData, rating: newRating });
     };
-    //themes
-    const handleThemeChange = (selectedOptions) => {
-        setNewThemes(selectedOptions.map(option => option.value));
-    };
     //gérer les dates
     const today = new Date().toISOString().split('T')[0];
     const minDate = '2024-07-01';
@@ -140,7 +136,8 @@ function BookReadPopup(props) {
         { value: 'Paranormal', label: '🧿 Paranormal', color: "#D44C47", backgroundcolor: "#FDEBEC90", backgroundcolorhover: "#FDEBEC", selectedcolor: "#FF7369" },
         { value: 'Romance', label: '❤️‍🔥 Romance', color: "#C14C8A", backgroundcolor: "#FAF1F590", backgroundcolorhover: "#FAF1F5", selectedcolor: "#E255A1" },
         { value: 'Philosophie', label: '🧐 Philosophie', color: "#337EA9", backgroundcolor: "#E7F3F890", backgroundcolorhover: "#E7F3F8", selectedcolor: "#529CCA" },
-        { value: 'Science-fiction', label: '👽 Science-fiction', color: "#CB912F", backgroundcolor: "#FBF3DB90", backgroundcolorhover: "#FBF3DB", selectedcolor: "#FFDC49" }
+        { value: 'Science-fiction', label: '👽 Science-fiction', color: "#CB912F", backgroundcolor: "#FBF3DB90", backgroundcolorhover: "#FBF3DB", selectedcolor: "#FFDC49" },
+        { value: 'Policier', label: '👮 Policier', color: "#9F6B53", backgroundcolor: "#F4EEEE90", backgroundcolorhover: "#F4EEEE", selectedcolor: "#937264" }
     ];
     const languageOptions = [
         { value: 'Français', label: 'Français', color: "#337EA9", backgroundcolor: "#E7F3F890", backgroundcolorhover: "#E7F3F8", selectedcolor: "#529CCA" },
@@ -156,6 +153,12 @@ function BookReadPopup(props) {
     
         if (!BookData.rating) {
             toast.error('Vous devez noter le livre');
+            setIsLoading('markasread', false);
+            return;
+        }
+
+        if (BookData.themes === 0) {
+            toast.error('Vous devez ajouter des thèmes au livre');
             setIsLoading('markasread', false);
             return;
         }
@@ -250,8 +253,12 @@ function BookReadPopup(props) {
                                     name="themes"
                                     placeholder="Sélectionnez un ou plusieurs thèmes"
                                     value={themeOptions.filter(option => BookData.themes.includes(option.value))}
-                                    onChange={handleThemeChange}
-                                    isDisabled={BookData.themes.length > 0}
+                                    onChange={(selectedOptions) => {
+                                        setBookData({
+                                            ...BookData,
+                                            themes: selectedOptions ? selectedOptions.map(option => option.value) : []
+                                        });
+                                    }}
                                     isMulti
                                     options={themeOptions}
                                     styles={{
