@@ -20,7 +20,6 @@ function BookReadPopup(props) {
     const [closing, setClosing] = useState(false);
     //form
     const [rating, setRating] = useState(0);
-    const [newThemes, setNewThemes] = useState([]);
     const [BookData, setBookData] = useState({
         title: '',
         author: '',
@@ -140,9 +139,10 @@ function BookReadPopup(props) {
         { value: 'Policier', label: '👮 Policier', color: "#9F6B53", backgroundcolor: "#F4EEEE90", backgroundcolorhover: "#F4EEEE", selectedcolor: "#937264" }
     ];
     const languageOptions = [
-        { value: 'Français', label: 'Français', color: "#337EA9", backgroundcolor: "#E7F3F890", backgroundcolorhover: "#E7F3F8", selectedcolor: "#529CCA" },
-        { value: 'Anglais', label: 'Anglais', color: "#C14C8A", backgroundcolor: "#FAF1F590", backgroundcolorhover: "#FAF1F5", selectedcolor: "#E255A1" },
-        { value: 'Espagnol', label: 'Espagnol', color: "#D44C47", backgroundcolor: "#FDEBEC90", backgroundcolorhover: "#FDEBEC", selectedcolor: "#FF7369" }
+        { value: 'Français', label: '🇫🇷 Français', color: "#337EA9", backgroundcolor: "#E7F3F890", backgroundcolorhover: "#E7F3F8", selectedcolor: "#529CCA" },
+        { value: 'Anglais', label: '🇬🇧 Anglais', color: "#C14C8A", backgroundcolor: "#FAF1F590", backgroundcolorhover: "#FAF1F5", selectedcolor: "#E255A1" },
+        { value: 'Espagnol', label: '🇪🇸 Espagnol', color: "#D44C47", backgroundcolor: "#FDEBEC90", backgroundcolorhover: "#FDEBEC", selectedcolor: "#FF7369" },
+        { value: 'Allemand', label: '🇩🇪 Allemand', color: "#D9730D", backgroundcolor: "#FAEBDD90", backgroundcolorhover: "#FAEBDD", selectedcolor: "#FFA344" }
     ];
 
     const handleSubmit = async (event) => {
@@ -167,14 +167,9 @@ function BookReadPopup(props) {
         formData.append('endDate', BookData.endDate);
         formData.append('description', BookData.description);
         formData.append('rating', BookData.rating);
-    
-        // Récupérer les thèmes si le livre n'en avait pas (créé dans le cadre d'une lecture future)
-        const themes = BookData.themes.length > 0 ? BookData.themes : newThemes;
-        formData.append('themes', JSON.stringify(themes));
-        console.log('FormData:', ...formData.entries());
+        formData.append('themes', JSON.stringify(BookData.themes));
     
         try {
-            console.log(props.bookId)
             const response = await axios.post(
                 process.env.NODE_ENV === "production" ? `/api/predict/${props.bookId}/markasread` : `/predict/${props.bookId}/markasread`,
                 formData,

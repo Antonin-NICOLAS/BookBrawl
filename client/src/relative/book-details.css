@@ -11,6 +11,7 @@ html[data-theme='dark'] {
     top: calc(8vh + 20px);
     background-color: var(--background);
     width: 100%;
+    height: fit-content;
 }
 
 .book-details-page {

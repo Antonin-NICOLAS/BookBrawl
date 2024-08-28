@@ -13,7 +13,7 @@ import './book-details.css'
 //LOADER//
 import LoadingAnimation from '../components/loader';
 
-const BookDetails = ({onReadClick}) => {
+const BookDetails = ({ onReadClick, onModifyClick, shouldUpdateBook, onBooksUpdate }) => {
     //Context
     const navigate = useNavigate();
     const { user, isLoading } = useContext(UserContext);
@@ -36,6 +36,14 @@ const BookDetails = ({onReadClick}) => {
             fetchCurrentBook();
         }
     }, [isLoading, user, bookId]);
+
+    //si on modifie l'appréciation --> changer les données du livre
+    useEffect(() => {
+        if (shouldUpdateBook) {
+            fetchBook();
+            onBooksUpdate();
+        }
+    }, [shouldUpdateBook, onBooksUpdate]);
 
 
     ///////start//////
@@ -154,11 +162,18 @@ const BookDetails = ({onReadClick}) => {
         }
     };
 
+    //bouton modifier appréciation
+    //ouvrir la popup
+    const ModifyReview = () => {
+        onModifyClick(bookId);
+    };
+
+
     //bouton ajouter aux livres lus
-          //ouvrir la popup
-  const handleReadClick = () => {
-    onReadClick(bookId);
-  };
+    //ouvrir la popup
+    const handleReadClick = () => {
+        onReadClick(bookId);
+    };
 
     //delete
     const deleteBook = async (bookTitle) => {
@@ -174,7 +189,7 @@ const BookDetails = ({onReadClick}) => {
                 fetchUserReview();
                 setTimeout(() => {
                     window.location.href = '/books';
-                  }, 1000);
+                }, 1000);
             }
         } catch (error) {
             console.error('Error deleting book from readings:', error);
@@ -251,6 +266,7 @@ const BookDetails = ({onReadClick}) => {
     const isAddingToFutureReadings = loadingStates.addToFutureReadings;
     const isMarkingAsCurrent = loadingStates.markascurrent;
     const isMarkingAsRead = loadingStates.markasread;
+    const isModifyingReview = loadingStates.modifyreview;
 
     const isDeletingBook = loadingStates.deletebook;
     const isDeletingFutureBook = loadingStates.deletefuturebook;
@@ -258,7 +274,7 @@ const BookDetails = ({onReadClick}) => {
     return (
         <div className="backgroundoverlay">
             <div className="book-details-page">
-                {isBookLoading ? (
+                {isBookLoading || isModifyingReview ? (
                     <LoadingAnimation />
                 ) : (
                     <>
@@ -340,12 +356,12 @@ const BookDetails = ({onReadClick}) => {
                                                     <p>
                                                         {review.rating}
                                                     </p>
-                                                    <button className='dangermodify'>Modifier mon appréciation</button> {/* TODO: faire ca*/}
+                                                    <button className='dangermodify' onClick={ModifyReview}>Modifier mon appréciation</button> {/* TODO: faire ca*/}
                                                 </div>
                                             </div>
                                         </div>
                                     ) : (
-                                        isAddingToFutureReadings || isMarkingAsCurrent || isMarkingAsRead || isCurrentLoading || isFutureLoading || isDeletingFutureBook ?
+                                        isAddingToFutureReadings || isMarkingAsCurrent || isMarkingAsRead || isCurrentLoading || isFutureLoading || isDeletingFutureBook || isModifyingReview ?
                                             (
                                                 <LoadingAnimation />
                                             ) : (
@@ -359,7 +375,7 @@ const BookDetails = ({onReadClick}) => {
                                                     {currentRead === true && (
                                                         <>
                                                             <p>Ce livre fait partie de vos lectures actuelles, il faut le finir pour ajouter un avis.</p>
-                                                            <button className='addtobooksread' onClick={handleReadClick}>J'ai fini le livre</button> 
+                                                            <button className='addtobooksread' onClick={handleReadClick}>J'ai fini le livre</button>
                                                         </>
                                                     )}
                                                     {toRead === true && (
