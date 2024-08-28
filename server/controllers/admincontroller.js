@@ -18,12 +18,19 @@ const checkAdmin = (req, res) => {
 // Récupérer les livres en attente de vérification
 const getUnverifiedBooks = async (req, res) => {
     try {
-        const books = await Book.find({ isVerified: false }).populate('pastReaders', 'prenom');
+        const books = await Book.find({ 
+            isVerified: false,
+            pastReaders: { $exists: true, $ne: [] } // Vérifie que pastReaders existe et n'est pas vide
+        }).populate('pastReaders', 'prenom');
+        
         res.status(200).json(books);
     } catch (error) {
+        console.error('Erreur lors de la récupération des livres en attente de vérification :', error);
         res.status(500).json({ error: 'Erreur lors de la récupération des livres en attente de vérification.' });
     }
 };
+
+module.exports = { getUnverifiedBooks };
 
 // Marquer un livre comme vérifié
 const verifyBook = async (req, res) => {

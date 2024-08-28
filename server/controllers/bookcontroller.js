@@ -50,7 +50,7 @@ const addUserBook = async (req, res) => {
                 language,
                 wordsRead,
                 image,
-                themes: Readingstatus === 'Lu' ? themes : [],
+                themes: Readingstatus === 'Lu' ? themes : themes || [],
                 isVerified: isAdmin === 'true' ? true : false,
                 reviews: Readingstatus === 'Lu' ? [{
                     user: userId,
