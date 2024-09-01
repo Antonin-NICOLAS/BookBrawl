@@ -188,6 +188,8 @@ html[data-theme='dark'] {
     background-color: var(--2);
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .currentreaders-card, .futurereaders-card{
     height: calc(40px + 10vh);
@@ -204,9 +206,10 @@ html[data-theme='dark'] {
 }
 
 .currentreaders-card img, .futurereaders-card img{
+    clip-path: inset(0 0 0 0 round 20px);
     object-fit: cover;
     width: 100%;
-    clip-path: inset(0 0 0 0 round 10px);
+    height: calc(9vh + 37px);
 }
 
 /*reviews - past*/

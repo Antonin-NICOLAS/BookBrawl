@@ -245,18 +245,23 @@ const BookDetails = ({ onReadClick, onModifyClick, shouldUpdateBook, onBooksUpda
             allReviews.push(userReview);
         }
         if (allReviews.length === 0) return 0;
+
         const totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
-        return totalRating / allReviews.length;
+        const average = totalRating / allReviews.length;
+
+        // Si le calcul produit NaN, retourne 0
+        return isNaN(average) ? 0 : average;
     };
 
     const averageRating = calculateAverageRating(book.reviews, review);
     const averageFullStars = Math.floor(averageRating);
     const averageHasHalfStar = averageRating % 1 !== 0;
 
-    //rating
-    const rating = review.rating;
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
+    // Vérifier le rating utilisateur aussi
+    const rating = review.rating ? 0 : review.rating;
+    const validRating = isNaN(rating) ? 0 : rating;
+    const fullStars = Math.floor(validRating);
+    const hasHalfStar = validRating % 1 !== 0;
 
     const isBookLoading = loadingStates.book;
     const isReviewLoading = loadingStates.review;
@@ -353,9 +358,7 @@ const BookDetails = ({ onReadClick, onModifyClick, shouldUpdateBook, onBooksUpda
                                                         <img key={i} src={FullStar} alt="full star" className="star-image" />
                                                     ))}
                                                     {hasHalfStar && <img src={HalfStar} alt="half star" className="star-image" />}
-                                                    <p>
-                                                        {review.rating}
-                                                    </p>
+                                                    <p>{validRating.toFixed(1)}</p>
                                                     <button className='dangermodify' onClick={ModifyReview}>Modifier mon appréciation</button> {/* TODO: faire ca*/}
                                                 </div>
                                             </div>
@@ -428,12 +431,13 @@ const BookDetails = ({ onReadClick, onModifyClick, shouldUpdateBook, onBooksUpda
                             </div>
                         </div>
                         <h3>Ce livre a été lu par :</h3>
-                        {book.reviews && book.reviews.length > 0 ? (
+                        {book.reviews.rating && book.reviews.length > 0 ? (
                             <div className='pastreaders'>
                                 {book.reviews.map(review => {
-                                    const readerrating = review.rating;
-                                    const readerfullStars = Math.floor(readerrating);
-                                    const readerhasHalfStar = readerrating % 1 !== 0;
+                                    const readerrating = review.rating ? 0 : review.rating;
+                                    const validReaderRating = isNaN(readerrating) ? 0 : readerrating;
+                                    const readerfullStars = Math.floor(validReaderRating);
+                                    const readerhasHalfStar = validReaderRating % 1 !== 0;
                                     return (
                                         <div key={review._id} className='pastreader-card'>
                                             <div className="card-left">
