@@ -221,25 +221,17 @@ label .imagebutton:hover {
 .account2 {
   display: flex;
 }
-.account2.medium .renderSection {
-  height: calc(200px + 32vh);
-}
-
-.account2.large .renderSection {
-  height: calc(240px + 40vh);
-}
-.account2.extralarge .renderSection {
-  height: calc(260px + 46vh);
-}
 
 .renderSection {
   background-color: var(--title);
   border-radius: 20px;
-  height: calc(51px + 30vh);
+  height: calc-size(auto);
+  min-height: calc(51px + 30vh);
   width: 52.5vw;
   display: flex;
   flex-direction: column;
-  transition: ease-in-out 0.5s;
+  transition: height 0.5s ease-in;
+  margin-bottom: calc(3px + 1.5vh);
 }
 
 /*navbar*/
@@ -347,7 +339,7 @@ label .imagebutton:hover {
   animation: avataropen 0.5s ease-in-out;
   transform: translateY(0px);
   width: 100%;
-  height: 20vh;
+  height: fit-content;
   opacity: 1;
 }
 
@@ -364,6 +356,11 @@ table.books-table *{
   margin-bottom: 0;
 }
 
+.recentbooklink {
+  display: inline-block;
+  height: 0;
+}
+
 /*largeur colonnes*/
 table.books-table .column1 {
   width: 25%;
@@ -373,10 +370,10 @@ table.books-table .column2{
 }
 /*images*/
 table.books-table .column1 img {
-  margin: calc(2px + 0.5vh) 2vh calc(2px + 0.5vh) 2vh;
-  height: 5vw;
+  height: 7vw;
+  width: auto;
   border-radius: 5px;
-  clip-path: inset(0% 10% 0% 10% round 10px);
+  clip-path: inset(0% 0% 0% 0% round 5px);
   object-fit: cover;
 }
 

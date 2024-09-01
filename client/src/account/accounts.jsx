@@ -9,6 +9,7 @@ import HalfStar from '../assets/halfstarrating.png';
 import { UserContext } from "../context/userContext";
 import { useLoading } from '../context/LoadingContext';
 import { toast } from "react-hot-toast";
+import { motion } from "framer-motion";
 //CSS
 import './accounts.css';
 //LOADER//
@@ -285,6 +286,12 @@ function Compte({ onPasswordClick }) {
     return date.toLocaleDateString('fr-FR', options);
   };
 
+  //animations
+  const menuanim = {
+    hidden: { opacity: 0, y: -50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  }
+
   const renderSection = () => {
     switch (activeSection) {
       case 'status':
@@ -331,59 +338,59 @@ function Compte({ onPasswordClick }) {
             )}
             <h3>Derniers livres lus</h3>
             {isRecentBooksLoading ? (
-                <LoadingAnimation />
+              <LoadingAnimation />
             ) : (
-                <table className="books-table">
-                    <tbody>
-                        {recentBooks.length > 0 ? (
-                            recentBooks.map((book) => {
-                                const rating = book.reviews[0].rating;
-                                const fullStars = Math.floor(rating);
-                                const hasHalfStar = rating % 1 !== 0;
+              <table className="books-table">
+                <tbody>
+                  {recentBooks.length > 0 ? (
+                    recentBooks.map((book) => {
+                      const rating = book.reviews[0].rating;
+                      const fullStars = Math.floor(rating);
+                      const hasHalfStar = rating % 1 !== 0;
 
-                                return (
-                                    <React.Fragment key={book._id}>
-                                        <tr>
-                                            <td className='column1' rowSpan="3">
-                                                <Link to={`/book/${book._id}`}>
-                                                    <img src={book.image} alt={book.title} className="book-image" />
-                                                </Link>
-                                            </td>
-                                            <td className="column2">
-                                                <p>
-                                                    <span>{book.title}</span>, {book.author}
-                                                </p>
-                                            </td>
-                                            <td className="column3">
-                                                <p>{formatDate(book.reviews[0].endDate)}</p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="column2">{book.wordsRead}</td>
-                                            <td className="column3" rowSpan="2">
-                                                <button>See more</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="column2 rating">
-                                                <div className="stars">
-                                                    {[...Array(fullStars)].map((_, i) => (
-                                                        <img key={i} src={FullStar} alt="full star" className="star-image" />
-                                                    ))}
-                                                    {hasHalfStar && <img src={HalfStar} alt="half star" className="star-image" />}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </React.Fragment>
-                                );
-                            })
-                        ) : (
-                            <tr>
-                                <td colSpan="3">Aucun livre récent disponible.</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                      return (
+                        <React.Fragment key={book._id}>
+                          <tr>
+                            <td className='column1' rowSpan="3">
+                              <Link to={`/book/${book._id}`} className="recentbooklink">
+                                <img src={book.image} alt={book.title} className="book-image" />
+                              </Link>
+                            </td>
+                            <td className="column2">
+                              <p>
+                                <span>{book.title}</span>, {book.author}
+                              </p>
+                            </td>
+                            <td className="column3">
+                              <p>{formatDate(book.reviews[0].endDate)}</p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="column2">{book.wordsRead}</td>
+                            <td className="column3" rowSpan="2">
+                              <button>See more</button>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="column2 rating">
+                              <div className="stars">
+                                {[...Array(fullStars)].map((_, i) => (
+                                  <img key={i} src={FullStar} alt="full star" className="star-image" />
+                                ))}
+                                {hasHalfStar && <img src={HalfStar} alt="half star" className="star-image" />}
+                              </div>
+                            </td>
+                          </tr>
+                        </React.Fragment>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="3">Aucun livre récent disponible.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             )}
           </div>
         );
@@ -391,7 +398,7 @@ function Compte({ onPasswordClick }) {
         return (
           <div className="rewards section-content">
             {isRewardsLoading ? (
-              <LoadingAnimation recentBooks={recentBooks} isLoading={isRecentBooksLoading}/>
+              <LoadingAnimation recentBooks={recentBooks} isLoading={isRecentBooksLoading} />
             ) : (
               <>
                 <div className="reward-category">
@@ -521,28 +528,43 @@ function Compte({ onPasswordClick }) {
             </div>
           </div>
         </div>
-        <div className={`account2 ${activeSection === 'words' && recentBooks.length > 1 ? 'large' : ''} ${activeSection === 'words' && recentBooks.length === 1 ? 'medium' : ''} ${activeSection === 'rewards' && rewards.length >= 2 ? 'extralarge' : ''} ${activeSection === 'rewards' && rewards.length === 1 ? 'large' : ''} ${activeSection === 'rewards' && rewards.length === 0 ? 'medium' : ''} ${activeSection === 'status' && showStatusForm ? 'large' : ''}`} >
+        <div className="account2" >
           <div className="renderSection">
-            <div className="accountnav">
-              <button onClick={() => setActiveSection('status')} className={activeSection === 'status' ? 'active' : ''}>
+            <motion.div
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1, transition: { duration: 0.5 } }}
+              className="accountnav">
+              <motion.button onClick={() => setActiveSection('status')}
+                initial="hidden"
+                animate="visible"
+                variants={menuanim}
+                className={activeSection === 'status' ? 'active' : ''}>
                 <span className="icon">
                   <i className="fa-solid fa-circle-user"></i>
                 </span>
                 <span className="text">Statut</span>
-              </button>
-              <button onClick={() => setActiveSection('words')} className={activeSection === 'words' ? 'active' : ''}>
+              </motion.button>
+              <motion.button onClick={() => setActiveSection('words')}
+                initial="hidden"
+                animate="visible"
+                variants={menuanim}
+                className={activeSection === 'words' ? 'active' : ''}>
                 <span className="icon">
                   <i className="fa-solid fa-chart-simple"></i>
                 </span>
                 <span className="text">Statistiques</span>
-              </button>
-              <button onClick={() => setActiveSection('rewards')} className={activeSection === 'rewards' ? 'active' : ''}>
+              </motion.button>
+              <motion.button onClick={() => setActiveSection('rewards')}
+                initial="hidden"
+                animate="visible"
+                variants={menuanim}
+                className={activeSection === 'rewards' ? 'active' : ''}>
                 <span className="icon">
                   <i className="fa-solid fa-award"></i>
                 </span>
                 <span className="text">Récompenses</span>
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
             {renderSection()}
           </div>
         </div>
