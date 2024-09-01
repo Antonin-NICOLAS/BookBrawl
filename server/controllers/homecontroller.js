@@ -15,6 +15,14 @@ const getLastReadBooks = async (req, res) => {
                 }
             },
             {
+                $lookup: {
+                    from: 'users', // Nom de la collection User
+                    localField: 'currentReaders', // Champ dans Book
+                    foreignField: '_id', // Champ correspondant dans User
+                    as: 'currentReadersInfo' // Alias pour les données peuplées
+                }
+            },
+            {
                 $group: {
                     _id: "$_id", // Regrouper par livre
                     title: { $first: "$title" },
@@ -26,6 +34,7 @@ const getLastReadBooks = async (req, res) => {
                     reviews: { $push: "$reviews" },
                     futureReaders: { $first: "$futureReaders" },
                     currentReaders: { $first: "$currentReaders" },
+                    currentReadersInfo: { $first: "$currentReadersInfo" },
                     pastReaders: { $first: "$pastReaders" },
                     pastReadersInfo: { $first: "$pastReadersInfo" }, // Inclure les infos des pastReaders
                     isVerified: { $first: "$isVerified" },
@@ -42,7 +51,16 @@ const getLastReadBooks = async (req, res) => {
                     themes: 1,
                     reviews: 1,
                     futureReaders: 1,
-                    currentReaders: 1,
+                    currentReaders: {
+                        $map: {
+                            input: "$currentReadersInfo",
+                            as: "currentReader",
+                            in: {
+                                _id: "$$currentReader._id",
+                                prenom: "$$currentReader.prenom"
+                            }
+                        }
+                    },
                     isVerified: 1,
                     pastReaders: {
                         $map: {
