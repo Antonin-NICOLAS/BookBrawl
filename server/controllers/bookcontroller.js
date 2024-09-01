@@ -130,13 +130,24 @@ const updateUserBook = async (req, res) => {
         // Vérifier si l'utilisateur a déjà une critique pour ce livre
         const review = book.reviews.find(review => review.user.equals(userId));
 
+        // Conversion en nombre et validation de wordsRead
+        const parsedWordsRead = parseInt(wordsRead, 10);
+        if (!isNaN(parsedWordsRead) && book.wordsRead !== parsedWordsRead) {
+            user.wordsRead -= book.wordsRead;
+            user.wordsRead += parsedWordsRead;
+            book.wordsRead = parsedWordsRead;
+
+            await checkAndAwardRewards(userId);
+            await checkAndRevokeRewards(userId);
+        }
+
         // Mise à jour des informations du livre si l'utilisateur est créateur de la critique
         if (review) {
             book.title = title || book.title;
             book.author = author || book.author;
             book.language = language || book.language;
             book.wordsRead = wordsRead || book.wordsRead;
-            book.isVerified = false;
+            book.isVerified = isAdmin === 'true' ? true : false;
 
             if (themes) {
                 book.themes = JSON.parse(themes);
@@ -158,17 +169,6 @@ const updateUserBook = async (req, res) => {
             review.rating = rating !== undefined ? rating : review.rating;
             review.startDate = startDate || review.startDate;
             review.endDate = endDate || review.endDate;
-
-            // Conversion en nombre et validation de wordsRead
-            const parsedWordsRead = parseInt(wordsRead, 10);
-            if (!isNaN(parsedWordsRead) && book.wordsRead !== parsedWordsRead) {
-                user.wordsRead -= book.wordsRead;
-                user.wordsRead += parsedWordsRead;
-                book.wordsRead = parsedWordsRead;
-
-                await checkAndAwardRewards(userId);
-                await checkAndRevokeRewards(userId);
-            }
 
             if (rating === '5' && !user.favoriteBooks.includes(book._id)) {
                 user.favoriteBooks.push(book._id);
