@@ -4,7 +4,7 @@ import { useContext } from "react";
 //context
 import { AdminContext } from "../context/adminContext";
 import { UserContext } from "../context/userContext";
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 //CSS
 import './navbar.css';
 //images
@@ -77,11 +77,6 @@ function Navbar({ onLoginClick, onLoginClickWhenOnRegister }) {
     }
   };
 
-  const navVariants = {
-    hidden: { opacity: 0, y: -50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
-
 
   return (
     <>
@@ -93,32 +88,47 @@ function Navbar({ onLoginClick, onLoginClickWhenOnRegister }) {
               <h1 className="Title">BookBrawl</h1>
             </a>
           </div>
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={navVariants}
+          <div
             className="navbar-o-p"
           >
             <ul className="navbar_links">
-              <li className="navbar_link first">
+              <motion.li
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.5 } }}
+                className="navbar_link first">
                 <Link to="/" onClick={() => setShowLinks(false)}><i className="fa-solid fa-house"></i>&nbsp;&nbsp;&nbsp;Accueil</Link>
-              </li>
-              <li className="navbar_link second">
+              </motion.li>
+              <motion.li
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.65 } }}
+                className="navbar_link second">
                 <Link to="/ranking" onClick={() => setShowLinks(false)}><i className="fa-solid fa-ranking-star"></i>&nbsp;&nbsp;&nbsp;Classement</Link>
-              </li>
-              <li className="navbar_link third">
+              </motion.li>
+              <motion.li
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.8 } }}
+                className="navbar_link third">
                 <Link to="/books" onClick={() => setShowLinks(false)}><i className="fa-solid fa-book"></i>&nbsp;&nbsp;&nbsp;Mes livres</Link>
-              </li>
-              <li className="navbar_link four">
+              </motion.li>
+              <motion.li
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.95 } }}
+                className="navbar_link four">
                 <Link to="/news" onClick={() => setShowLinks(false)}><i className="fa-solid fa-newspaper"></i>&nbsp;&nbsp;&nbsp;Actualités</Link>
-              </li>
-              <li className="navbar_link fifth">
+              </motion.li>
+              <motion.li
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 1.1 } }}
+                className="navbar_link fifth">
                 <Link to="/about" onClick={() => setShowLinks(false)}><i className="fa-solid fa-question"></i>&nbsp;&nbsp;&nbsp;À propos</Link>
-              </li>
+              </motion.li>
               {isAdmin && (
-                <li className="navbar_link sixth">
+                <motion.li
+                  initial={{ opacity: 0, y: -50 }}
+                  animate={{ opacity: 1, y: 0, transition: { duration: 1.25 } }}
+                  className="navbar_link sixth">
                   <Link to="/admin" onClick={() => setShowLinks(false)}><i className="fa-solid fa-user-shield"></i>&nbsp;&nbsp;&nbsp;Admin</Link>
-                </li>
+                </motion.li>
               )}
             </ul>
             <input type="checkbox" id="switch" checked={checked} onChange={handleChange} name="theme" />
@@ -128,7 +138,7 @@ function Navbar({ onLoginClick, onLoginClickWhenOnRegister }) {
             ) : (
               <button className="login" onClick={handleLoginClick}><i className="fa-solid fa-user"></i>Login</button>
             )}
-            </motion.div>
+          </div>
           <button className="burger" onClick={handleShowLinks}>
             <span className="bar"></span>
           </button>
