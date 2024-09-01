@@ -43,7 +43,7 @@ iframe{
 .last-read-books-table td {
     padding: 12px;
     width: 100%;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
@@ -62,19 +62,44 @@ iframe{
     border-radius: 4px;
 }
 
-/*themes*/
-.last-read-books-table .themes{
-    width: 30%;
+.last-read-books-table .column1{
+    width: fit-content;
+}
+.last-read-books-table .column2{
+    width: 12%;
 }
 
-.last-read-books-table .themes ul{
+.last-read-books-table .column3{
+    width: 12%;
+}
+.last-read-books-table .column4{
+    width: 10%;
+}
+.last-read-books-table .column6{
+    width: 15%;
+}
+.last-read-books-table-container .column6 a{
+    color: #0d105a;
+}
+
+.last-read-books-table .column7{
+    width: 5%;
+}
+
+
+/*column5*/
+.last-read-books-table .column5{
+    width: 40%;
+}
+
+.last-read-books-table .column5 ul{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
 
-.last-read-books-table .themes li{
+.last-read-books-table .column5 li{
     margin: calc(3px + 1vh) calc(3px + 0.5vw);
     padding: calc(2px + 0.5vh) calc(2px + 0.5vw);
     border-radius: 10px;

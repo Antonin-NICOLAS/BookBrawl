@@ -5,6 +5,8 @@ import axios from 'axios';
 import { UserContext } from '../context/userContext';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-hot-toast';
+//LOADER//
+import LoadingAnimation from '../components/loader';
 //CSS
 import './home.css'
 
@@ -60,6 +62,15 @@ function Home() {
     return themeOptions.find(option => option.value === theme);
   };
 
+  // Trier les livres par date de fin décroissante
+  const sortedBooks = recentbooks.sort((a, b) => {
+    const dateA = new Date(a.reviews[a.reviews.length - 1].endDate);
+    const dateB = new Date(b.reviews[b.reviews.length - 1].endDate);
+    return dateB - dateA; // Trier par date décroissante
+  });
+
+  const areRecentBooksLoading = loadingStates.recentbooks;
+
   return (
     <>
       <iframe
@@ -67,64 +78,69 @@ function Home() {
       ></iframe>
       {user ? (
         <div className="last-read-books-table-container">
-        <h2>Derniers Livres Lus par la Communauté</h2>
-        {recentbooks.length === 0 ? (
-          <div className="no-books-message">Aucun livre récent trouvé.</div>
-        ) : (
-          <div className="last-read-table-container">
-            <table className="last-read-books-table">
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>Langue</th>
-                <th>Thèmes</th>
-                <th>Lecteur</th>
-                <th>Note</th>
-                <th>Date de Fin</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentbooks.map(book => (
-                <tr key={book._id}>
-                  <td><Link to={`/book/${book._id}`}><img src={book.image} alt={book.title} className="book-image" /></Link></td>
-                  <td><Link to={`/book/${book._id}`}>{book.title}</Link></td>
-                  <td>{book.author}</td>
-                  <td>{book.language}</td>
-                  <td className="themes"><ul>{book.themes && book.themes.length > 0 ? (
-                    book.themes.map((theme, index) => {
-                      const themeOption = getThemeOption(theme);
-                      return (
-                        <li
-                          key={index}
-                          className='thème'
-                          style={{
-                            color: themeOption ? themeOption.color : 'inherit',
-                            backgroundColor: themeOption ? themeOption.backgroundcolor : 'inherit'
-                          }}
-                        >
-                          {themeOption.label}
-                        </li>
-                      );
-                    })
-                  ) : (
-                    <li>Pas de thème associé</li>
-                  )}</ul></td>
-                  <td>{book.pastReaders[book.pastReaders.length - 1].prenom}</td>
-                  <td>{book.reviews[book.reviews.length - 1].rating}</td>
-                  <td>{new Date(book.reviews[book.reviews.length - 1].endDate).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          </div>
-        )}
-      </div>
+          <h2>Derniers Livres Lus par la Communauté</h2>
+          {areRecentBooksLoading ? (
+            <LoadingAnimation />
+          ) : (
+            recentbooks.length === 0 ? (
+              <div className="no-books-message">Aucun livre récent trouvé.</div>
+            ) : (
+              <div className="last-read-table-container">
+                <table className="last-read-books-table">
+                  <thead>
+                    <tr>
+                      <th className="column1">Image</th>
+                      <th className="column2">Titre</th>
+                      <th className="column3">Auteur</th>
+                      <th className="column4">Langue</th>
+                      <th className="column5">Thèmes</th>
+                      <th className="column6">Lecteur</th>
+                      <th className="column7">Note</th>
+                      <th className="column8">Date de Fin</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedBooks.map(book => (
+                      <tr key={book._id}>
+                        <td className="column1"><Link to={`/book/${book._id}`}><img src={book.image} alt={book.title} className="book-image" /></Link></td>
+                        <td className="column2"><Link to={`/book/${book._id}`}>{book.title}</Link></td>
+                        <td className="column3">{book.author}</td>
+                        <td className="column4">{book.language}</td>
+                        <td className="column5"><ul>{book.themes && book.themes.length > 0 ? (
+                          book.themes.map((theme, index) => {
+                            const themeOption = getThemeOption(theme);
+                            return (
+                              <li
+                                key={index}
+                                className='thème'
+                                style={{
+                                  color: themeOption ? themeOption.color : 'inherit',
+                                  backgroundColor: themeOption ? themeOption.backgroundcolor : 'inherit'
+                                }}
+                              >
+                                {themeOption.label}
+                              </li>
+                            );
+                          })
+                        ) : (
+                          <li>Pas de thème associé</li>
+                        )}</ul></td>
+                        <td className="column6"><Link to={`/user/${book.pastReaders[book.pastReaders.length - 1]._id}`}>{book.pastReaders[book.pastReaders.length - 1].prenom}</Link></td>
+                        <td className="column7">{book.reviews[book.reviews.length - 1].rating}</td>
+                        <td className="column8">{new Date(book.reviews[book.reviews.length - 1].endDate).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+          )
+          }
+        </div>
       ) : (
         <>
-        <h1>Derniers Livres Lus par la Communauté</h1>
-        <p>Veuillez vous connecter pour voir les livres.</p>
+          <h1>Derniers Livres Lus par la Communauté</h1>
+          <p>Veuillez vous connecter pour voir les livres.</p>
         </>
       )}
     </>
