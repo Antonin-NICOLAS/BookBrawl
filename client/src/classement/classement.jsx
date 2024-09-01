@@ -5,6 +5,7 @@ import axios from 'axios';
 import { UserContext } from '../context/userContext';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-hot-toast';
+import { motion } from 'framer-motion'
 //CSS
 import './classement.css';
 //LOADER//
@@ -82,25 +83,32 @@ const Classement = () => {
                     <LoadingAnimation />
                 ) : (
                     <>
-                        <table className='classement-table'>
+                        <motion.table 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, transition: { duration: 1 } }}
+                        className='classement-table'>
                             <thead className="table-head">
-                                <tr>
+                                <motion.tr
+                                    initial={{ rotateY: 180 }}
+                                    animate={{ rotateY: 360, transition: { duration: 0.5 } }}>
                                     <th className="column1">Rang</th>
                                     <th className="column2">Nom</th>
                                     <th className="column3">Mots lus</th>
-                                </tr>
+                                </motion.tr>
                             </thead>
                             <tbody>
                                 {rankedUsers && rankedUsers.length > 0 ? (
                                     rankedUsers.map((userItem, index) => (
-                                        <tr
+                                        <motion.tr
                                             key={userItem._id}
+                                            initial={{ rotateY: 180 }}
+                                            animate={{ rotateY: 360, transition: { duration: (0.5 + index) * 0.2 } }}
                                             className={user && String(userItem._id) === String(user.id) ? 'table-highlight' : ''}
                                         >
                                             <td className='column1'>{userItem.rank}</td>
                                             <td className="column2"><Link to={`/user/${userItem._id}`}>{userItem.prenom} {userItem.nom}</Link></td>
                                             <td className="column3">{userItem.wordsRead}</td>
-                                        </tr>
+                                        </motion.tr>
                                     ))
                                 ) : (
                                     <tr>
@@ -108,7 +116,7 @@ const Classement = () => {
                                     </tr>
                                 )}
                             </tbody>
-                        </table>
+                        </motion.table>
                         <ClassementChart users={users} className="chart" />
                     </>
                 )}
