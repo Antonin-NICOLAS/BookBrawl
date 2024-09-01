@@ -42,6 +42,23 @@ function Home() {
     }
   };
 
+  //gérer les noms des utilisateurs
+  const getUserLink = (book) => {
+    const pastReader = book.pastReaders[book.pastReaders.length - 1];
+    const currentReader = book.currentReaders[book.currentReaders.length - 1];
+    
+    // Si pastReader existe, on retourne le lien correspondant, sinon on retourne celui de currentReader.
+    return `/user/${pastReader?._id || currentReader?._id}`;
+  };
+  
+  const getReaderName = (book) => {
+    const pastReader = book.pastReaders[book.pastReaders.length - 1];
+    const currentReader = book.currentReaders[book.currentReaders.length - 1];
+    
+    // Si pastReader existe, on retourne le prénom correspondant, sinon on retourne celui de currentReader.
+    return pastReader?.prenom || currentReader?.prenom || 'Nom inconnu';
+  };
+
   //retrouver couleur des themes
   const themeOptions = [
     { value: 'Action', label: '💪 Action', color: "#337EA9", backgroundcolor: "#E7F3F890", backgroundcolorhover: "#E7F3F8", selectedcolor: "#529CCA" },
@@ -71,78 +88,84 @@ function Home() {
 
   const areRecentBooksLoading = loadingStates.recentbooks;
 
+  if (!user) {
+    return (
+      <>
+        <iframe
+          src="https://o4gxyez9102nrm.embednotionpage.com/Book-Brawl-a8c34d21f72a4a9dbc73a4b1f7373c16?pvs=74"
+        ></iframe>
+        <h1>Derniers Livres Lus par la Communauté</h1>
+        <p>Veuillez vous connecter pour voir les livres.</p>
+      </>
+    );
+  }
+
   return (
     <>
-      <iframe
-        src="https://o4gxyez9102nrm.embednotionpage.com/Book-Brawl-a8c34d21f72a4a9dbc73a4b1f7373c16?pvs=74"
-      ></iframe>
-      {user ? (
+      {areRecentBooksLoading ? (
+        <LoadingAnimation />
+      ) : (
         <div className="last-read-books-table-container">
           <h2>Derniers Livres Lus par la Communauté</h2>
-          {areRecentBooksLoading ? (
-            <LoadingAnimation />
+          {recentbooks.length === 0 ? (
+            <div className="no-books-message">Aucun livre récent trouvé.</div>
           ) : (
-            recentbooks.length === 0 ? (
-              <div className="no-books-message">Aucun livre récent trouvé.</div>
-            ) : (
-              <div className="last-read-table-container">
-                <table className="last-read-books-table">
-                  <thead>
-                    <tr>
-                      <th className="column1">Image</th>
-                      <th className="column2">Titre</th>
-                      <th className="column3">Auteur</th>
-                      <th className="column4">Langue</th>
-                      <th className="column5">Thèmes</th>
-                      <th className="column6">Lecteur</th>
-                      <th className="column7">Note</th>
-                      <th className="column8">Date de Fin</th>
+            <div className="last-read-table-container">
+              <table className="last-read-books-table">
+                <thead>
+                  <tr>
+                    <th className="column1">Image</th>
+                    <th className="column2">Titre</th>
+                    <th className="column3">Auteur</th>
+                    <th className="column4">Langue</th>
+                    <th className="column5">Thèmes</th>
+                    <th className="column6">Lecteur</th>
+                    <th className="column7">Note</th>
+                    <th className="column8">Date de Fin</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedBooks.map(book => (
+                    <tr key={book._id}>
+                      <td className="column1"><Link to={`/book/${book._id}`}><img src={book.image} alt={book.title} className="book-image" /></Link></td>
+                      <td className="column2"><Link to={`/book/${book._id}`}>{book.title}</Link></td>
+                      <td className="column3">{book.author}</td>
+                      <td className="column4">{book.language}</td>
+                      <td className="column5"><ul>{book.themes && book.themes.length > 0 ? (
+                        book.themes.map((theme, index) => {
+                          const themeOption = getThemeOption(theme);
+                          return (
+                            <li
+                              key={index}
+                              className='thème'
+                              style={{
+                                color: themeOption ? themeOption.color : 'inherit',
+                                backgroundColor: themeOption ? themeOption.backgroundcolor : 'inherit'
+                              }}
+                            >
+                              {themeOption.label}
+                            </li>
+                          );
+                        })
+                      ) : (
+                        <li>Pas de thème associé</li>
+                      )}</ul></td>
+                      <td className="column6">
+                        <Link to={getUserLink(book)}>
+                          {getReaderName(book)}
+                        </Link>
+                      </td>
+                      <td className="column7">{book.reviews[book.reviews.length - 1].rating}</td>
+                      <td className="column8">{new Date(book.reviews[book.reviews.length - 1].endDate).toLocaleDateString()}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {sortedBooks.map(book => (
-                      <tr key={book._id}>
-                        <td className="column1"><Link to={`/book/${book._id}`}><img src={book.image} alt={book.title} className="book-image" /></Link></td>
-                        <td className="column2"><Link to={`/book/${book._id}`}>{book.title}</Link></td>
-                        <td className="column3">{book.author}</td>
-                        <td className="column4">{book.language}</td>
-                        <td className="column5"><ul>{book.themes && book.themes.length > 0 ? (
-                          book.themes.map((theme, index) => {
-                            const themeOption = getThemeOption(theme);
-                            return (
-                              <li
-                                key={index}
-                                className='thème'
-                                style={{
-                                  color: themeOption ? themeOption.color : 'inherit',
-                                  backgroundColor: themeOption ? themeOption.backgroundcolor : 'inherit'
-                                }}
-                              >
-                                {themeOption.label}
-                              </li>
-                            );
-                          })
-                        ) : (
-                          <li>Pas de thème associé</li>
-                        )}</ul></td>
-                        <td className="column6"><Link to={`/user/${book.pastReaders[book.pastReaders.length - 1]._id}`}>{book.pastReaders[book.pastReaders.length - 1].prenom}</Link></td>
-                        <td className="column7">{book.reviews[book.reviews.length - 1].rating}</td>
-                        <td className="column8">{new Date(book.reviews[book.reviews.length - 1].endDate).toLocaleDateString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )
-          )
-          }
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
-      ) : (
-        <>
-          <h1>Derniers Livres Lus par la Communauté</h1>
-          <p>Veuillez vous connecter pour voir les livres.</p>
-        </>
-      )}
+      )
+      }
     </>
   );
 }
