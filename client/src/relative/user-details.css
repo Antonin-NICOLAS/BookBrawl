@@ -1,0 +1,18 @@
+.backgroundoverlay{
+    position: absolute;
+    top: calc(8vh + 20px);
+    background-color: var(--background);
+    width: 100%;
+    height: fit-content;
+}
+
+.user-details-page {
+    margin: 30px 0;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--color-text-body);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
