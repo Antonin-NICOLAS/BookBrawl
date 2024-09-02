@@ -34,7 +34,7 @@ const bookSchema = new Schema({
     },
     language: {
         type: String,
-        enum: ['Français', 'Anglais', 'Espagnol'],
+        enum: ['Français', 'Anglais', 'Espagnol', 'Allemand'],
         required: true
     },
     wordsRead: {
