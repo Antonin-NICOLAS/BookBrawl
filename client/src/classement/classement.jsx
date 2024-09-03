@@ -18,6 +18,10 @@ const Classement = () => {
     const { setIsLoading, loadingStates } = useLoading();
     //others
     const [users, setUsers] = useState([]);
+    //
+        useEffect(() => {
+            fetchUsers();
+    }, []);
 
     //ask users to server
     const fetchUsers = async () => {
