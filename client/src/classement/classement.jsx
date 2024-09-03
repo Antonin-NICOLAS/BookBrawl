@@ -90,7 +90,6 @@ const Classement = () => {
                                             key={userItem._id}
                                             initial={{ rotateY: 180 }}
                                             animate={{ rotateY: 360, transition: { duration: (0.5 + index) * 0.2 } }}
-                                            className={user && String(userItem._id) === String(user.id) ? 'table-highlight' : ''}
                                         >
                                             <td className='column1'>{userItem.rank}</td>
                                             <td className="column2"><Link to={`/user/${userItem._id}`}>{userItem.prenom} {userItem.nom}</Link></td>
