@@ -15,17 +15,9 @@ import ClassementChart from './classementchart';
 
 const Classement = () => {
     //Context
-    const { user, isLoading } = useContext(UserContext);
     const { setIsLoading, loadingStates } = useLoading();
     //others
     const [users, setUsers] = useState([]);
-
-    //attendre Usercontext
-    useEffect(() => {
-        if (!isLoading && user) {
-            fetchUsers();
-        }
-    }, [isLoading, user]);
 
     //ask users to server
     const fetchUsers = async () => {
@@ -62,15 +54,6 @@ const Classement = () => {
             return { ...user, rank };
         });
     };
-
-    if (!user) {
-        return (
-            <div className='unauthorizeduser'>
-                <h1>Classement des utilisateurs par nombre de mots lus</h1>
-                <p>Veuillez vous connecter pour voir le classement.</p>
-            </div>
-        );
-    }
 
     const isUsersLoading = loadingStates.users;
     const rankedUsers = calculateRanks(users);
