@@ -17,10 +17,11 @@ router.use(
 //usercontext
 router.get('/profile', getProfile);
 
-router.use(secure);
-
 //classement
 router.get('/userranking', getUserRank);
+
+router.use(secure);
+
 //accounts
 const uploadavatar = require('../config/multeravatar')
 router.post('/addavatar', uploadavatar.single('image'), addUserAvatar);
