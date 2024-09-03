@@ -179,53 +179,9 @@ export default function App() {
             <UserContextProvider>
                 <AdminContextProvider>
                     {isLoading && <LoadingAnimation />}
-                    <Navbar onLoginClick={handleLoginClick} onLoginClickWhenOnRegister={handleRegistrationClick} />
                     <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
                     <Routes location={background || location} key={location.pathname}>
-                        <Route exact path="/" element={<Home />} />
-                        <Route exact path="/ranking" element={<Classement />} />
-                        <Route path="/user/:userId" element={<UserDetails />} />
-                        <Route exact path="/books" element={
-
-                            <Books onFutureBookClick={handleNewFutureBookClick}
-                                onBookClick={handleNewBookClick}
-                                shouldUpdateBooks={updateBooks}
-                                shouldUpdateFavoriteBooks={updateFavoriteBooks}
-                                shouldUpdateFutureBooks={updateFutureBooks}
-                                shouldUpdateCurrentBooks={updateCurrentBooks}
-                                onBooksUpdate={handleBooksUpdate} />
-
-                        } />
-                        <Route path="/book/:bookId" element={
-
-                            <BookDetails onReadClick={handleReadBookClick}
-                                onModifyClick={handleModifyAppreciationClick}
-                                shouldUpdateBook={updateBook}
-                                onBooksUpdate={handleBooksUpdate} />
-                        } />
-                        <Route exact path="/news" element={<News />} />
-                        <Route path="/about" element={<APropos />} />
-                        <Route path="/accounts" element={<Accounts onPasswordClick={handlePasswordClick} />} />
-                        <Route path="/forgot-password" element={<ForgotPassword />} />
-                        <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
-                        <Route path="*" element={<ErrorPage />} />
-                        <Route path="/admin" element={<AdminPage />} />
-                        {/*redirects*/}
-                        <Route path="/login" element={<Navigate to="/" replace />} />
-                        <Route path="/register" element={<Navigate to="/" replace />} />
-                        <Route path="/ranking/login" element={<Navigate to="/ranking" replace />} />
-                        <Route path="/ranking/register" element={<Navigate to="/ranking" replace />} />
-                        <Route path="/books/login" element={<Navigate to="/books" replace />} />
-                        <Route path="/books/register" element={<Navigate to="/books" replace />} />
-                        <Route path="/books/addbook" element={<Navigate to="/books" replace />} />
-                        <Route path="/books/addfuturebook" element={<Navigate to="/books" replace />} />
-                        <Route path="/book/modify/:bookId" element={<Navigate to={`/book/${bookIdForPopup}`} replace />} />
-                        <Route path="/book/markasread/:bookId" element={<Navigate to={`/book/${bookIdForPopup}`} replace />} />
-                        <Route path="/news/login" element={<Navigate to="/news" replace />} />
-                        <Route path="/news/register" element={<Navigate to="/news" replace />} />
-                        <Route path="/about/login" element={<Navigate to="/about" replace />} />
-                        <Route path="/about/register" element={<Navigate to="/about" replace />} />
-                        <Route path="/accounts/changepassword" element={<Navigate to="/accounts" replace />} />
+                        <Route exact path="/" element={<Classement />} />
                     </Routes>
                     <Footer />
                     {ButtonPopup && (
