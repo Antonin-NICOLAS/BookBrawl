@@ -176,8 +176,6 @@ export default function App() {
 
     return (
         <LoadingProvider>
-            <UserContextProvider>
-                <AdminContextProvider>
                     {isLoading && <LoadingAnimation />}
                     <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
                     <Routes location={background || location} key={location.pathname}>
@@ -223,8 +221,6 @@ export default function App() {
                             <Route path="/books/addfuturebook" element={<FutureBookPopup trigger={ButtonFutureBookPopup} setTrigger={handlePopupFutureBookClose} location={location} />} />
                         </Routes>
                     )}
-                </AdminContextProvider>
-            </UserContextProvider>
         </LoadingProvider>
     );
 }
