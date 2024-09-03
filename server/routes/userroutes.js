@@ -14,11 +14,11 @@ router.use(
     })
 );
 
-//usercontext
-router.get('/profile', getProfile);
-
 //classement
 router.get('/userranking', getUserRank);
+
+//usercontext
+router.get('/profile', getProfile);
 
 router.use(secure);
 
