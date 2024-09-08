@@ -253,12 +253,12 @@ const BookDetails = ({ onReadClick, onModifyClick, shouldUpdateBook, onBooksUpda
         return isNaN(average) ? 0 : average;
     };
 
-    const averageRating = calculateAverageRating(book.reviews, review);
+    const averageRating = calculateAverageRating(book.reviews || [], review || {});
     const averageFullStars = Math.floor(averageRating);
     const averageHasHalfStar = averageRating % 1 !== 0;
 
     // Vérifier le rating utilisateur aussi
-    const rating = review.rating ? 0 : review.rating;
+    const rating = review && review.rating ? review.rating : 0;
     const validRating = isNaN(rating) ? 0 : rating;
     const fullStars = Math.floor(validRating);
     const hasHalfStar = validRating % 1 !== 0;
@@ -279,7 +279,7 @@ const BookDetails = ({ onReadClick, onModifyClick, shouldUpdateBook, onBooksUpda
     return (
         <div className="backgroundoverlay">
             <div className="book-details-page">
-                {isBookLoading || isModifyingReview ? (
+                {isBookLoading || isModifyingReview || isReviewLoading ? (
                     <LoadingAnimation />
                 ) : (
                     <>
@@ -431,32 +431,30 @@ const BookDetails = ({ onReadClick, onModifyClick, shouldUpdateBook, onBooksUpda
                             </div>
                         </div>
                         <h3>Ce livre a été lu par :</h3>
-                        {book.reviews.rating && book.reviews.length > 0 ? (
+                        {book.reviews && book.reviews.length > 0 ? (
                             <div className='pastreaders'>
                                 {book.reviews.map(review => {
-                                    const readerrating = review.rating ? 0 : review.rating;
+                                    const readerrating = review.rating || 0;
                                     const validReaderRating = isNaN(readerrating) ? 0 : readerrating;
                                     const readerfullStars = Math.floor(validReaderRating);
                                     const readerhasHalfStar = validReaderRating % 1 !== 0;
+
                                     return (
                                         <div key={review._id} className='pastreader-card'>
                                             <div className="card-left">
                                                 <div className="readeravatar">
-                                                    <Link to={`/user/${review.user._id}`}><img src={review.user.avatar} alt={`${review.user.prenom} ${review.user.nom}`} /></Link>
+                                                    <Link to={`/user/${review.user._id}`}>
+                                                        <img src={review.user.avatar} alt={`${review.user.prenom} ${review.user.nom}`} />
+                                                    </Link>
                                                 </div>
                                             </div>
                                             <div className="card-right">
                                                 <p>
                                                     Lu du {new Date(review.startDate).toLocaleDateString()} au {new Date(review.endDate).toLocaleDateString()} par {review.user.prenom}
                                                 </p>
-                                                <p>
-                                                    <strong>Commentaire :</strong>
-                                                </p>
-                                                <p>
-                                                    {review.description}
-                                                </p>
-                                                <p>
-                                                    <strong>Note finale :</strong></p>
+                                                <p><strong>Commentaire :</strong></p>
+                                                <p>{review.description}</p>
+                                                <p><strong>Note finale :</strong></p>
                                                 <div className='rating'>
                                                     <div className="stars">
                                                         {[...Array(readerfullStars)].map((_, i) => (
@@ -464,10 +462,11 @@ const BookDetails = ({ onReadClick, onModifyClick, shouldUpdateBook, onBooksUpda
                                                         ))}
                                                         {readerhasHalfStar && <img src={HalfStar} alt="half star" className="star-image" />}
                                                     </div>
-                                                    {review.rating}</div>
+                                                    {review.rating}
+                                                </div>
                                             </div>
                                         </div>
-                                    )
+                                    );
                                 })}
                             </div>
                         ) : (
