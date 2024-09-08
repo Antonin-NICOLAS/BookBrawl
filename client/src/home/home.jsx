@@ -91,9 +91,7 @@ function Home() {
   if (!user) {
     return (
       <>
-        <iframe
-          src="https://o4gxyez9102nrm.embednotionpage.com/Book-Brawl-a8c34d21f72a4a9dbc73a4b1f7373c16?pvs=74"
-        ></iframe>
+        <h1>Concours terminé</h1>
         <h1>Derniers Livres Lus par la Communauté</h1>
         <p>Veuillez vous connecter pour voir les livres.</p>
       </>
@@ -105,6 +103,7 @@ function Home() {
       {areRecentBooksLoading ? (
         <LoadingAnimation />
       ) : (
+        <h1>Concours terminé</h1>
         <div className="last-read-books-table-container">
           <h2>Derniers Livres Lus par la Communauté</h2>
           {recentbooks.length === 0 ? (
