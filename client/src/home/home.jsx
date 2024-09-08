@@ -103,8 +103,8 @@ function Home() {
       {areRecentBooksLoading ? (
         <LoadingAnimation />
       ) : (
-        <h1>Concours terminé</h1>
         <div className="last-read-books-table-container">
+          <h1>Concours terminé</h1>
           <h2>Derniers Livres Lus par la Communauté</h2>
           {recentbooks.length === 0 ? (
             <div className="no-books-message">Aucun livre récent trouvé.</div>
