@@ -15,13 +15,17 @@ import ClassementChart from './classementchart';
 
 const Classement = () => {
     //Context
+    const { user, isLoading } = useContext(UserContext);
     const { setIsLoading, loadingStates } = useLoading();
     //others
     const [users, setUsers] = useState([]);
-    //
-        useEffect(() => {
+
+    //attendre Usercontext
+    useEffect(() => {
+        if (!isLoading && user) {
             fetchUsers();
-    }, []);
+        }
+    }, [isLoading, user]);
 
     //ask users to server
     const fetchUsers = async () => {
@@ -59,6 +63,15 @@ const Classement = () => {
         });
     };
 
+    if (!user) {
+        return (
+            <div className='unauthorizeduser'>
+                <h1>Classement des utilisateurs par nombre de mots lus</h1>
+                <p>Veuillez vous connecter pour voir le classement.</p>
+            </div>
+        );
+    }
+
     const isUsersLoading = loadingStates.users;
     const rankedUsers = calculateRanks(users);
 
@@ -90,6 +103,7 @@ const Classement = () => {
                                             key={userItem._id}
                                             initial={{ rotateY: 180 }}
                                             animate={{ rotateY: 360, transition: { duration: (0.5 + index) * 0.2 } }}
+                                            className={user && String(userItem._id) === String(user.id) ? 'table-highlight' : ''}
                                         >
                                             <td className='column1'>{userItem.rank}</td>
                                             <td className="column2"><Link to={`/user/${userItem._id}`}>{userItem.prenom} {userItem.nom}</Link></td>
