@@ -226,10 +226,6 @@ const Books = ({ onFutureBookClick,
                             <LoadingAnimation />
                         ) : (
                             <div className={`books-list ${books.length > 0 ? '' : 'fornobook'}`}>
-                                <button type='button' className="add-book-button" onClick={handleNewBookClick}>
-                                    <i className="fa-solid fa-circle-plus"></i>
-                                    Ajouter un livre
-                                </button>
                                 {books.length > 0 ? (
                                     books.map((book) => (
                                         <div key={book._id} className="book-item">
@@ -286,10 +282,6 @@ const Books = ({ onFutureBookClick,
                             <LoadingAnimation />
                         ) : (
                             <div className={`books-list ${Futurebooks.length > 0 ? '' : 'fornobook'}`}>
-                                <button type='button' className="add-book-button" onClick={handleNewFutureBookClick}>
-                                    <i className="fa-solid fa-circle-plus"></i>
-                                    Ajouter un livre
-                                </button>
                                 {Futurebooks.length > 0 ? (
                                     Futurebooks.map((book) => (
                                         <div key={book._id} className="book-item">
