@@ -14,14 +14,13 @@ router.use(
     })
 );
 
-//classement
-router.get('/userranking', getUserRank);
-
 //usercontext
 router.get('/profile', getProfile);
 
 router.use(secure);
 
+//classement
+router.get('/userranking', getUserRank);
 //accounts
 const uploadavatar = require('../config/multeravatar')
 router.post('/addavatar', uploadavatar.single('image'), addUserAvatar);
